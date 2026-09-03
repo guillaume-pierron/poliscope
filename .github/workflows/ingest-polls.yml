@@ -1,0 +1,45 @@
+name: Ingest polls into Supabase
+
+on:
+  push:
+    branches: [automation/polls-inbox]
+    paths:
+      - "data/polls-inbox/**.json"
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Submit each poll file to Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          POLLS_AUTOMATION_TOKEN: ${{ secrets.POLLS_AUTOMATION_TOKEN }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=(data/polls-inbox/*.json)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No poll files to process."
+            exit 0
+          fi
+          for f in "${files[@]}"; do
+            echo "Processing $f"
+            payload=$(jq --arg token "$POLLS_AUTOMATION_TOKEN" '. + {token: $token}' "$f")
+            body=$(jq -n --argjson payload "$payload" '{payload: $payload}')
+            status=$(curl -sS -o /tmp/resp.json -w "%{http_code}" \
+              -X POST "$SUPABASE_URL/rest/v1/rpc/submit_poll_data" \
+              -H "apikey: $SUPABASE_ANON_KEY" \
+              -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+              -H "Content-Type: application/json" \
+              --data-binary "$body")
+            echo "HTTP $status"
+            cat /tmp/resp.json
+            echo
+            if [ "$status" -ge 300 ]; then
+              echo "::error::Failed to submit $f (HTTP $status)"
+              exit 1
+            fi
+          done
