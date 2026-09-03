@@ -1,0 +1,31 @@
+{
+  "institute": "Elabe",
+  "sponsor": "BFMTV, La Tribune Dimanche",
+  "field_start": "2026-08-26",
+  "field_end": "2026-08-28",
+  "sample_size": 1501,
+  "method": "Méthode des quotas",
+  "published_at": "2026-08-29",
+  "source_name": "Elabe",
+  "source_url": "https://elabe.fr/presidentielle-2027-aout/",
+  "scenarios": [
+    {
+      "label": "Second tour : Le Pen face à Philippe",
+      "round": "second_tour",
+      "order_index": 0,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 52.5, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 47.5, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Attal",
+      "round": "second_tour",
+      "order_index": 1,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 57, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 43, "low": null, "high": null}
+      ]
+    }
+  ]
+}

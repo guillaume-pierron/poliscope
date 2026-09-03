@@ -1,0 +1,58 @@
+{
+  "institute": "Ifop-Fiducial",
+  "sponsor": "LCI, Le Figaro, Sud Radio",
+  "field_start": "2026-08-24",
+  "field_end": "2026-08-25",
+  "sample_size": 1598,
+  "method": "Méthode des quotas, échantillon national d'inscrits sur les listes électorales",
+  "published_at": "2026-08-26",
+  "source_name": "Sud Radio",
+  "source_url": "https://www.sudradio.fr/sud-radio/marine-le-pen-vainqueure-de-la-presidentielle-2027-dans-tous-les-scenarios",
+  "scenarios": [
+    {
+      "label": "Second tour : Le Pen face à Philippe",
+      "round": "second_tour",
+      "order_index": 0,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 52, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 48, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Attal",
+      "round": "second_tour",
+      "order_index": 1,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 54, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 46, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Glucksmann",
+      "round": "second_tour",
+      "order_index": 2,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 55, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 45, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Retailleau",
+      "round": "second_tour",
+      "order_index": 3,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 58, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 42, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Mélenchon",
+      "round": "second_tour",
+      "order_index": 4,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 67, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 33, "low": null, "high": null}
+      ]
+    }
+  ]
+}
