@@ -74,7 +74,10 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-2 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Poliscope. Plateforme indépendante et non partisane.</p>
-          <p>Les candidats de démonstration sont fictifs. Voir la méthodologie.</p>
+          <p>
+            Plateforme indépendante, non affiliée à un candidat ou un parti. Chaque proposition
+            est sourcée — voir la méthodologie.
+          </p>
         </div>
       </div>
     </footer>

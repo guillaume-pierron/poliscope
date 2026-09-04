@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CompareTable, type ThemeRow } from "@/components/compare/compare-table";
-import { ButtonLink } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { CompareView, type ThemeRow } from "@/components/compare/compare-view";
 import { themeSimilarity, verdictFromSimilarity } from "@/lib/compare";
 import {
   getAllPositions,
@@ -74,26 +75,30 @@ export default async function ComparePairPage({
     .filter((row) => row.proposalsA.length > 0 || row.proposalsB.length > 0);
 
   return (
-    <div className="container-app max-w-5xl py-10 md:py-16">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            {candidateA.name} <span className="text-muted-2">vs</span> {candidateB.name}
-          </h1>
-          <p className="mt-2 text-muted">Comparaison thème par thème, propositions sourcées.</p>
-        </div>
-        <div className="flex gap-2">
-          <ButtonLink href={`/candidats/${candidateA.slug}`} variant="outline" size="sm">
-            Programme de {candidateA.name.split(" ")[0]}
-          </ButtonLink>
-          <ButtonLink href={`/candidats/${candidateB.slug}`} variant="outline" size="sm">
-            Programme de {candidateB.name.split(" ")[0]}
-          </ButtonLink>
-        </div>
-      </div>
+    <div className="container-app max-w-6xl py-8 md:py-12">
+      <Link
+        href="/comparer"
+        className="focus-ring inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
+      >
+        <ArrowLeft size={15} />
+        Retour aux comparaisons
+      </Link>
 
-      <div className="mt-10">
-        <CompareTable candidateA={candidateA} candidateB={candidateB} rows={rows} />
+      <h1 className="mt-5 font-serif text-[2rem] font-semibold tracking-tight sm:text-[2.4rem]">
+        <span style={{ color: candidateA.party?.color }}>{candidateA.name}</span>{" "}
+        <span className="text-muted-2">vs</span>{" "}
+        <span style={{ color: candidateB.party?.color }}>{candidateB.name}</span>
+      </h1>
+      <p className="mt-2 text-muted">Comparaison thème par thème, propositions sourcées.</p>
+
+      <div className="mt-8">
+        <CompareView
+          candidateA={candidateA}
+          candidateB={candidateB}
+          rows={rows}
+          sourcedCountA={proposalsA.length}
+          sourcedCountB={proposalsB.length}
+        />
       </div>
     </div>
   );

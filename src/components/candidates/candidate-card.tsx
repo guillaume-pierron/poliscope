@@ -8,10 +8,15 @@ export function CandidateCard({ candidate }: { candidate: Candidate }) {
   return (
     <Link
       href={`/candidats/${candidate.slug}`}
-      className="focus-ring group flex flex-col rounded-xl border border-border bg-background p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_20px_40px_-24px_rgba(15,15,25,0.25)]"
+      className="focus-ring group flex flex-col rounded-xl border border-border bg-card p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_20px_40px_-24px_rgba(15,15,25,0.25)]"
     >
       <div className="flex items-start justify-between">
-        <CandidateAvatar name={candidate.name} color={candidate.party?.color} size="lg" />
+        <CandidateAvatar
+          name={candidate.name}
+          color={candidate.party?.color}
+          photoUrl={candidate.photo_url}
+          size="lg"
+        />
         {candidate.is_demo && <Badge variant="demo">Démo</Badge>}
       </div>
 

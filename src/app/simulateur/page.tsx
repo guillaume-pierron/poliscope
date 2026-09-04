@@ -1,56 +1,31 @@
 import type { Metadata } from "next";
-import { Wallet, Users, Home, Car } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Label, Select } from "@/components/ui/input";
-import { NewsletterForm } from "@/components/home/newsletter-form";
+import { Simulator } from "@/components/simulator/simulator";
+import { getCandidates } from "@/lib/data/queries";
 
 export const metadata: Metadata = {
-  title: "Simulateur d'impact économique",
+  title: "Simulateur d'impact",
   description:
-    "Bientôt disponible : estimez l'impact des programmes candidats sur votre budget personnel.",
+    "Renseignez votre situation et découvrez, candidat par candidat, quelles mesures sourcées vous concernent — avec une estimation en euros quand la mesure est chiffrée.",
 };
 
-const fields = [
-  { icon: Wallet, label: "Revenu net mensuel du foyer" },
-  { icon: Users, label: "Situation familiale et nombre d'enfants" },
-  { icon: Home, label: "Propriétaire ou locataire" },
-  { icon: Car, label: "Type de véhicule et trajet domicile-travail" },
-];
+export default async function SimulateurPage() {
+  const candidates = await getCandidates();
 
-export default function SimulateurPage() {
   return (
-    <div className="container-app max-w-2xl py-10 md:py-16">
-      <div className="flex items-center gap-2">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          Simulateur d&apos;impact économique
+    <div className="container-app py-10 md:py-14">
+      <div className="max-w-3xl">
+        <h1 className="font-serif text-[2rem] font-semibold tracking-tight sm:text-[2.4rem]">
+          Quel impact sur votre situation&nbsp;?
         </h1>
-        <Badge variant="accent">Bientôt disponible</Badge>
-      </div>
-      <p className="mt-3 max-w-xl text-muted">
-        Estimez, en fonction de votre situation, l&apos;impact concret des mesures économiques de
-        chaque candidat sur votre budget. Ce module est en cours de construction.
-      </p>
-
-      <div className="mt-10 rounded-xl border border-dashed border-border-strong bg-surface p-6">
-        <p className="mb-5 text-sm font-medium text-muted">Aperçu du formulaire à venir</p>
-        <div className="space-y-4 opacity-60">
-          {fields.map((field) => (
-            <div key={field.label}>
-              <Label className="flex items-center gap-2">
-                <field.icon size={15} />
-                {field.label}
-              </Label>
-              <Select disabled>
-                <option>À venir</option>
-              </Select>
-            </div>
-          ))}
-        </div>
+        <p className="mt-3 text-muted">
+          Décrivez votre foyer : Poliscope croise votre profil avec les propositions réellement
+          sourcées de chaque candidat, et estime un montant chaque fois que la mesure donne
+          elle-même le chiffre.
+        </p>
       </div>
 
-      <div className="mt-10">
-        <p className="text-sm font-semibold">Être prévenu du lancement</p>
-        <NewsletterForm className="mt-3 max-w-sm" />
+      <div className="mt-9">
+        <Simulator candidates={candidates} />
       </div>
     </div>
   );

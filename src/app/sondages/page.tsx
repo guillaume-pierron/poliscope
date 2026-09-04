@@ -1,68 +1,109 @@
 import type { Metadata } from "next";
-import { AlertTriangle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { PollCard } from "@/components/polls/poll-card";
-import { TrendChart } from "@/components/polls/trend-chart";
-import { getCandidates, getPollResults, getPolls } from "@/lib/data/queries";
+import { LineChart } from "lucide-react";
+import { AverageExplainer } from "@/components/polls/average-explainer";
+import { EvolutionChart } from "@/components/polls/evolution-chart";
+import { PollFilters } from "@/components/polls/poll-filters";
+import { ReadingTips } from "@/components/polls/reading-tips";
+import { RecentChanges } from "@/components/polls/recent-changes";
+import { TodaySnapshot } from "@/components/polls/today-snapshot";
+import { collectPremierTourHeadlines, computeSnapshot } from "@/lib/polls-aggregate";
+import { getCandidates, getPollResults, getPollScenarios, getPolls } from "@/lib/data/queries";
+import type { PollScenario, PollResult } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Sondages",
   description: "Suivez les tendances de la présidentielle 2027 et leur évolution dans le temps.",
 };
 
+const SNAPSHOT_WINDOW = 5;
+
 export default async function SondagesPage() {
-  const [polls, candidates] = await Promise.all([getPolls(), getCandidates()]);
-  const resultsByPoll: Record<string, Awaited<ReturnType<typeof getPollResults>>> = {};
+  const [polls, scenarios, candidates] = await Promise.all([
+    getPolls(),
+    getPollScenarios(),
+    getCandidates(),
+  ]);
+
+  const resultsByScenario: Record<string, PollResult[]> = {};
   await Promise.all(
-    polls.map(async (poll) => {
-      resultsByPoll[poll.id] = await getPollResults(poll.id);
+    scenarios.map(async (scenario) => {
+      resultsByScenario[scenario.id] = await getPollResults(scenario.id);
     })
   );
 
-  const latest = polls[0];
+  const scenariosByPoll: Record<string, PollScenario[]> = {};
+  for (const scenario of scenarios) {
+    (scenariosByPoll[scenario.poll_id] ??= []).push(scenario);
+  }
+  for (const list of Object.values(scenariosByPoll)) {
+    list.sort((a, b) => a.order_index - b.order_index);
+  }
+
+  const premierTourHeadlines = collectPremierTourHeadlines(polls, scenariosByPoll, resultsByScenario);
+  const snapshot = computeSnapshot(premierTourHeadlines, candidates, SNAPSHOT_WINDOW);
+
+  const hasPremierTour = premierTourHeadlines.length > 0;
+  const hasSecondTour = polls.some((p) => (scenariosByPoll[p.id] ?? []).some((s) => s.round === "second_tour"));
+  const defaultRound = hasPremierTour ? "premier_tour" : hasSecondTour ? "second_tour" : "premier_tour";
 
   return (
-    <div className="container-app max-w-4xl py-10 md:py-16">
-      <div className="flex items-center gap-2">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Sondages</h1>
-        <Badge variant="demo">Données de démonstration</Badge>
-      </div>
+    <div className="container-app max-w-6xl py-8 md:py-12">
+      <h1 className="font-serif text-[2rem] font-semibold tracking-tight sm:text-[2.4rem]">
+        Sondages présidentiels 2027
+      </h1>
       <p className="mt-2 max-w-2xl text-muted">
-        Intentions de vote au premier tour, agrégées par institut. Ces chiffres sont fictifs et
-        illustrent la structure du futur module Sondages.
+        Retrouvez les derniers sondages d&apos;intentions de vote et leur évolution.
       </p>
 
-      <div className="mt-6 flex items-start gap-3 rounded-xl border border-border bg-surface p-4 text-sm text-muted">
-        <AlertTriangle size={16} className="mt-0.5 shrink-0" />
-        <p>
-          Un sondage est une photographie à un instant donné, avec une marge d&apos;erreur. Ni une
-          moyenne ni une projection ne doivent être lues comme une probabilité certaine de
-          victoire.
-        </p>
+      <div className="mt-6">
+        <ReadingTips />
       </div>
 
-      {latest && (
-        <section className="mt-10">
-          <h2 className="mb-4 text-lg font-semibold">Évolution des intentions de vote</h2>
-          <div className="rounded-xl border border-border bg-background p-6">
-            <TrendChart polls={polls} resultsByPoll={resultsByPoll} candidates={candidates} />
-          </div>
-        </section>
-      )}
-
-      <section className="mt-10">
-        <h2 className="mb-4 text-lg font-semibold">Derniers sondages publiés</h2>
-        <div className="space-y-4">
-          {polls.map((poll) => (
-            <PollCard
-              key={poll.id}
-              poll={poll}
-              results={resultsByPoll[poll.id] ?? []}
-              candidates={candidates}
-            />
-          ))}
+      {polls.length === 0 ? (
+        <div className="mt-8 flex flex-col items-center rounded-xl border border-dashed border-border-strong py-16 text-center">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-soft text-primary">
+            <LineChart size={20} />
+          </span>
+          <p className="mt-4 max-w-md text-muted">
+            Aucun sondage n&apos;est encore répertorié pour la présidentielle 2027. Ce module
+            n&apos;affiche que des chiffres réels, publiés par un institut identifié et sourcé — il
+            se remplira au fur et à mesure des publications.
+          </p>
         </div>
-      </section>
+      ) : (
+        <>
+          {hasPremierTour && (
+            <div className="mt-6">
+              <TodaySnapshot
+                entries={snapshot}
+                windowSize={SNAPSHOT_WINDOW}
+                latestPublishedAt={premierTourHeadlines[0].poll.published_at}
+              />
+            </div>
+          )}
+
+          <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-start">
+            <div id="sondages-liste" className="min-w-0 scroll-mt-24">
+              <h2 className="mb-4 text-lg font-semibold">Derniers sondages publiés</h2>
+              <PollFilters
+                polls={polls}
+                scenariosByPoll={scenariosByPoll}
+                resultsByScenario={resultsByScenario}
+                candidates={candidates}
+                defaultRound={defaultRound}
+              />
+            </div>
+
+            <div className="space-y-5 lg:sticky lg:top-24">
+              {hasPremierTour && <RecentChanges entries={snapshot} windowSize={SNAPSHOT_WINDOW} />}
+              {hasPremierTour && (
+                <EvolutionChart headlines={premierTourHeadlines} candidates={candidates} />
+              )}
+              <AverageExplainer />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

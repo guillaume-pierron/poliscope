@@ -1,28 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --surface: #f7f7f9;
-  --surface-strong: #f0f0f4;
-  --foreground: #0b0d12;
+  /* Warm ivory page ground, pure white cards — the mockup's signature. */
+  --background: #fdfbf6;
+  --card: #ffffff;
+  --surface: #f8f4ea;
+  --surface-strong: #efe9db;
+  --foreground: #0f1729;
   --muted: #6b7280;
   --muted-2: #9ca3af;
-  --border: #e6e6eb;
-  --border-strong: #d9d9e2;
+  --border: #ece5d7;
+  --border-strong: #ddd4c2;
 
-  --primary: #4338ca;
+  --primary: #1d6ff2;
   --primary-foreground: #ffffff;
-  --primary-soft: #eef0fd;
+  --primary-soft: #eaf1fe;
 
   --accent: #b45309;
-  --accent-soft: #fdf1e3;
+  --accent-soft: #fdf6e7;
 
-  --success: #0f7a5c;
-  --success-soft: #e7f6f0;
-  --danger: #b3261e;
-  --danger-soft: #fbeae9;
+  --success: #16a34a;
+  --success-soft: #f0f9f2;
+  --danger: #dc2626;
+  --danger-soft: #fdf0ef;
 
-  --ring: #4338ca;
+  --ring: #1d6ff2;
 
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -32,6 +34,7 @@
 
 @theme inline {
   --color-background: var(--background);
+  --color-card: var(--card);
   --color-surface: var(--surface);
   --color-surface-strong: var(--surface-strong);
   --color-foreground: var(--foreground);
@@ -60,6 +63,7 @@
   --radius-xl: var(--radius-xl);
 
   --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-playfair);
   --font-mono: var(--font-geist-mono);
 
   --animate-fade-in: fade-in 0.5s ease-out;
@@ -100,14 +104,20 @@ body {
   text-wrap: balance;
 }
 
-.container-app {
-  max-width: 78rem;
+/*
+ * Defined via @utility (not a plain rule) so it lands in Tailwind's own
+ * utilities layer. A plain unlayered rule here would always beat a
+ * Tailwind max-w-* utility on the same element regardless of class order —
+ * cascade layers give unlayered CSS top priority no matter what — which
+ * silently ignored every `container-app max-w-*` narrowing used across
+ * the app's content pages.
+ */
+@utility container-app {
+  max-width: 94rem;
   margin-inline: auto;
   padding-inline: 1.25rem;
-}
 
-@media (min-width: 768px) {
-  .container-app {
+  @media (min-width: 768px) {
     padding-inline: 2rem;
   }
 }
@@ -120,9 +130,9 @@ body {
   outline-offset: 2px;
 }
 
-/* Subtle grain / gradient mesh for hero backgrounds, no clichéd flag gradients */
+/* Warm light wash behind the hero — peach top-right, faint blue left. */
 .mesh-bg {
   background:
-    radial-gradient(60% 50% at 15% 10%, color-mix(in srgb, var(--primary) 10%, transparent) 0%, transparent 60%),
-    radial-gradient(50% 40% at 90% 0%, color-mix(in srgb, var(--accent) 12%, transparent) 0%, transparent 60%);
+    radial-gradient(55% 45% at 92% 0%, rgba(244, 190, 140, 0.22) 0%, transparent 62%),
+    radial-gradient(45% 40% at 8% 10%, rgba(29, 111, 242, 0.07) 0%, transparent 60%);
 }

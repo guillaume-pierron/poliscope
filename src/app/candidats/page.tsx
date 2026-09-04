@@ -12,10 +12,10 @@ export default async function CandidatsPage() {
 
   return (
     <div className="container-app py-10 md:py-16">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Les candidats</h1>
+      <h1 className="font-serif text-[2rem] font-semibold tracking-tight sm:text-[2.4rem]">Les candidats</h1>
       <p className="mt-2 max-w-2xl text-muted">
-        Personnages de démonstration créés pour cette version de Poliscope. Chaque proposition
-        listée est reliée à une source — voir la{" "}
+        Les principaux candidats déclarés à l&apos;élection présidentielle 2027. Chaque
+        proposition listée est reliée à sa source d&apos;origine — voir la{" "}
         <a href="/methodologie" className="underline underline-offset-2">
           méthodologie
         </a>

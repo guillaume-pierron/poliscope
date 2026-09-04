@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import {
   LineChart,
   Wallet,
@@ -29,7 +30,15 @@ export const THEME_ICONS: Record<string, LucideIcon> = {
   home: Home,
 };
 
-export function ThemeIcon({ icon, className }: { icon: string; className?: string }) {
+export function ThemeIcon({
+  icon,
+  className,
+  style,
+}: {
+  icon: string;
+  className?: string;
+  style?: CSSProperties;
+}) {
   const Icon = THEME_ICONS[icon] ?? Globe;
-  return <Icon className={className} aria-hidden="true" />;
+  return <Icon className={className} style={style} aria-hidden="true" />;
 }

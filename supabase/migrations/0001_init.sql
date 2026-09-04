@@ -14,6 +14,7 @@ create table if not exists elections (
   name text not null,
   kind text not null check (kind in ('presidentielle', 'legislatives', 'municipales', 'europeennes', 'autre')),
   round_date date,
+  second_round_date date,
   is_active boolean not null default false,
   created_at timestamptz not null default now()
 );

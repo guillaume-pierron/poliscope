@@ -3,10 +3,11 @@
 Comprenez les programmes. Comparez les candidats. Faites-vous votre propre opinion.
 
 Poliscope est une plateforme indépendante et non partisane pour comprendre les
-programmes de l'élection présidentielle française de 2027, comparer les
-candidats et découvrir quels programmes correspondent le plus à ses propres
-positions politiques. Le nom, les candidats et les données de cette version
-sont **de démonstration** — voir [Données de démonstration](#données-de-démonstration).
+programmes de l'élection présidentielle française de 2027 (premier tour le
+18 avril, second tour le 2 mai), comparer les candidats et découvrir quels
+programmes correspondent le plus à ses propres positions politiques. Le nom
+est provisoire ; les candidats et leurs propositions sont réels et sourcés —
+voir [Candidats et sources](#candidats-et-sources).
 
 Construite pour survivre à 2027 : le modèle de données (élections, candidats,
 thèmes, questions, propositions, sondages) est générique et pourra servir aux
@@ -27,7 +28,8 @@ législatives, municipales et européennes suivantes.
   candidats.
 - **Méthodologie** (`/methodologie`) et **Confidentialité** (`/confidentialite`).
 - **Sondages** (`/sondages`) — structure complète (institut, commanditaire,
-  méthode, échantillon, courbe d'évolution) avec données de démonstration.
+  méthode, échantillon, courbe d'évolution) ; volontairement vide par défaut
+  tant qu'aucun sondage réel et sourcé n'a été ajouté (voir plus bas).
 - **Simulateur d'impact** (`/simulateur`) — structure prête, marquée « Bientôt
   disponible » comme demandé pour la V1.
 - **Administration** (`/admin`) — CRUD générique (candidats, partis, thèmes,
@@ -45,9 +47,11 @@ Framer Motion.
 Poliscope fonctionne **immédiatement**, sans aucune configuration : toutes les
 lectures passent par `src/lib/data/queries.ts`, qui interroge Supabase si les
 variables d'environnement sont présentes, et retombe sinon sur le jeu de
-données de démonstration typé dans `src/lib/data/local/`. C'est le même jeu de
-données qui est exporté vers `supabase/seed.sql` (voir plus bas), donc le
-comportement est identique en local et avec une vraie base.
+données typé dans `src/lib/data/local/` — qui contient les vraies données
+(candidats, propositions sourcées) décrites plus bas, pas des données
+fictives. C'est ce même jeu de données qui est exporté vers
+`supabase/seed.sql` (voir plus bas), donc le comportement est identique en
+local et avec une vraie base.
 
 ## Démarrage
 
@@ -95,7 +99,7 @@ src/
     candidats/          Liste + fiche candidat
     comparer/           Sélecteur + comparaison a-vs-b
     themes/[slug]/      Vue transversale par thème
-    sondages/           Sondages (démonstration)
+    sondages/           Sondages (vide par défaut, structure prête)
     simulateur/         Bientôt disponible
     admin/              Back-office protégé
     api/match-data/     Données publiques (candidats, positions, questions)
@@ -109,13 +113,13 @@ src/
     compare.ts            Similarité thème par thème pour le comparateur
     data/
       queries.ts          Couche d'accès aux données (Supabase → fallback local)
-      local/               Jeu de données de démonstration typé
+      local/               Jeu de données typé (candidats réels et sourcés)
     admin/                 Auth, config des entités, accès données admin
     supabase/               Clients Supabase (browser, server, admin)
   proxy.ts                Protège /admin (anciennement middleware.ts)
 supabase/
   migrations/0001_init.sql Schéma complet (tables, contraintes, RLS)
-  seed.sql                  Données de démonstration (généré, voir ci-dessus)
+  seed.sql                  Données réelles (généré depuis local/, voir ci-dessus)
 scripts/export-seed.ts       Génère supabase/seed.sql depuis les données locales
 ```
 
@@ -144,17 +148,45 @@ sourcées.
 
 Voir `/confidentialite` pour la version destinée aux visiteurs.
 
-## Données de démonstration
+## Candidats et sources
 
-Les cinq candidats (Camille Martin, Alexandre Leroy, Sarah Moreau, Thomas
-Bernard, Nina Laurent), leurs partis et toutes leurs propositions sont
-**fictifs**, créés uniquement pour donner corps à l'application. Chaque
-proposition de démonstration est marquée comme telle et pointe vers une source
-factice (`example.org`). Aucune déclaration réelle n'a été attribuée à une
-personne réelle. Avant toute mise en production, ce jeu de données doit être
-remplacé par des candidats et des sources réelles, vérifiées et datées (voir
-la structure `proposals` / `candidate_positions` dans
-`supabase/migrations/0001_init.sql`).
+Poliscope couvre neuf des principales figures déclarées à la présidentielle
+2027 (sur un total de 25+ candidatures annoncées au 3 septembre 2026, un
+champ qui continue d'évoluer) : Jean-Luc Mélenchon, François Ruffin, Marine
+Tondelier, Raphaël Glucksmann, Gabriel Attal, Édouard Philippe, Xavier
+Bertrand, Bruno Retailleau et Marine Le Pen. Ce n'est ni une liste officielle
+ni un jugement sur qui « compte » — c'est un premier périmètre couvrant tout
+l'échiquier politique, à étendre.
+
+**Chaque biographie et chaque proposition provient d'une source réelle et
+nommée** (site de campagne officiel, site d'un parti, ou média identifiable),
+avec sa date de publication — voir `source_name` / `source_url` /
+`published_at` sur chaque fiche candidat et dans
+`src/lib/data/local/proposals.ts`. Aucune position n'est devinée : quand
+aucune source fiable n'a été trouvée pour un candidat sur un thème donné (ou
+sur une question du Match), ce thème est simplement absent de sa fiche —
+affiché comme « Position non renseignée » — plutôt que rempli par une
+estimation. C'est pourquoi la couverture est volontairement inégale d'un
+candidat à l'autre : elle reflète ce que chacun a réellement rendu public,
+pas un choix éditorial.
+
+**Ce jeu de données est un instantané, pas une vérité figée.** Les
+candidatures, programmes et sondages évoluent en continu jusqu'à la
+publication de la liste officielle par le Conseil constitutionnel, peu avant
+le premier tour. Pour l'étendre ou le corriger :
+
+- via `/admin` une fois Supabase connecté (ajout de candidats, propositions,
+  positions, sans toucher au code) ;
+- ou en modifiant `src/lib/data/local/*.ts` puis en relançant
+  `npm run db:seed:export`.
+
+Dans les deux cas, la même règle s'applique : pas de proposition sans source
+vérifiable et datée.
+
+Le module Sondages (`/sondages`) est volontairement vide par défaut pour la
+même raison : afficher un chiffre à côté du nom d'un candidat réel sans
+institut ni méthode identifiés serait trompeur. Il se remplit uniquement via
+de vrais sondages sourcés (table `polls` / `poll_results`).
 
 ## Déploiement (Vercel)
 
@@ -177,8 +209,10 @@ npm run db:seed:export      # régénère supabase/seed.sql depuis les données 
 ## Feuille de route
 
 - Simulateur d'impact économique (structure en place, calculs à venir).
-- Sondages : brancher un import automatisé plutôt que des données de
-  démonstration.
+- Sondages : brancher une source réelle (import manuel via `/admin` ou flux
+  automatisé depuis un institut) pour peupler le module, actuellement vide.
+- Étendre la couverture aux ~15 autres candidats déclarés, et maintenir les
+  positions/propositions à jour à mesure que les programmes se précisent.
 - Authentification multi-admin (actuellement : mot de passe unique via
   cookie signé — largement suffisant pour une V1, à remplacer par Supabase
   Auth + rôles si plusieurs personnes doivent éditer le contenu).

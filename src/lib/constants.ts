@@ -9,5 +9,5 @@ export const NAV_LINKS = [
   { href: "/candidats", label: "Candidats" },
   { href: "/comparer", label: "Comparer" },
   { href: "/sondages", label: "Sondages" },
-  { href: "/actualites", label: "Actualités" },
+  { href: "/methodologie", label: "Méthodologie" },
 ] as const;

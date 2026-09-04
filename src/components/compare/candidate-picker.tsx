@@ -57,7 +57,12 @@ export function CandidatePicker({
                   : "border-border hover:border-border-strong hover:bg-surface"
               )}
             >
-              <CandidateAvatar name={candidate.name} color={candidate.party?.color} size="sm" />
+              <CandidateAvatar
+                name={candidate.name}
+                color={candidate.party?.color}
+                photoUrl={candidate.photo_url}
+                size="sm"
+              />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{candidate.name}</p>
                 <p className="truncate text-xs text-muted">{candidate.party?.name}</p>

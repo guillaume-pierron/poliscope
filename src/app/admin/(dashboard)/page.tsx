@@ -30,7 +30,7 @@ export default async function AdminDashboardPage() {
           <Link
             key={key}
             href={`/admin/${key}`}
-            className="focus-ring rounded-xl border border-border bg-background p-5 transition-colors hover:border-border-strong hover:bg-surface"
+            className="focus-ring rounded-xl border border-border bg-card p-5 transition-colors hover:border-border-strong hover:bg-surface"
           >
             <div className="flex items-center justify-between">
               <p className="font-semibold">{ENTITIES[key].labelPlural}</p>

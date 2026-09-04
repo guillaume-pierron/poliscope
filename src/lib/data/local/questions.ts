@@ -185,10 +185,15 @@ export const questions: Question[] = [
   },
 ];
 
+/**
+ * "Neutre" (0) is a real answer and counts in the score like any other —
+ * it is genuinely different from skipping via "Passer" (value: null), which
+ * excludes the question entirely. Never conflate the two.
+ */
 export const LIKERT_OPTIONS = [
   { label: "Tout à fait d'accord", value: 2 },
   { label: "Plutôt d'accord", value: 1 },
-  { label: "Neutre / sans opinion", value: 0 },
+  { label: "Neutre", value: 0 },
   { label: "Plutôt pas d'accord", value: -1 },
   { label: "Pas du tout d'accord", value: -2 },
 ];

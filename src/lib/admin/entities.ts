@@ -98,6 +98,12 @@ export const ENTITIES: Record<EntityKey, EntityConfig> = {
       { name: "published_at", label: "Date de publication", type: "date" },
       { name: "verified_at", label: "Date de vérification", type: "date" },
       {
+        name: "tags",
+        label: "Tags (séparés par des virgules)",
+        type: "text",
+        help: "Ex. « SMIC, Prix » — alimente les filtres de la page thème.",
+      },
+      {
         name: "status",
         label: "Statut",
         type: "select",

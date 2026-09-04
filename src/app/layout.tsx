@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header";
+import { Ticker } from "@/components/layout/ticker";
 import { Footer } from "@/components/layout/footer";
+import { ChromeGate } from "@/components/layout/chrome-gate";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/constants";
 
 const geistSans = Geist({
@@ -13,6 +15,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -38,11 +46,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html
+      lang="fr"
+      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">
+        <ChromeGate>
+          <Ticker />
+        </ChromeGate>
         <Header />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <ChromeGate>
+          <Footer />
+        </ChromeGate>
       </body>
     </html>
   );

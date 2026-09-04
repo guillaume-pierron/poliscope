@@ -16,7 +16,7 @@ export default async function ComparerPage({
 
   return (
     <div className="container-app max-w-4xl py-10 md:py-16">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Comparer deux candidats</h1>
+      <h1 className="font-serif text-[2rem] font-semibold tracking-tight sm:text-[2.4rem]">Comparer deux candidats</h1>
       <p className="mt-2 max-w-2xl text-muted">
         Sélectionnez deux candidats pour comparer leurs propositions thème par thème, avec la
         possibilité de n&apos;afficher que leurs différences.

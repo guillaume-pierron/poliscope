@@ -4,6 +4,7 @@ import type {
   CandidatePosition,
   Party,
   Poll,
+  PollScenario,
   PollResult,
   Proposal,
   Question,
@@ -19,7 +20,11 @@ import { candidates as localCandidates, getCandidateBySlug as localGetCandidateB
 import { questions as localQuestions } from "./local/questions";
 import { candidatePositions as localPositions } from "./local/positions";
 import { proposals as localProposals } from "./local/proposals";
-import { polls as localPolls, pollResults as localPollResults } from "./local/polls";
+import {
+  polls as localPolls,
+  pollScenarios as localPollScenarios,
+  pollResults as localPollResults,
+} from "./local/polls";
 
 /**
  * Data access layer. Poliscope ships with a fully-featured local demo
@@ -213,19 +218,68 @@ export async function getPolls(): Promise<Poll[]> {
   return [...localPolls].sort((a, b) => (a.published_at < b.published_at ? 1 : -1));
 }
 
-export async function getPollResults(pollId: string): Promise<PollResult[]> {
+export interface HeadlinePoll {
+  poll: Poll;
+  scenario: PollScenario;
+  results: PollResult[];
+}
+
+/**
+ * The single most recent poll's headline scenario (order_index 0), for the
+ * homepage teaser. Never blends hypotheses — same rule as /sondages — and
+ * returns null rather than a guess when no real poll/scenario/result exists.
+ */
+export async function getHomeHeadlinePoll(): Promise<HeadlinePoll | null> {
+  const polls = await getPolls();
+  const poll = polls[0];
+  if (!poll) return null;
+
+  const scenarios = (await getPollScenarios())
+    .filter((s) => s.poll_id === poll.id)
+    .sort((a, b) => a.order_index - b.order_index);
+  const scenario = scenarios[0];
+  if (!scenario) return null;
+
+  const results = await getPollResults(scenario.id);
+  if (results.length === 0) return null;
+
+  return { poll, scenario, results };
+}
+
+export async function getPollScenarios(): Promise<PollScenario[]> {
   if (isSupabaseConfigured()) {
     try {
       const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase
-        .from("poll_results")
+        .from("poll_scenarios")
         .select("*")
-        .eq("poll_id", pollId);
+        .order("order_index");
       if (error) throw error;
       if (data && data.length) return data;
     } catch {
       // fall through
     }
   }
-  return localPollResults.filter((r) => r.poll_id === pollId);
+  return [...localPollScenarios].sort((a, b) => a.order_index - b.order_index);
+}
+
+/**
+ * Résultats d'un scénario précis (une hypothèse) — jamais d'un sondage entier,
+ * pour ne jamais risquer de mélanger deux hypothèses distinctes.
+ */
+export async function getPollResults(scenarioId: string): Promise<PollResult[]> {
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = await createSupabaseServerClient();
+      const { data, error } = await supabase
+        .from("poll_results")
+        .select("*")
+        .eq("scenario_id", scenarioId);
+      if (error) throw error;
+      if (data && data.length) return data;
+    } catch {
+      // fall through
+    }
+  }
+  return localPollResults.filter((r) => r.scenario_id === scenarioId);
 }

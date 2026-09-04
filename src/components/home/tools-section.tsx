@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { ArrowUpRight, ScanSearch, SplitSquareHorizontal, FileText, LineChart } from "lucide-react";
+import {
+  ArrowUpRight,
+  ScanSearch,
+  SplitSquareHorizontal,
+  FileText,
+  LineChart,
+  Calculator,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tools = [
@@ -26,6 +33,14 @@ const tools = [
     available: true,
   },
   {
+    icon: Calculator,
+    title: "Simulateur d'impact",
+    description:
+      "Décrivez votre situation : quelles mesures sourcées vous concernent, et combien quand elles sont chiffrées.",
+    href: "/simulateur",
+    available: true,
+  },
+  {
     icon: LineChart,
     title: "Sondages",
     description: "Suivez les tendances de la présidentielle et leur évolution dans le temps.",
@@ -36,23 +51,23 @@ const tools = [
 
 export function ToolsSection() {
   return (
-    <section className="container-app py-20">
+    <section className="container-app pb-20 pt-6">
       <div className="max-w-2xl">
-        <h2 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h2 className="text-balance font-serif text-[1.9rem] font-semibold tracking-tight sm:text-[2.2rem]">
           La présidentielle, sans le brouillard.
         </h2>
         <p className="mt-3 text-muted">
-          Quatre outils pour comprendre, comparer et vous forger votre propre opinion — sans parti pris.
+          Cinq outils pour comprendre, comparer et vous forger votre propre opinion — sans parti pris.
         </p>
       </div>
 
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {tools.map((tool) => (
           <Link
             key={tool.title}
             href={tool.href}
             className={cn(
-              "focus-ring group flex flex-col rounded-xl border border-border p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_20px_40px_-24px_rgba(15,15,25,0.25)]"
+              "focus-ring group flex flex-col rounded-[20px] border border-border bg-card p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_20px_40px_-24px_rgba(15,23,41,0.25)]"
             )}
           >
             <tool.icon className="text-primary" size={22} strokeWidth={1.75} />

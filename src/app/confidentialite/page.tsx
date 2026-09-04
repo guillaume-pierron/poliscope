@@ -15,12 +15,12 @@ const principles = [
   {
     icon: Lock,
     title: "Vos réponses restent sur votre appareil",
-    body: "Les réponses au Match sont enregistrées uniquement dans le stockage local de votre navigateur (localStorage). Elles ne sont jamais envoyées ni conservées sur nos serveurs, et le calcul de compatibilité s'exécute dans votre navigateur.",
+    body: "Les réponses au Match sont enregistrées uniquement dans le stockage local de votre navigateur (localStorage). Elles ne sont jamais envoyées ni conservées sur nos serveurs, et le calcul de proximité s'exécute dans votre navigateur.",
   },
   {
     icon: EyeOff,
     title: "Aucun profil politique nominatif",
-    body: "Poliscope ne construit aucun profil associant une identité (email, compte, cookie publicitaire) à des opinions politiques. Le partage de résultats ne transmet que des scores de compatibilité, jamais le détail de vos réponses, et seulement si vous cliquez explicitement sur « Partager ».",
+    body: "Poliscope ne construit aucun profil associant une identité (email, compte, cookie publicitaire) à des opinions politiques. Le partage de résultats ne transmet que des scores de proximité, jamais le détail de vos réponses, et seulement si vous cliquez explicitement sur « Partager ».",
   },
   {
     icon: Mail,
@@ -32,7 +32,7 @@ const principles = [
 export default function ConfidentialitePage() {
   return (
     <div className="container-app max-w-2xl py-10 md:py-16">
-      <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Confidentialité</h1>
+      <h1 className="font-serif text-[2rem] font-semibold tracking-tight sm:text-[2.4rem]">Confidentialité</h1>
       <p className="mt-3 text-muted">
         Le Match peut révéler indirectement des opinions politiques. Nous avons conçu Poliscope
         selon une logique « privacy by design ».
@@ -40,7 +40,7 @@ export default function ConfidentialitePage() {
 
       <div className="mt-10 space-y-6">
         {principles.map((p) => (
-          <div key={p.title} className="flex gap-4 rounded-xl border border-border bg-background p-5">
+          <div key={p.title} className="flex gap-4 rounded-xl border border-border bg-card p-5">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary">
               <p.icon size={18} />
             </span>

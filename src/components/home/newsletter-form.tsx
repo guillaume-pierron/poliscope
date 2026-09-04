@@ -20,7 +20,7 @@ export function NewsletterForm({ className }: { className?: string }) {
           required
           placeholder="vous@exemple.fr"
           aria-label="Adresse e-mail"
-          className="bg-background"
+          className="bg-card"
         />
         <Button type="submit" variant="primary" size="md" disabled={pending} className="shrink-0">
           {pending ? "…" : "Recevoir"}

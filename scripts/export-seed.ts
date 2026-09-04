@@ -17,7 +17,7 @@ import { candidates } from "../src/lib/data/local/candidates";
 import { questions } from "../src/lib/data/local/questions";
 import { candidatePositions } from "../src/lib/data/local/positions";
 import { proposals } from "../src/lib/data/local/proposals";
-import { polls, pollResults } from "../src/lib/data/local/polls";
+import { polls, pollScenarios, pollResults } from "../src/lib/data/local/polls";
 
 function uuid(kind: string, key: string) {
   return `uuid_generate_v5(uuid_ns_url(), 'poliscope:${kind}:${key}')`;
@@ -45,7 +45,7 @@ const lines: string[] = [
 lines.push("-- elections");
 for (const e of elections) {
   lines.push(
-    `insert into elections (id, slug, name, kind, round_date, is_active) values (${uuid("election", e.slug)}, ${sqlString(e.slug)}, ${sqlString(e.name)}, ${sqlString(e.kind)}, ${sqlString(e.round_date)}, ${sqlBool(e.is_active)}) on conflict (id) do nothing;`
+    `insert into elections (id, slug, name, kind, round_date, second_round_date, is_active) values (${uuid("election", e.slug)}, ${sqlString(e.slug)}, ${sqlString(e.name)}, ${sqlString(e.kind)}, ${sqlString(e.round_date)}, ${sqlString(e.second_round_date)}, ${sqlBool(e.is_active)}) on conflict (id) do nothing;`
   );
 }
 
@@ -95,7 +95,7 @@ for (const p of proposals) {
   const candidate = candidates.find((c) => c.id === p.candidate_id)!;
   const themeSlug = p.theme_id.replace("theme-", "");
   lines.push(
-    `insert into proposals (id, candidate_id, theme_id, title, summary, description, source_name, source_url, published_at, verified_at, status) values (${uuid("proposal", p.id)}, ${uuid("candidate", candidate.slug)}, ${uuid("theme", themeSlug)}, ${sqlString(p.title)}, ${sqlString(p.summary)}, ${sqlString(p.description)}, ${sqlString(p.source_name)}, ${sqlString(p.source_url)}, ${sqlString(p.published_at)}, ${sqlString(p.verified_at)}, ${sqlString(p.status)}) on conflict (id) do nothing;`
+    `insert into proposals (id, candidate_id, theme_id, title, summary, description, source_name, source_url, published_at, verified_at, status, tags) values (${uuid("proposal", p.id)}, ${uuid("candidate", candidate.slug)}, ${uuid("theme", themeSlug)}, ${sqlString(p.title)}, ${sqlString(p.summary)}, ${sqlString(p.description)}, ${sqlString(p.source_name)}, ${sqlString(p.source_url)}, ${sqlString(p.published_at)}, ${sqlString(p.verified_at)}, ${sqlString(p.status)}, ${sqlString(p.tags)}) on conflict (id) do nothing;`
   );
 }
 
@@ -103,7 +103,14 @@ lines.push("", "-- polls");
 for (const poll of polls) {
   const electionSlug = elections.find((e) => e.id === poll.election_id)?.slug ?? elections[0].slug;
   lines.push(
-    `insert into polls (id, election_id, institute, sponsor, field_start, field_end, sample_size, method, round, published_at, is_demo) values (${uuid("poll", poll.id)}, ${uuid("election", electionSlug)}, ${sqlString(poll.institute)}, ${sqlString(poll.sponsor)}, ${sqlString(poll.field_start)}, ${sqlString(poll.field_end)}, ${poll.sample_size}, ${sqlString(poll.method)}, ${sqlString(poll.round)}, ${sqlString(poll.published_at)}, ${sqlBool(poll.is_demo)}) on conflict (id) do nothing;`
+    `insert into polls (id, election_id, institute, sponsor, field_start, field_end, sample_size, method, source_name, source_url, published_at, is_demo) values (${uuid("poll", poll.id)}, ${uuid("election", electionSlug)}, ${sqlString(poll.institute)}, ${sqlString(poll.sponsor)}, ${sqlString(poll.field_start)}, ${sqlString(poll.field_end)}, ${poll.sample_size}, ${sqlString(poll.method)}, ${sqlString(poll.source_name)}, ${sqlString(poll.source_url)}, ${sqlString(poll.published_at)}, ${sqlBool(poll.is_demo)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- poll_scenarios");
+for (const s of pollScenarios) {
+  lines.push(
+    `insert into poll_scenarios (id, poll_id, label, round, order_index) values (${uuid("poll_scenario", s.id)}, ${uuid("poll", s.poll_id)}, ${sqlString(s.label)}, ${sqlString(s.round)}, ${s.order_index}) on conflict (id) do nothing;`
   );
 }
 
@@ -111,7 +118,7 @@ lines.push("", "-- poll_results");
 for (const r of pollResults) {
   const candidate = candidates.find((c) => c.id === r.candidate_id)!;
   lines.push(
-    `insert into poll_results (id, poll_id, candidate_id, value, low, high) values (${uuid("poll_result", r.id)}, ${uuid("poll", r.poll_id)}, ${uuid("candidate", candidate.slug)}, ${r.value}, ${sqlNumber(r.low)}, ${sqlNumber(r.high)}) on conflict (id) do nothing;`
+    `insert into poll_results (id, scenario_id, candidate_id, value, low, high) values (${uuid("poll_result", r.id)}, ${uuid("poll_scenario", r.scenario_id)}, ${uuid("candidate", candidate.slug)}, ${r.value}, ${sqlNumber(r.low)}, ${sqlNumber(r.high)}) on conflict (id) do nothing;`
   );
 }
 

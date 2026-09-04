@@ -12,7 +12,7 @@ const STATUS_VARIANT: Record<Proposal["status"], "default" | "primary" | "accent
 
 export function ProposalItem({ proposal }: { proposal: Proposal }) {
   return (
-    <article className="rounded-xl border border-border bg-background p-5">
+    <article className="rounded-xl border border-border bg-card p-5">
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant={STATUS_VARIANT[proposal.status]}>
           {PROPOSAL_STATUS_LABELS[proposal.status]}
