@@ -38,7 +38,7 @@ export function Footer() {
       <div className="container-app py-9">
         <div className="grid gap-8 md:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
           <div>
-            <Logo />
+            <Logo showAccent={false} />
             <p className="mt-2.5 max-w-xs text-sm text-muted">
               Comprenez les programmes. Faites-vous votre propre opinion.
             </p>
