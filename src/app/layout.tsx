@@ -50,12 +50,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body>
         <ChromeGate>
           <Ticker />
         </ChromeGate>
         <Header />
-        <main className="flex-1">{children}</main>
+        <main>{children}</main>
         <ChromeGate>
           <Footer />
         </ChromeGate>
