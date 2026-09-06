@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { loadAnswers } from "@/lib/match-storage";
-import { computeMatchResults } from "@/lib/scoring";
+import { computeMatchResults, computeThemeWeightsFromPriorityAnswers } from "@/lib/scoring";
 import type { Candidate, CandidateMatchResult, CandidatePosition, Question } from "@/lib/types";
 
 export function CompatBadge({ candidate }: { candidate: Candidate }) {
@@ -19,7 +19,8 @@ export function CompatBadge({ candidate }: { candidate: Candidate }) {
     fetch("/api/match-data")
       .then((res) => res.json())
       .then((data: { candidates: Candidate[]; positions: CandidatePosition[]; questions: Question[] }) => {
-        const [computed] = computeMatchResults(answers, [candidate], data.positions, data.questions);
+        const themeWeights = computeThemeWeightsFromPriorityAnswers(answers, data.questions);
+        const [computed] = computeMatchResults(answers, [candidate], data.positions, data.questions, themeWeights);
         setResult(computed ?? null);
       })
       .catch(() => setResult(null));

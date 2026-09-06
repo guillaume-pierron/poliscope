@@ -143,6 +143,12 @@ export async function getCandidateBySlug(slug: string): Promise<Candidate | unde
   return candidate ? withParty(candidate) : undefined;
 }
 
+/**
+ * Only "active" questions are served — a question can be prepared (typed,
+ * sourced, ready) without being asked in the current questionnaire yet,
+ * which is what lets a future "Affiner mon Match" unlock more questions per
+ * theme without a breaking change here.
+ */
 export async function getQuestions(): Promise<Question[]> {
   if (isSupabaseConfigured()) {
     try {
@@ -150,6 +156,7 @@ export async function getQuestions(): Promise<Question[]> {
       const { data, error } = await supabase
         .from("questions")
         .select("*, theme:themes(*)")
+        .eq("is_active", true)
         .order("order_index");
       if (error) throw error;
       if (data && data.length) return data as Question[];
@@ -157,7 +164,9 @@ export async function getQuestions(): Promise<Question[]> {
       // fall through
     }
   }
-  return localQuestions.map((q) => ({ ...q, theme: localGetThemeBySlug(q.theme_id.replace("theme-", "")) }));
+  return localQuestions
+    .filter((q) => q.is_active)
+    .map((q) => ({ ...q, theme: localGetThemeBySlug(q.theme_id.replace("theme-", "")) }));
 }
 
 export async function getAllPositions(): Promise<CandidatePosition[]> {

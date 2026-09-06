@@ -6,7 +6,7 @@ import { ArrowRight, RefreshCcw, ScanSearch, SplitSquareHorizontal } from "lucid
 import { CandidateAvatar } from "@/components/candidates/candidate-avatar";
 import { ButtonLink } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { computeMatchResults } from "@/lib/scoring";
+import { computeMatchResults, computeThemeWeightsFromPriorityAnswers } from "@/lib/scoring";
 import { countChangedPositions, loadSnapshot, saveSnapshot } from "@/lib/match-storage";
 import { formatDate } from "@/lib/utils";
 import type {
@@ -71,11 +71,13 @@ export function MatchHeroPanel({ answers }: { answers: UserAnswer[] }) {
     );
   }
 
+  const themeWeights = computeThemeWeightsFromPriorityAnswers(answers, data.questions);
   const results: CandidateMatchResult[] = computeMatchResults(
     answers,
     data.candidates,
     data.positions,
-    data.questions
+    data.questions,
+    themeWeights
   );
   const top5 = results.slice(0, 5);
   const top2 = results.slice(0, 2).filter((r) => r.score !== null);

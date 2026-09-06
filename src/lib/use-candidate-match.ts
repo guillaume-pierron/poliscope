@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { loadAnswers } from "@/lib/match-storage";
-import { computeMatchResults } from "@/lib/scoring";
+import { computeMatchResults, computeThemeWeightsFromPriorityAnswers } from "@/lib/scoring";
 import type { Candidate, CandidateMatchResult, CandidatePosition, Question } from "@/lib/types";
 
 type MatchData = { candidates: Candidate[]; positions: CandidatePosition[]; questions: Question[] };
@@ -34,7 +34,8 @@ export function useCandidateMatchResult(candidate: Candidate): CandidateMatchSta
     fetch("/api/match-data")
       .then((res) => res.json())
       .then((data: MatchData) => {
-        const [computed] = computeMatchResults(answers, [candidate], data.positions, data.questions);
+        const themeWeights = computeThemeWeightsFromPriorityAnswers(answers, data.questions);
+        const [computed] = computeMatchResults(answers, [candidate], data.positions, data.questions, themeWeights);
         if (!computed || computed.score === null) {
           setState({ status: "no-data" });
         } else {

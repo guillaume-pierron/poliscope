@@ -48,9 +48,16 @@ export async function logoutAction() {
 function parseFieldValue(raw: FormDataEntryValue | null, type: string) {
   if (raw === null) return null;
   const value = raw.toString();
-  if (value === "" ) return null;
+  if (value === "" ) return type === "json" ? [] : null;
   if (type === "number") return Number(value);
   if (type === "boolean") return value === "on" || value === "true";
+  if (type === "json") {
+    try {
+      return JSON.parse(value);
+    } catch {
+      throw new Error(`JSON invalide : « ${value.slice(0, 80)}${value.length > 80 ? "…" : ""} »`);
+    }
+  }
   return value;
 }
 
@@ -71,8 +78,12 @@ export async function saveEntityAction(
   const id = formData.get("id")?.toString();
 
   const record: Record<string, unknown> = {};
-  for (const field of entity.fields) {
-    record[field.name] = parseFieldValue(formData.get(field.name), field.type);
+  try {
+    for (const field of entity.fields) {
+      record[field.name] = parseFieldValue(formData.get(field.name), field.type);
+    }
+  } catch (error) {
+    return { status: "error", message: error instanceof Error ? error.message : "Champ invalide." };
   }
 
   try {

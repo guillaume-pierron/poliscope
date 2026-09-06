@@ -1,18 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, Clock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Clock, HelpCircle, Scale } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Sparkle } from "@/components/ui/swoosh";
 import { CivicSceneDoodle, CloudDoodle, PaperPlaneDoodle, PlantDoodle } from "@/components/ui/doodles";
 import { ThemeIcon } from "@/lib/theme-icons";
 import { cn } from "@/lib/utils";
-import { LIKERT_OPTIONS } from "@/lib/data/local/questions";
+import { calculateQuestionDiscrimination } from "@/lib/scoring";
 import { loadAnswers, saveAnswers } from "@/lib/match-storage";
-import type { Question, UserAnswer } from "@/lib/types";
+import type {
+  CandidatePosition,
+  Question,
+  QuestionDiscrimination,
+  Theme,
+  UserAnswer,
+} from "@/lib/types";
+import { QUESTION_DISCRIMINATION_LABELS } from "@/lib/types";
 
-/** Intensity glyphs for the five likert answers, from most to least agreement. */
+/** Intensity glyphs for the five likert answers, from most to least agreement — keyed by value, so both wordings (agreement, intensity) share them. */
 const INTENSITY_GLYPHS: Record<number, string> = {
   2: "++",
   1: "+",
@@ -21,17 +28,42 @@ const INTENSITY_GLYPHS: Record<number, string> = {
   [-2]: "– –",
 };
 
+/**
+ * "Pourquoi cette question ?" toggle. A separate component keyed by
+ * question id in the parent so its open/closed state always resets when
+ * the visitor moves to another question, without extra effect plumbing.
+ */
+function QuestionContext({ context }: { context: string | null }) {
+  const [open, setOpen] = useState(false);
+  if (!context) return null;
+
+  return (
+    <div className="mt-3">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="focus-ring inline-flex items-center gap-1.5 text-xs font-medium text-muted transition-colors hover:text-foreground"
+      >
+        <HelpCircle size={13} />
+        {open ? "Masquer le contexte" : "Pourquoi cette question ?"}
+      </button>
+      {open && <p className="animate-fade-in mt-2 text-sm leading-relaxed text-muted">{context}</p>}
+    </div>
+  );
+}
+
 export function Questionnaire() {
   const router = useRouter();
   const [questions, setQuestions] = useState<Question[] | null>(null);
+  const [positions, setPositions] = useState<CandidatePosition[]>([]);
   const [index, setIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, number | null>>({});
+  const [answers, setAnswers] = useState<Record<string, number | string | null>>({});
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     // localStorage is an external system only readable client-side on mount.
     const saved = loadAnswers();
-    const map: Record<string, number | null> = {};
+    const map: Record<string, number | string | null> = {};
     saved.forEach((a) => {
       map[a.question_id] = a.value;
     });
@@ -40,12 +72,15 @@ export function Questionnaire() {
     // Fetch the same public reference dataset the results page and homepage
     // panel use (candidates/positions/questions) so a saved answer's
     // question_id always matches whichever backend (Supabase or the local
-    // fallback) is currently serving positions — never the demo IDs.
+    // fallback) is currently serving positions — never the demo IDs. The
+    // positions are also what the discrimination hint below is computed
+    // from — never a hardcoded per-question verdict.
     fetch("/api/match-data")
       .then((res) => res.json())
-      .then((data: { questions: Question[] }) => {
+      .then((data: { questions: Question[]; positions: CandidatePosition[] }) => {
         const qs = data.questions;
         setQuestions(qs);
+        setPositions(data.positions);
         const firstUnanswered = qs.findIndex((q) => !(q.id in map));
         setIndex(firstUnanswered === -1 ? 0 : firstUnanswered);
         setHydrated(true);
@@ -56,22 +91,56 @@ export function Questionnaire() {
       });
   }, []);
 
-  if (!hydrated || !questions || questions.length === 0) {
+  // Every theme referenced by a likert/choice question already carries the
+  // full Theme (with icon) via the API — reused here to illustrate a
+  // "priority" question's options without a second data fetch.
+  const themeById = useMemo(() => {
+    const map = new Map<string, Theme>();
+    for (const q of questions ?? []) {
+      if (q.theme) map.set(q.theme.id, q.theme);
+    }
+    return map;
+  }, [questions]);
+
+  // Every hook above must run on every render regardless of `hydrated` (the
+  // Rules of Hooks) — this one guards its own input instead of being
+  // skipped by an early return, so the hook count never changes between
+  // the loading and ready renders.
+  const currentQuestion = hydrated && questions ? (questions[index] ?? null) : null;
+  const discrimination: QuestionDiscrimination = useMemo(
+    () => (currentQuestion ? calculateQuestionDiscrimination(currentQuestion, positions) : null),
+    [currentQuestion, positions]
+  );
+
+  if (!hydrated || !questions || questions.length === 0 || !currentQuestion) {
     return <div className="container-app py-24" />;
   }
 
   const total = questions.length;
-  const question = questions[index];
+  const question = currentQuestion;
   const theme = question.theme;
-  const isLikert = question.answer_type !== "choice";
-  const options = !isLikert && question.choices ? question.choices : LIKERT_OPTIONS;
+  const isLikert = question.answer_type === "likert";
+  const isPriority = question.answer_type === "priority";
+
+  // A visitor's earlier "priority" pick shouldn't be offered again on a
+  // later priority question — picking the same topic twice would be a
+  // no-op that just wastes a question.
+  const options = isPriority
+    ? question.options.filter((o) => {
+        const pickedEarlier = questions
+          .slice(0, index)
+          .filter((q) => q.answer_type === "priority")
+          .some((q) => answers[q.id] === o.id);
+        return !pickedEarlier;
+      })
+    : question.options;
 
   const currentValue = answers[question.id];
   const isAnswered = currentValue !== undefined;
   const isLast = index === total - 1;
   const estimatedMinutesLeft = Math.max(1, Math.round(((total - index) * 10) / 60));
 
-  function persist(next: Record<string, number | null>) {
+  function persist(next: Record<string, number | string | null>) {
     setAnswers(next);
     const list: UserAnswer[] = questions!
       .filter((q) => q.id in next)
@@ -79,7 +148,7 @@ export function Questionnaire() {
     saveAnswers(list);
   }
 
-  function selectValue(value: number) {
+  function selectValue(value: number | string) {
     persist({ ...answers, [question.id]: value });
   }
 
@@ -125,10 +194,16 @@ export function Questionnaire() {
             className="animate-rise relative rounded-[24px] border border-border bg-card p-7 sm:p-9"
           >
           <div className="flex items-start justify-between gap-4">
-            {theme && (
+            {theme && !isPriority && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-sm font-medium text-primary">
                 <ThemeIcon icon={theme.icon} className="h-4 w-4" />
                 {theme.name}
+              </span>
+            )}
+            {isPriority && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-sm font-medium text-accent">
+                <Scale className="h-4 w-4" />
+                Vos priorités
               </span>
             )}
             <CivicSceneDoodle className="hidden h-16 w-24 shrink-0 sm:block" />
@@ -141,15 +216,23 @@ export function Questionnaire() {
             <p className="mt-2 text-sm text-muted">{question.description}</p>
           )}
 
+          <QuestionContext key={`${question.id}-context`} context={question.context} />
+
+          {discrimination && (
+            <p className="mt-3 text-xs italic text-muted-2">{QUESTION_DISCRIMINATION_LABELS[discrimination]}</p>
+          )}
+
           <div className="mt-7 space-y-2.5">
             {options.map((option) => {
-              const selected = currentValue === option.value;
-              const glyph = isLikert ? (INTENSITY_GLYPHS[option.value] ?? "○") : null;
+              const value = isLikert ? option.value! : option.id;
+              const selected = currentValue === value;
+              const glyph = isLikert ? (INTENSITY_GLYPHS[option.value!] ?? "○") : null;
+              const optionTheme = option.theme_id ? themeById.get(option.theme_id) : undefined;
               return (
                 <button
-                  key={option.label}
+                  key={option.id}
                   type="button"
-                  onClick={() => selectValue(option.value)}
+                  onClick={() => selectValue(value)}
                   className={cn(
                     "focus-ring flex w-full items-center gap-3 rounded-2xl border px-4 py-3.5 text-left text-sm font-medium transition-all duration-150",
                     selected
@@ -163,9 +246,18 @@ export function Questionnaire() {
                       selected ? "bg-card text-primary" : "bg-primary-soft text-primary"
                     )}
                   >
-                    {glyph ?? <span className="h-2 w-2 rounded-full bg-current" />}
+                    {optionTheme ? (
+                      <ThemeIcon icon={optionTheme.icon} className="h-4 w-4" />
+                    ) : (
+                      (glyph ?? <span className="h-2 w-2 rounded-full bg-current" />)
+                    )}
                   </span>
-                  <span className="flex-1">{option.label}</span>
+                  <span className="flex-1">
+                    <span className="block">{option.label}</span>
+                    {option.description && (
+                      <span className="mt-0.5 block text-xs font-normal text-muted">{option.description}</span>
+                    )}
+                  </span>
                   {selected && (
                     <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white">
                       <Check size={14} strokeWidth={3} />
@@ -193,9 +285,13 @@ export function Questionnaire() {
             type="button"
             onClick={skip}
             className="focus-ring text-sm font-medium text-muted-2 transition-colors hover:text-foreground"
-            title="Exclut cette question du calcul — différent de « Neutre », qui compte comme une vraie réponse."
+            title={
+              isPriority
+                ? "N'ajuste aucune pondération pour ce sujet."
+                : "Exclut cette question du calcul — différent de « Neutre », qui compte comme une vraie réponse."
+            }
           >
-            Passer <span className="hidden sm:inline">(sans opinion)</span>
+            Passer <span className="hidden sm:inline">{isPriority ? "(optionnel)" : "(sans opinion)"}</span>
           </button>
 
           <button

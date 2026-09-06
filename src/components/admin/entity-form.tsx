@@ -29,13 +29,31 @@ export function EntityForm({
 
       {entity.fields.map((field) => {
         const value = record?.[field.name];
-        let defaultValue = value === null || value === undefined ? "" : String(value);
+        let defaultValue =
+          field.type === "json"
+            ? value === null || value === undefined
+              ? "[]"
+              : typeof value === "string"
+                ? value
+                : JSON.stringify(value, null, 2)
+            : value === null || value === undefined
+              ? ""
+              : String(value);
         if (field.type === "date" && defaultValue) defaultValue = defaultValue.slice(0, 10);
 
         return (
           <div key={field.name}>
             <Label htmlFor={field.name}>{field.label}</Label>
-            {field.type === "textarea" ? (
+            {field.type === "json" ? (
+              <Textarea
+                id={field.name}
+                name={field.name}
+                defaultValue={defaultValue}
+                rows={8}
+                required={field.required}
+                className="font-mono text-xs"
+              />
+            ) : field.type === "textarea" ? (
               <Textarea id={field.name} name={field.name} defaultValue={defaultValue} rows={4} required={field.required} />
             ) : field.type === "select" ? (
               <Select id={field.name} name={field.name} defaultValue={defaultValue} required={field.required}>

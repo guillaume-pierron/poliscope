@@ -1,23 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { ExternalLink, Minus, ThumbsDown, ThumbsUp } from "lucide-react";
+import { CircleDot, ExternalLink, Minus, ThumbsDown, ThumbsUp } from "lucide-react";
 import { Modal } from "@/components/ui/modal";
 import { CandidateAvatarWithParty } from "./candidate-avatar-party";
 import { ThemeIcon } from "@/lib/theme-icons";
+import { describePositionValue, positionTone } from "@/lib/match-format";
 import type { Candidate, CandidatePosition, Question } from "@/lib/types";
 
-const SCORE_LABEL: Record<number, string> = {
-  2: "Totalement favorable",
-  1: "Plutôt favorable",
-  0: "Neutre",
-  [-1]: "Plutôt opposé",
-  [-2]: "Totalement opposé",
-};
-
-function ScoreIcon({ score }: { score: number }) {
-  if (score > 0) return <ThumbsUp size={16} className="shrink-0 text-success" />;
-  if (score < 0) return <ThumbsDown size={16} className="shrink-0 text-danger" />;
+/** A "choice" position has no agree/disagree valence — never a thumbs up/down implying "good/bad". */
+function PositionIcon({ question, position }: { question: Question; position: CandidatePosition }) {
+  const tone = positionTone(question.answer_type, position);
+  if (tone === "positive") return <ThumbsUp size={16} className="shrink-0 text-success" />;
+  if (tone === "negative") return <ThumbsDown size={16} className="shrink-0 text-danger" />;
+  if (tone === "choice") return <CircleDot size={16} className="shrink-0 text-primary" />;
   return <Minus size={16} className="shrink-0 text-muted-2" />;
 }
 
@@ -59,10 +55,10 @@ export function PositionDetailModal({
 
           <h3 className="mt-3 text-base font-medium leading-snug">{data.question.question}</h3>
 
-          {data.position.score !== null && (
+          {describePositionValue(data.question, data.position) && (
             <div className="mt-3 flex items-center gap-2 text-sm font-medium">
-              <ScoreIcon score={data.position.score} />
-              {SCORE_LABEL[data.position.score]}
+              <PositionIcon question={data.question} position={data.position} />
+              {describePositionValue(data.question, data.position)}
             </div>
           )}
 

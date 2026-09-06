@@ -1,6 +1,6 @@
 export type EntityKey = "themes" | "parties" | "candidats" | "propositions" | "questions" | "positions";
 
-export type FieldType = "text" | "textarea" | "number" | "url" | "date" | "select" | "boolean";
+export type FieldType = "text" | "textarea" | "number" | "url" | "date" | "select" | "boolean" | "json";
 
 export interface EntityField {
   name: string;
@@ -125,18 +125,38 @@ export const ENTITIES: Record<EntityKey, EntityConfig> = {
     fields: [
       { name: "question", label: "Question", type: "text", required: true },
       { name: "theme_id", label: "Thème", type: "select", relation: "themes", required: true },
-      { name: "description", label: "Précision (optionnelle)", type: "textarea" },
+      { name: "description", label: "Précision (optionnelle, toujours visible)", type: "textarea" },
+      {
+        name: "context",
+        label: "Contexte (« Pourquoi cette question ? », masqué par défaut)",
+        type: "textarea",
+        help: "2-4 lignes neutres qui expliquent l'enjeu — jamais un argument pour une réponse, jamais la position d'un candidat.",
+      },
       {
         name: "answer_type",
         label: "Type de réponse",
         type: "select",
         options: [
-          { value: "likert", label: "Échelle d'accord (5 niveaux)" },
-          { value: "choice", label: "Choix multiples" },
+          { value: "likert", label: "Échelle d'opinion (5 niveaux, -2 à 2)" },
+          { value: "choice", label: "Arbitrage entre politiques (non ordonné)" },
+          { value: "priority", label: "Priorité de l'utilisateur (jamais comparée à un candidat)" },
         ],
       },
-      { name: "weight", label: "Poids", type: "number", help: "1 par défaut, plus si structurante." },
+      {
+        name: "options",
+        label: "Réponses possibles (JSON)",
+        type: "json",
+        required: true,
+        help: 'Tableau de { "id", "label", "value"?, "description"?, "theme_id"? }. "value" (-2..2) uniquement pour les questions "likert" ; "theme_id" uniquement pour les questions "priority".',
+      },
+      { name: "weight", label: "Poids", type: "number", help: "Champ conservé pour compatibilité, non utilisé par le calcul (voir méthodologie)." },
       { name: "order_index", label: "Ordre d'affichage", type: "number" },
+      {
+        name: "is_active",
+        label: "Active dans le questionnaire",
+        type: "boolean",
+        help: "Une question peut être prête (sourcée, typée) sans être encore posée en V1.",
+      },
     ],
   },
   positions: {
@@ -149,12 +169,31 @@ export const ENTITIES: Record<EntityKey, EntityConfig> = {
       { name: "candidate_id", label: "Candidat", type: "select", relation: "candidats", required: true },
       { name: "question_id", label: "Question", type: "select", relation: "questions", required: true },
       {
-        name: "score",
-        label: "Position (-2 à 2, vide = non renseignée)",
+        name: "answer_type",
+        label: "Type de réponse",
+        type: "select",
+        options: [
+          { value: "likert", label: "Échelle d'opinion" },
+          { value: "choice", label: "Arbitrage entre politiques" },
+        ],
+        help: "Doit correspondre au type de la question choisie ci-dessus.",
+      },
+      {
+        name: "numeric_score",
+        label: "Position sur l'échelle (-2 à 2, vide = non renseignée)",
         type: "number",
+        help: "Uniquement pour une question de type « échelle d'opinion ».",
+      },
+      {
+        name: "option_id",
+        label: "Identifiant de l'option choisie (vide = non renseignée)",
+        type: "text",
+        help: "Uniquement pour une question de type « arbitrage » — doit correspondre à un « id » du champ Réponses possibles de la question.",
       },
       { name: "explanation", label: "Explication courte", type: "textarea" },
       { name: "source_url", label: "URL de la source", type: "url" },
+      { name: "source_name", label: "Nom de la source", type: "text", help: "Ex. « Le JDD », « Programme officiel »." },
+      { name: "verified_at", label: "Date de dernière vérification", type: "date" },
     ],
   },
 };

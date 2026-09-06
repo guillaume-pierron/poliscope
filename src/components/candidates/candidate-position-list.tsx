@@ -1,17 +1,13 @@
-import { ExternalLink, Minus, ThumbsDown, ThumbsUp } from "lucide-react";
+import { CircleDot, ExternalLink, Minus, ThumbsDown, ThumbsUp } from "lucide-react";
+import { describePositionValue, positionTone } from "@/lib/match-format";
 import type { CandidatePosition, Question } from "@/lib/types";
 
-const SCORE_LABEL: Record<number, string> = {
-  2: "Totalement favorable",
-  1: "Plutôt favorable",
-  0: "Neutre",
-  [-1]: "Plutôt opposé",
-  [-2]: "Totalement opposé",
-};
-
-function ScoreIcon({ score }: { score: number }) {
-  if (score > 0) return <ThumbsUp size={15} className="shrink-0 text-success" />;
-  if (score < 0) return <ThumbsDown size={15} className="shrink-0 text-danger" />;
+/** A "choice" position has no agree/disagree valence — never a thumbs up/down implying "good/bad". */
+function PositionIcon({ question, position }: { question: Question; position: CandidatePosition }) {
+  const tone = positionTone(question.answer_type, position);
+  if (tone === "positive") return <ThumbsUp size={15} className="shrink-0 text-success" />;
+  if (tone === "negative") return <ThumbsDown size={15} className="shrink-0 text-danger" />;
+  if (tone === "choice") return <CircleDot size={15} className="shrink-0 text-primary" />;
   return <Minus size={15} className="shrink-0 text-muted-2" />;
 }
 
@@ -29,7 +25,7 @@ export function CandidatePositionList({
 }) {
   const questionById = new Map(questions.map((q) => [q.id, q]));
   const items = positions
-    .filter((p) => p.score !== null)
+    .filter((p) => p.numeric_score !== null || p.option_id !== null)
     .map((p) => ({ position: p, question: questionById.get(p.question_id) }))
     .filter((item): item is { position: CandidatePosition; question: Question } => !!item.question)
     .sort((a, b) => a.question.order_index - b.question.order_index);
@@ -51,8 +47,8 @@ export function CandidatePositionList({
           )}
           <h3 className="mt-1 font-medium">{question.question}</h3>
           <div className="mt-2.5 flex items-center gap-2 text-sm font-medium">
-            <ScoreIcon score={position.score!} />
-            {SCORE_LABEL[position.score!]}
+            <PositionIcon question={question} position={position} />
+            {describePositionValue(question, position)}
           </div>
           {position.explanation && (
             <p className="mt-2 text-sm leading-relaxed text-foreground/85">{position.explanation}</p>

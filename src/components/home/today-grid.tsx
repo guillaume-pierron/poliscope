@@ -41,15 +41,20 @@ function QuestionOfDay() {
   // Date.now() is impure and would risk a hydration mismatch in render.
   const [index, setIndex] = useState(0);
 
+  // "Priority" questions aren't compared to a candidate and their options
+  // are theme names, not answers to this widget's Oui/Non/Pas sûr teaser —
+  // excluded from the rotation so it never lands on one.
+  const rotatable = questions.filter((q) => q.answer_type !== "priority");
+
   useEffect(() => {
     const dayOfYear = Math.floor(
       (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
     );
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIndex(dayOfYear % questions.length);
-  }, []);
+    setIndex(dayOfYear % rotatable.length);
+  }, [rotatable.length]);
 
-  const question = questions[index];
+  const question = rotatable[index];
   const theme = themes.find((t) => t.id === question.theme_id);
 
   return (

@@ -3,9 +3,16 @@ import type { CandidatePosition, UserAnswer } from "@/lib/types";
 /**
  * All Match state lives in localStorage, in the visitor's browser only.
  * Nothing here is ever sent to a server — see /confidentialite.
+ *
+ * Bumped to v2 alongside the 2026 questionnaire rewrite: several question
+ * ids changed shape (numeric likert → option-based choice) or meaning
+ * (e.g. q6's polarity flipped, see questions.ts), so a v1 answer would
+ * silently mean something different if reused as-is. Old v1 data is simply
+ * ignored — the visitor is prompted to redo the (now more precise) Match
+ * rather than risk a wrong result.
  */
-const ANSWERS_KEY = "poliscope:match:answers:v1";
-const SNAPSHOT_KEY = "poliscope:match:snapshot:v1";
+const ANSWERS_KEY = "poliscope:match:answers:v2";
+const SNAPSHOT_KEY = "poliscope:match:snapshot:v2";
 
 export function loadAnswers(): UserAnswer[] {
   if (typeof window === "undefined") return [];
@@ -37,7 +44,12 @@ export function clearAnswers() {
 }
 
 /** The slice of a candidate position that matters for change detection. */
-type PositionSnapshot = { candidate_id: string; question_id: string; score: number | null };
+type PositionSnapshot = {
+  candidate_id: string;
+  question_id: string;
+  numeric_score: number | null;
+  option_id: string | null;
+};
 
 interface MatchSnapshot {
   computedAt: string;
@@ -46,7 +58,12 @@ interface MatchSnapshot {
 
 function toSnapshotPositions(positions: CandidatePosition[]): PositionSnapshot[] {
   return positions
-    .map((p) => ({ candidate_id: p.candidate_id, question_id: p.question_id, score: p.score }))
+    .map((p) => ({
+      candidate_id: p.candidate_id,
+      question_id: p.question_id,
+      numeric_score: p.numeric_score,
+      option_id: p.option_id,
+    }))
     .sort((a, b) =>
       a.candidate_id === b.candidate_id
         ? a.question_id.localeCompare(b.question_id)
@@ -91,8 +108,10 @@ export function countChangedPositions(
 ): number {
   const key = (p: { candidate_id: string; question_id: string }) =>
     `${p.candidate_id}::${p.question_id}`;
-  const prevByKey = new Map(previous.map((p) => [key(p), p.score]));
-  const currByKey = new Map(current.map((p) => [key(p), p.score]));
+  const valueOf = (p: { numeric_score: number | null; option_id: string | null }) =>
+    p.numeric_score ?? p.option_id;
+  const prevByKey = new Map(previous.map((p) => [key(p), valueOf(p)]));
+  const currByKey = new Map(current.map((p) => [key(p), valueOf(p)]));
 
   let changed = 0;
   const allKeys = new Set([...prevByKey.keys(), ...currByKey.keys()]);

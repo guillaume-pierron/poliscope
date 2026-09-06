@@ -11,7 +11,7 @@ import { TopMatchCard } from "@/components/results/top-match-card";
 import { CompareTopTwoCard } from "@/components/results/compare-top-two-card";
 import { CivicLandscapeIllustration, ConfettiDoodle } from "@/components/ui/doodles";
 import { clearAnswers, loadAnswers } from "@/lib/match-storage";
-import { computeMatchResults, computeUserPriorityThemes } from "@/lib/scoring";
+import { computeMatchResults, computeThemeWeightsFromPriorityAnswers, computeUserPriorityThemes } from "@/lib/scoring";
 import type { Candidate, CandidateMatchResult, CandidatePosition, Question, UserAnswer } from "@/lib/types";
 
 type MatchData = { candidates: Candidate[]; positions: CandidatePosition[]; questions: Question[] };
@@ -63,16 +63,27 @@ export default function ResultatsPage() {
     );
   }
 
+  const themeWeights = computeThemeWeightsFromPriorityAnswers(answers, data.questions);
   const results: CandidateMatchResult[] = computeMatchResults(
     answers,
     data.candidates,
     data.positions,
-    data.questions
+    data.questions,
+    themeWeights
   );
   const ranked = results.filter((r) => r.score !== null);
   const top = ranked[0] ?? null;
   const runnerUp = ranked[1] ?? null;
   const priorityThemes = computeUserPriorityThemes(answers, data.questions);
+
+  // "Priority" answers weight the score but are never themselves compared
+  // to a candidate — split out here so the hero text never implies they
+  // were, matching CandidateMatchResult.answeredQuestions's own definition.
+  const questionById = new Map(data.questions.map((q) => [q.id, q]));
+  const priorityAnsweredCount = answers.filter(
+    (a) => a.value !== null && questionById.get(a.question_id)?.answer_type === "priority"
+  ).length;
+  const comparableAnsweredCount = answeredCount - priorityAnsweredCount;
 
   function refaireLeMatch() {
     clearAnswers();
@@ -94,8 +105,12 @@ export default function ResultatsPage() {
             </div>
 
             <p className="mt-4 max-w-sm text-muted">
-              Basés sur {answeredCount} réponse{answeredCount > 1 ? "s" : ""} comparées aux
-              positions documentées de chaque candidat.
+              Basés sur {comparableAnsweredCount} réponse{comparableAnsweredCount > 1 ? "s" : ""}{" "}
+              comparées aux positions documentées de chaque candidat
+              {priorityAnsweredCount > 0
+                ? ` (+ ${priorityAnsweredCount} priorité${priorityAnsweredCount > 1 ? "s" : ""} qui pondèrent votre score, jamais comparées à un candidat)`
+                : ""}
+              .
             </p>
 
             <div className="mt-6 flex max-w-sm items-start gap-3 rounded-2xl border border-border bg-surface p-4 text-sm text-muted">
