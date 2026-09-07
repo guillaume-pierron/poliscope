@@ -106,7 +106,7 @@ export function Hero({
               </span>
             </h1>
 
-            <HandNote tone="danger" className="mt-3 block -rotate-3 pr-24 text-right sm:hidden">
+            <HandNote tone="danger" className="mt-3 block -rotate-3 pr-6 text-right sm:hidden">
               Des faits pour vos choix
             </HandNote>
 
@@ -116,7 +116,7 @@ export function Hero({
               <span className="font-medium text-primary">sources vérifiables</span>.
             </p>
 
-            <HandNote tone="danger" className="mt-3 block rotate-3 pr-20 text-right sm:hidden">
+            <HandNote tone="danger" className="mt-3 block rotate-3 pr-4 text-right sm:hidden">
               Une société plus éclairée
             </HandNote>
 
