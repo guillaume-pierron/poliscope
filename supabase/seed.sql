@@ -5,19 +5,19 @@
 insert into elections (id, slug, name, kind, round_date, second_round_date, is_active) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:election:presidentielle-2027'), 'presidentielle-2027', 'Élection présidentielle 2027', 'presidentielle', '2027-04-18', '2027-05-02', true) on conflict (id) do nothing;
 
 -- parties
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:rn'), 'Rassemblement National', 'RN', 'extreme-droite', '#2a78d6') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:lfi'), 'La France insoumise', 'LFI', 'gauche', '#eb6834') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:renaissance'), 'Renaissance', 'RE', 'centre', '#1baf7a') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:horizons'), 'Horizons', 'HOR', 'centre-droit', '#eda100') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:lr'), 'Les Républicains', 'LR', 'droite', '#e87ba4') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:place-publique'), 'Place publique', 'PP', 'centre-gauche', '#008300') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:ecologistes'), 'Les Écologistes', 'EELV', 'gauche', '#4a3aa7') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:rn'), 'Rassemblement National', 'RN', 'extreme-droite', '#0d378a') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:lfi'), 'La France insoumise', 'LFI', 'gauche', '#cc2443') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:renaissance'), 'Renaissance', 'RE', 'centre', '#c9a800') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:horizons'), 'Horizons', 'HOR', 'centre-droit', '#0000ba') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:lr'), 'Les Républicains', 'LR', 'droite', '#0066cc') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:place-publique'), 'Place publique', 'PP', 'centre-gauche', '#d94f7d') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:ecologistes'), 'Les Écologistes', 'EELV', 'gauche', '#00a000') on conflict (id) do nothing;
 insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:debout'), 'Debout !', null, 'gauche', '#e34948') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:sans-etiquette-droite'), 'Sans étiquette (ex-Les Républicains)', null, 'droite', '#9085e9') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:sans-etiquette-droite'), 'Sans étiquette (ex-Les Républicains)', null, 'droite', '#6b7280') on conflict (id) do nothing;
 insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:nouvelle-energie'), 'Nouvelle Énergie', 'NE', 'droite', '#0d9488') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:pcf'), 'Parti communiste français', 'PCF', 'gauche', '#cc0000') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:lo'), 'Lutte Ouvrière', 'LO', 'extreme-gauche', '#a3123a') on conflict (id) do nothing;
-insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:dlf'), 'Debout la France', 'DLF', 'droite', '#1e3a5f') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:pcf'), 'Parti communiste français', 'PCF', 'gauche', '#dd0000') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:lo'), 'Lutte Ouvrière', 'LO', 'extreme-gauche', '#bb0000') on conflict (id) do nothing;
+insert into parties (id, name, short_name, orientation, color) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:party:dlf'), 'Debout la France', 'DLF', 'droite', '#0082c4') on conflict (id) do nothing;
 
 -- themes
 insert into themes (id, slug, name, description, icon, order_index) values (uuid_generate_v5(uuid_ns_url(), 'poliscope:theme:economie'), 'economie', 'Économie', 'Croissance, fiscalité, dépense publique et compétitivité.', 'line-chart', 1) on conflict (id) do nothing;
