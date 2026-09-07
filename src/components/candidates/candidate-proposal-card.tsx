@@ -29,12 +29,12 @@ export function CandidateProposalCard({
 
   return (
     <article className="rounded-2xl border border-border bg-card p-5">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex min-w-0 items-start gap-4">
+      <div className="flex items-start gap-4">
+        <div className="flex min-w-0 flex-1 items-start gap-4">
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
             <ThemeIcon icon={theme?.icon ?? "globe"} className="h-6 w-6" />
           </span>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             {theme && (
               <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary">
                 {theme.name}
