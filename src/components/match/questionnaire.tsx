@@ -56,7 +56,7 @@ function QuestionContext({ context }: { context: string | null }) {
   if (!context) return null;
 
   return (
-    <div className="mt-4 flex items-start gap-2.5">
+    <div className="mt-3 flex items-start gap-2.5">
       <Info size={17} className="mt-0.5 shrink-0 text-primary" />
       <div className="min-w-0">
         <button
@@ -192,7 +192,9 @@ export function Questionnaire() {
   }
 
   return (
-    <div className="relative overflow-hidden py-10 md:py-16">
+    // Hauteur de la fenêtre moins l'en-tête : le questionnaire tient d'un
+    // seul écran, sans défilement, tant que la place le permet.
+    <div className="relative flex min-h-[calc(100svh-73px)] flex-col justify-center overflow-hidden py-6 md:py-8">
       {/* Décor latéral — images fournies par le site (voir
           public/illustrations/README.txt). En fond CSS : tant que le fichier
           n'est pas déposé, rien ne s'affiche, au lieu d'une image cassée. */}
@@ -241,7 +243,7 @@ export function Questionnaire() {
 
           <div
             key={question.id}
-            className="animate-rise relative rounded-[24px] border border-border bg-card p-7 shadow-[0_24px_70px_-46px_rgba(15,23,41,0.4)] sm:p-9"
+            className="animate-rise relative rounded-[24px] border border-border bg-card p-6 shadow-[0_24px_70px_-46px_rgba(15,23,41,0.4)] sm:p-7"
           >
           <div className="flex items-start justify-between gap-4">
             {theme && !isPriority && (
@@ -260,11 +262,11 @@ export function Questionnaire() {
                 tant que le fichier n'est pas déposé. */}
             <span
               aria-hidden="true"
-              className="hidden h-20 w-28 shrink-0 bg-[url('/illustrations/match-question.png')] bg-contain bg-right-top bg-no-repeat sm:block"
+              className="pointer-events-none absolute right-6 top-6 hidden h-16 w-24 bg-[url('/illustrations/match-question.png')] bg-contain bg-right-top bg-no-repeat sm:block"
             />
           </div>
 
-          <h1 className="mt-5 text-balance font-serif text-2xl font-semibold leading-snug sm:text-[1.75rem]">
+          <h1 className="mt-4 text-balance font-serif text-2xl font-semibold leading-snug sm:text-[1.75rem]">
             {question.question}
           </h1>
           {question.description && (
@@ -274,10 +276,10 @@ export function Questionnaire() {
           <QuestionContext key={`${question.id}-context`} context={question.context} />
 
           {discrimination && (
-            <p className="mt-3 text-xs italic text-muted-2">{QUESTION_DISCRIMINATION_LABELS[discrimination]}</p>
+            <p className="mt-2 text-xs italic text-muted-2">{QUESTION_DISCRIMINATION_LABELS[discrimination]}</p>
           )}
 
-          <div className="mt-7 space-y-2.5">
+          <div className="mt-5 space-y-2">
             {options.map((option) => {
               const value = isLikert ? option.value! : option.id;
               const selected = currentValue === value;
@@ -290,7 +292,7 @@ export function Questionnaire() {
                   type="button"
                   onClick={() => selectValue(value)}
                   className={cn(
-                    "focus-ring flex w-full items-center gap-3.5 rounded-2xl border px-4 py-3.5 text-left transition-all duration-150",
+                    "focus-ring flex w-full items-center gap-3.5 rounded-2xl border px-4 py-2.5 text-left transition-all duration-150",
                     selected
                       ? "border-primary bg-primary-soft/60"
                       : "border-border-strong bg-card hover:bg-surface"
@@ -298,7 +300,7 @@ export function Questionnaire() {
                 >
                   <span
                     className={cn(
-                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
+                      "flex h-9 w-9 shrink-0 items-center justify-center rounded-full",
                       intensity?.tone ?? "bg-primary-soft text-primary"
                     )}
                   >
@@ -328,7 +330,7 @@ export function Questionnaire() {
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-between gap-3">
+        <div className="mt-6 flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={goPrevious}
