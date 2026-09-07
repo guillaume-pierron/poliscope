@@ -41,9 +41,9 @@ export function Hero({
             </h1>
 
             <p className="mt-7 max-w-[460px] text-[1.02rem] leading-relaxed text-muted">
-              Répondez à {questionCount} questions et découvrez quels candidats sont les plus
-              proches de vous. Chaque position comparée renvoie à{" "}
-              <span className="font-medium text-primary">sa source d&apos;origine</span>.
+              Comparez les candidats, leurs programmes et l&apos;impact réel de leurs mesures,
+              toujours à partir de{" "}
+              <span className="font-medium text-primary">sources vérifiables</span>.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
