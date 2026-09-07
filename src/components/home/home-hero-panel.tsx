@@ -59,7 +59,7 @@ export function HomeHeroPanel({
       {tab === "sondages" ? (
         <PollHeroPanel candidates={candidates} headline={headline} showMatchNudge={!hasMatch} />
       ) : (
-        <MatchHeroPanel answers={answers} questionCount={questionCount} />
+        <MatchHeroPanel answers={answers} questionCount={questionCount} candidates={candidates} />
       )}
     </div>
   );

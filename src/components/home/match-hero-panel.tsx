@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, RefreshCcw, ScanSearch, SplitSquareHorizontal } from "lucide-react";
+import { ArrowRight, Clock, FileText, HelpCircle, Lock, RefreshCcw, SplitSquareHorizontal, Users } from "lucide-react";
 import { CandidateAvatar } from "@/components/candidates/candidate-avatar";
 import { ButtonLink } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MATCH_PREVIEW_ROWS } from "./match-preview-rows";
-import { cn } from "@/lib/utils";
+import { HandNote } from "@/components/ui/hand-note";
+import { MatchMiniOrbit } from "./match-mini-orbit";
 import { computeMatchResults, computeThemeWeightsFromPriorityAnswers } from "@/lib/scoring";
 import { countChangedPositions, loadSnapshot, saveSnapshot } from "@/lib/match-storage";
 import { formatDate } from "@/lib/utils";
@@ -24,8 +24,11 @@ type MatchData = { candidates: Candidate[]; positions: CandidatePosition[]; ques
 export function MatchHeroPanel({
   answers,
   questionCount,
+  candidates,
 }: {
   answers: UserAnswer[];
+  /** Portraits de la constellation du premier écran. */
+  candidates: Candidate[];
   /** Real number of questions currently asked — never a hardcoded "18" that could go stale. */
   questionCount: number;
 }) {
@@ -53,47 +56,56 @@ export function MatchHeroPanel({
       .catch(() => setData({ candidates: [], positions: [], questions: [] }));
   }, [answeredCount]);
 
-  // First-time visitor: the hero panel has to *explain* what a Match is,
-  // not just report that they haven't done one. The preview rows are
-  // anonymous and explicitly labelled as an example — never mistakable for
-  // a real ranking.
+  // Premier écran d'un visiteur qui découvre le site : le panneau explique
+  // l'outil et l'engagement demandé, sans jamais montrer de score d'exemple
+  // qui pourrait se lire comme un vrai résultat.
   if (answeredCount === 0) {
     return (
-      <div className="rounded-[20px] border border-border bg-card p-6 shadow-[0_24px_70px_-38px_rgba(15,23,41,0.35)]">
-        <div className="flex items-center gap-1.5">
-          <p className="font-serif text-[1.05rem] font-semibold">Mon Match</p>
+      <div className="rounded-[22px] border border-border bg-card p-6 shadow-[0_24px_70px_-38px_rgba(15,23,41,0.35)] sm:p-7">
+        <h2 className="font-serif text-[1.9rem] font-semibold leading-none tracking-tight">
+          Mon Match
+        </h2>
+        <p className="mt-2.5 text-sm leading-relaxed text-muted">
+          Répondez à {questionCount} questions et découvrez les candidats les plus proches de vos
+          idées.
+        </p>
+
+        <div className="mt-5 grid grid-cols-3 gap-2.5">
+          <PanelStat icon={FileText} value={`${questionCount} questions`} detail="sur les grands enjeux" />
+          <PanelStat icon={Clock} value="3 minutes" detail="seulement" />
+          <PanelStat
+            icon={Users}
+            value={`${candidates.length} candidats`}
+            detail="comparés"
+          />
         </div>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted">
-          {questionCount} questions, environ 3 minutes. Voici à quoi ressemble un résultat&nbsp;:
-        </p>
 
-        <ul className="mt-4 space-y-3">
-          {MATCH_PREVIEW_ROWS.map((row) => (
-            <li key={row.label} className="flex items-center gap-3">
-              <span className="w-[84px] shrink-0 truncate text-sm font-medium text-foreground/85">
-                {row.label}
-              </span>
-              <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-strong">
-                <div
-                  className={cn("h-full rounded-full transition-[width] duration-700 ease-out", row.tone)}
-                  style={{ width: `${row.value}%` }}
-                />
-              </div>
-              <span className="w-9 shrink-0 text-right font-mono text-sm font-semibold tabular-nums">
-                {row.value}%
-              </span>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-5 border-t border-border pt-4">
+          <div className="relative">
+            <MatchMiniOrbit candidates={candidates} />
+            <HandNote className="absolute -top-1 right-0 hidden w-[8rem] -rotate-3 text-right leading-tight lg:block">
+              Des idées plus proches de vous&nbsp;?
+            </HandNote>
+          </div>
+        </div>
 
-        <p className="mt-3 flex items-center gap-1.5 text-xs text-muted-2">
-          <ScanSearch size={12} className="shrink-0" />
-          Exemple illustratif — vos résultats dépendent de vos réponses.
-        </p>
-
-        <ButtonLink href="/match" variant="accent" size="sm" className="mt-4 w-full">
-          Découvrir mon Match
+        <ButtonLink href="/match" variant="accent" size="lg" className="mt-4 w-full">
+          Commencer le questionnaire
+          <ArrowRight size={17} />
         </ButtonLink>
+
+        <Link
+          href="/methodologie"
+          className="focus-ring mt-3 flex items-center justify-center gap-1.5 text-sm font-medium text-primary hover:underline"
+        >
+          <HelpCircle size={15} />
+          Comment ça marche&nbsp;?
+        </Link>
+
+        <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-muted-2">
+          <Lock size={12} />
+          Sans inscription · Réponses conservées sur votre appareil
+        </p>
       </div>
     );
   }
@@ -200,6 +212,24 @@ export function MatchHeroPanel({
           </Link>
         )}
       </div>
+    </div>
+  );
+}
+
+function PanelStat({
+  icon: Icon,
+  value,
+  detail,
+}: {
+  icon: typeof Users;
+  value: string;
+  detail: string;
+}) {
+  return (
+    <div className="rounded-xl bg-primary-soft/60 p-3">
+      <Icon size={16} className="text-primary" />
+      <p className="mt-1.5 text-sm font-semibold leading-tight">{value}</p>
+      <p className="text-xs leading-tight text-muted-2">{detail}</p>
     </div>
   );
 }
