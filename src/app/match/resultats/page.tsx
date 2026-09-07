@@ -54,10 +54,10 @@ export default function ResultatsPage() {
         <h1 className="mt-6 text-2xl font-semibold">Aucun résultat pour l&apos;instant</h1>
         <p className="mt-3 text-muted">
           Vous n&apos;avez pas encore répondu au questionnaire, ou vos réponses ont été effacées
-          de cet appareil. Faites le Match pour découvrir votre classement.
+          de cet appareil. Répondez au Match pour découvrir votre classement.
         </p>
         <ButtonLink href="/match" variant="accent" size="lg" className="mt-8">
-          Faire mon Match
+          Découvrir mon Match
         </ButtonLink>
       </div>
     );

@@ -30,10 +30,10 @@ export function CandidateProximityCard({ candidate }: { candidate: Candidate }) 
       <div className="rounded-2xl border border-border bg-card p-6 text-center">
         <p className="text-sm font-semibold">Votre proximité</p>
         <p className="mt-2 text-sm text-muted">
-          Faites le Match pour découvrir votre proximité avec {candidate.name}.
+          Répondez au Match pour découvrir votre proximité avec {candidate.name}.
         </p>
         <ButtonLink href="/match" variant="accent" size="sm" className="mt-4">
-          Faire mon Match
+          Découvrir mon Match
         </ButtonLink>
       </div>
     );

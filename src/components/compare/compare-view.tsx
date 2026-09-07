@@ -171,7 +171,7 @@ export function CompareView({
             Répondez au Match pour découvrir votre propre proximité avec chaque candidat.
           </p>
           <ButtonLink href="/match" variant="accent" size="sm" className="mt-3 w-full">
-            Faire mon Match
+            Découvrir mon Match
           </ButtonLink>
         </div>
       </div>

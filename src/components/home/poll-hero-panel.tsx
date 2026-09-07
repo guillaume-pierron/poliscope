@@ -42,7 +42,7 @@ export function PollHeroPanel({
             Et vous, de quel candidat êtes-vous le plus proche&nbsp;?
           </p>
           <ButtonLink href="/match" variant="accent" size="sm" className="shrink-0">
-            Faire mon Match
+            Découvrir mon Match
             <Sun size={14} />
           </ButtonLink>
         </div>

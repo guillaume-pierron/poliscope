@@ -57,7 +57,7 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <ButtonLink href="/match" variant="accent" size="md" className="hidden sm:inline-flex">
-            Faire mon Match
+            Découvrir mon Match
             <Sun size={16} />
           </ButtonLink>
           <MobileNav />

@@ -66,7 +66,7 @@ export function MobileNav() {
             href="/match"
             className="focus-ring mt-2 inline-flex h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground"
           >
-            Faire mon Match
+            Découvrir mon Match
           </Link>
         </nav>
       </div>
