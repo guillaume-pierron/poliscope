@@ -12,12 +12,22 @@ import type { HeadlinePoll } from "@/lib/data/queries";
 import type { Candidate } from "@/lib/types";
 
 /** Annotation manuscrite décorative — toujours aria-hidden, jamais porteuse d'information. */
-function HandNote({ children, className }: { children: React.ReactNode; className?: string }) {
+function HandNote({
+  children,
+  className,
+  tone = "primary",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  tone?: "primary" | "danger";
+}) {
+  const textClass = tone === "danger" ? "text-danger" : "text-primary";
+  const strokeClass = tone === "danger" ? "text-danger/60" : "text-primary/60";
   return (
     <span aria-hidden="true" className={className}>
-      <span className="relative inline-block font-hand text-[1.15rem] leading-[1.15] text-primary">
+      <span className={`relative inline-block font-hand text-[1.15rem] leading-[1.15] ${textClass}`}>
         {children}
-        <Swoosh className="-bottom-1.5 text-primary/60" />
+        <Swoosh className={`-bottom-1.5 ${strokeClass}`} />
       </span>
     </span>
   );
@@ -92,7 +102,7 @@ export function Hero({
               </span>
             </h1>
 
-            <HandNote className="mt-3 block -rotate-3 pr-6 text-right sm:hidden">
+            <HandNote tone="danger" className="mt-3 block -rotate-3 pr-6 text-right sm:hidden">
               Des faits pour vos choix
             </HandNote>
 
@@ -102,7 +112,7 @@ export function Hero({
               <span className="font-medium text-primary">sources vérifiables</span>.
             </p>
 
-            <HandNote className="mt-3 block rotate-3 pr-4 text-right sm:hidden">
+            <HandNote tone="danger" className="mt-3 block rotate-3 pr-4 text-right sm:hidden">
               Une société plus éclairée
             </HandNote>
 
