@@ -11,11 +11,17 @@ hero_deskop.png   Version DESKTOP, image miroir : sujet à gauche, vide à
 Ces deux-là passent par un import statique : leur URL porte un hash du
 contenu, donc remplacer le fichier suffit à voir le changement.
 
---- Questionnaire du Match (/match) — À FOURNIR ---
+--- Questionnaire du Match (/match) ---
 
-Ces trois images sont chargées en fond CSS : tant que le fichier n'existe
-pas, rien ne s'affiche (aucune image cassée). Fond transparent recommandé
-(PNG), le décor de la page étant crème.
+Ces trois images passent aussi par un import statique : elles sont donc
+converties et redimensionnées automatiquement, et leur URL porte un hash
+du contenu. Remplacer un fichier suffit à voir le changement.
+
+Attention : elles sont désormais REQUISES au build. Ne les supprime pas
+sans retirer aussi leur import dans
+src/components/match/questionnaire.tsx.
+
+Fond transparent recommandé (PNG), le décor de la page étant crème.
 
 match-side-left.png    Grande scène décorative, colonne de GAUCHE.
                        Visible à partir de 1024 px de large.
@@ -31,5 +37,5 @@ match-question.png     Petite vignette en haut à droite de la carte de
                        de 640 px. Prévoir un rapport largeur/hauteur proche
                        de 1,4 pour éviter les bandes vides.
 
-Attention : ces trois fichiers ne sont pas optimisés automatiquement (fond
-CSS). Compresse-les avant de les déposer — vise moins de 200 Ko chacun.
+Le poids du fichier source importe peu : l'optimiseur le ramène à quelques
+dizaines de Ko en WebP. Inutile de compresser avant de déposer.

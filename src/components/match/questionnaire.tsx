@@ -2,6 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import sideLeft from "../../../public/illustrations/match-side-left.png";
+import sideRight from "../../../public/illustrations/match-side-right.png";
+import questionVignette from "../../../public/illustrations/match-question.png";
 import {
   ArrowLeft,
   ArrowRight,
@@ -195,17 +199,34 @@ export function Questionnaire() {
     // Hauteur de la fenêtre moins l'en-tête : le questionnaire tient d'un
     // seul écran, sans défilement, tant que la place le permet.
     <div className="relative flex min-h-[calc(100svh-73px)] flex-col justify-center overflow-hidden py-6 md:py-8">
-      {/* Décor latéral — images fournies par le site (voir
-          public/illustrations/README.txt). En fond CSS : tant que le fichier
-          n'est pas déposé, rien ne s'affiche, au lieu d'une image cassée. */}
+      {/* Décor latéral. Import statique plutôt que fond CSS : les fichiers
+          pèsent plusieurs Mo et ne seraient sinon ni convertis ni
+          redimensionnés — et l'URL générée porte un hash du contenu, donc les
+          remplacer suffit à voir le changement. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 left-0 hidden w-[26vw] max-w-[420px] bg-[url('/illustrations/match-side-left.png')] bg-contain bg-bottom bg-no-repeat lg:block lg:top-24"
-      />
+        className="pointer-events-none absolute bottom-0 left-0 top-24 hidden w-[26vw] max-w-[420px] lg:block"
+      >
+        <Image
+          src={sideLeft}
+          alt=""
+          fill
+          sizes="(max-width: 1023px) 1px, 420px"
+          className="object-contain object-bottom"
+        />
+      </div>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 right-0 hidden w-[16vw] max-w-[260px] bg-[url('/illustrations/match-side-right.png')] bg-contain bg-bottom bg-no-repeat xl:block xl:top-1/2"
-      />
+        className="pointer-events-none absolute bottom-0 right-0 top-1/2 hidden w-[16vw] max-w-[260px] xl:block"
+      >
+        <Image
+          src={sideRight}
+          alt=""
+          fill
+          sizes="(max-width: 1279px) 1px, 260px"
+          className="object-contain object-bottom"
+        />
+      </div>
 
       <HandNote className="pointer-events-none absolute left-[6vw] top-40 hidden w-[9rem] -rotate-6 text-center leading-tight xl:block">
         Une société plus éclairée
@@ -258,12 +279,18 @@ export function Questionnaire() {
                 Vos priorités
               </span>
             )}
-            {/* Vignette de la carte — même principe : fond CSS, donc absente
-                tant que le fichier n'est pas déposé. */}
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute right-6 top-6 hidden h-16 w-24 bg-[url('/illustrations/match-question.png')] bg-contain bg-right-top bg-no-repeat sm:block"
-            />
+              className="pointer-events-none absolute right-6 top-6 hidden h-16 w-24 sm:block"
+            >
+              <Image
+                src={questionVignette}
+                alt=""
+                fill
+                sizes="96px"
+                className="object-contain object-right-top"
+              />
+            </span>
           </div>
 
           <h1 className="mt-4 text-balance font-serif text-2xl font-semibold leading-snug sm:text-[1.75rem]">
