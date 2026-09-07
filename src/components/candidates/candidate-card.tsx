@@ -3,7 +3,7 @@ import { ArrowRight, BarChart3, FileText, Scale, Target } from "lucide-react";
 import { CandidateAvatar } from "./candidate-avatar";
 import { Badge } from "@/components/ui/badge";
 import { ORIENTATION_LABELS } from "@/lib/types";
-import { hexToRgba } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import type { Candidate } from "@/lib/types";
 
 export function CandidateCard({
@@ -27,11 +27,10 @@ export function CandidateCard({
   const color = candidate.party?.color ?? "var(--primary)";
 
   return (
-    <article
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_44px_-26px_rgba(15,23,41,0.28)]"
-      style={{ backgroundColor: hexToRgba(candidate.party?.color ?? "#1d6ff2", 0.04) }}
-    >
-      {/* Liseré aux couleurs du parti. */}
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_44px_-26px_rgba(15,23,41,0.28)]">
+      {/* Seul marqueur coloré de la carte : sur une grille de treize
+          candidats, multiplier les rappels de la couleur du parti donnait à
+          chaque marque une présence que ce site n'a pas à lui accorder. */}
       <span aria-hidden="true" className="absolute inset-y-0 left-0 w-1.5" style={{ background: color }} />
 
       <div className="flex flex-1 flex-col p-5 pl-7">
@@ -49,10 +48,7 @@ export function CandidateCard({
             </h3>
             <p className="mt-0.5 truncate text-sm text-muted">{candidate.party?.name}</p>
             {candidate.party && (
-              <span
-                className="mt-2 inline-flex rounded-full px-2.5 py-1 text-xs font-medium"
-                style={{ backgroundColor: hexToRgba(candidate.party.color, 0.14), color }}
-              >
+              <span className="mt-2 inline-flex rounded-full bg-surface px-2.5 py-1 text-xs font-medium text-muted">
                 {ORIENTATION_LABELS[candidate.party.orientation]}
               </span>
             )}
@@ -61,8 +57,7 @@ export function CandidateCard({
           {candidate.party?.short_name && (
             <span
               aria-hidden="true"
-              className="shrink-0 font-serif text-lg font-bold tracking-tight"
-              style={{ color: hexToRgba(candidate.party.color, 0.75) }}
+              className="shrink-0 font-serif text-lg font-bold tracking-tight text-muted-2"
             >
               {candidate.party.short_name}
             </span>
@@ -72,14 +67,19 @@ export function CandidateCard({
 
         <p className="mt-4 line-clamp-2 text-sm leading-relaxed text-muted">{candidate.biography}</p>
 
-        <div className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4">
+        {/* La proximité n'apparaît qu'une fois le Match fait : une case vide
+            sur trois, à la première visite, déséquilibrait la rangée. */}
+        <div
+          className={cn(
+            "mt-4 grid gap-2 border-t border-border pt-4",
+            proximity === null ? "grid-cols-2" : "grid-cols-3"
+          )}
+        >
           <Stat icon={FileText} value={proposalCount} label="propositions sourcées" />
           <Stat icon={BarChart3} value={themeCount} label="thèmes couverts" />
-          <Stat
-            icon={Target}
-            value={proximity === null ? "—" : `${proximity} %`}
-            label={proximity === null ? "faites le Match" : "de proximité"}
-          />
+          {proximity !== null && (
+            <Stat icon={Target} value={`${proximity} %`} label="de proximité" />
+          )}
         </div>
 
         <div className="mt-5 flex gap-2.5">
