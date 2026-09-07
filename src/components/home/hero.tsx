@@ -8,9 +8,12 @@ import type { Candidate } from "@/lib/types";
 export function Hero({
   candidates,
   headline,
+  questionCount,
 }: {
   candidates: Candidate[];
   headline: HeadlinePoll | null;
+  /** Real question count — the promise made here must never drift from the actual questionnaire. */
+  questionCount: number;
 }) {
   return (
     <section className="mesh-bg relative overflow-hidden border-b border-border">
@@ -37,15 +40,15 @@ export function Hero({
               </span>
             </h1>
 
-            <p className="mt-7 max-w-[440px] text-[1.02rem] leading-relaxed text-muted">
-              Poliscope compare les programmes, les positions et{" "}
-              <span className="font-medium text-primary">les sources</span> pour vous aider à
-              vous faire votre propre opinion — sans bruit inutile.
+            <p className="mt-7 max-w-[460px] text-[1.02rem] leading-relaxed text-muted">
+              Répondez à {questionCount} questions et découvrez quels candidats sont les plus
+              proches de vous. Chaque position comparée renvoie à{" "}
+              <span className="font-medium text-primary">sa source d&apos;origine</span>.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <ButtonLink href="/match" variant="accent" size="lg">
-                Faire mon Match
+                Découvrir mon Match
                 <Sun size={17} />
               </ButtonLink>
               <ButtonLink href="/comparer" variant="outline" size="lg">
@@ -61,7 +64,7 @@ export function Hero({
         </div>
 
         <div className="animate-fade-in [animation-delay:150ms]">
-          <HomeHeroPanel candidates={candidates} headline={headline} />
+          <HomeHeroPanel candidates={candidates} headline={headline} questionCount={questionCount} />
         </div>
       </div>
     </section>

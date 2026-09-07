@@ -25,7 +25,9 @@ export function CompareShowcaseCard({
   className?: string;
 }) {
   const href = candidates ? `/comparer/${candidates.a.slug}-vs-${candidates.b.slug}` : "/comparer";
-  const rows = [disagreement, agreement].filter(
+  // Une position proche d'abord, une position opposée ensuite — l'ordre dans
+  // lequel on veut donner envie de comprendre le comparateur.
+  const rows = [agreement, disagreement].filter(
     (r): r is { theme: Theme; verdict: ThemeVerdict } => r !== null
   );
 
@@ -63,7 +65,7 @@ export function CompareShowcaseCard({
         </div>
       )}
 
-      {rows.length > 0 && (
+      {rows.length > 0 ? (
         <ul className="mt-4 space-y-2">
           {rows.map(({ theme, verdict }) => (
             <li
@@ -80,11 +82,17 @@ export function CompareShowcaseCard({
             </li>
           ))}
         </ul>
+      ) : (
+        candidates && (
+          <p className="mt-4 rounded-lg border border-dashed border-border-strong px-3 py-2 text-xs text-muted-2">
+            Pas encore assez de positions documentées en commun pour ces deux candidats.
+          </p>
+        )
       )}
 
-      <p className="focus-ring mt-4 flex items-center gap-1.5 text-sm font-medium text-primary">
+      <p className="focus-ring mt-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-sm font-semibold text-primary transition-colors group-hover:bg-primary-soft/80">
         Comparer deux candidats
-        <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+        <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
       </p>
     </Link>
   );

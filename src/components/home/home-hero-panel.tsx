@@ -10,28 +10,32 @@ import type { HeadlinePoll } from "@/lib/data/queries";
 import type { Candidate, UserAnswer } from "@/lib/types";
 
 /**
- * Decides what the hero's right-hand panel shows: real polls by default, or
- * the visitor's own Match results if they've already taken it on this
- * device. Reads localStorage only — never touches the server with a
- * visitor's answers. Renders a neutral skeleton until that check resolves,
- * so the server-rendered markup never has to guess.
+ * The hero's right-hand panel always opens on "Mon Match" — either the
+ * visitor's own results if they've taken it on this device, or an
+ * explained example if they haven't. Polls stay one click away: they're
+ * useful, but they're the least distinctive thing Poliscope does, and
+ * leading with them made the site read as yet another poll aggregator.
+ * Reads localStorage only — never touches the server with a visitor's
+ * answers. Renders a neutral skeleton until that check resolves, so the
+ * server-rendered markup never has to guess.
  */
 export function HomeHeroPanel({
   candidates,
   headline,
+  questionCount,
 }: {
   candidates: Candidate[];
   headline: HeadlinePoll | null;
+  questionCount: number;
 }) {
   const [answers, setAnswers] = useState<UserAnswer[] | null>(null);
   const [tab, setTab] = useState<HeroTab | null>(null);
 
   useEffect(() => {
     const loaded = loadAnswers();
-    const hasMatch = loaded.some((a) => a.value !== null);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setAnswers(loaded);
-    setTab(hasMatch ? "match" : "sondages");
+    setTab("match");
   }, []);
 
   if (answers === null || tab === null) {
@@ -55,7 +59,7 @@ export function HomeHeroPanel({
       {tab === "sondages" ? (
         <PollHeroPanel candidates={candidates} headline={headline} showMatchNudge={!hasMatch} />
       ) : (
-        <MatchHeroPanel answers={answers} />
+        <MatchHeroPanel answers={answers} questionCount={questionCount} />
       )}
     </div>
   );

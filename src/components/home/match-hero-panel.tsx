@@ -6,6 +6,9 @@ import { ArrowRight, RefreshCcw, ScanSearch, SplitSquareHorizontal } from "lucid
 import { CandidateAvatar } from "@/components/candidates/candidate-avatar";
 import { ButtonLink } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Sparkle } from "@/components/ui/swoosh";
+import { MATCH_PREVIEW_ROWS } from "./match-preview-rows";
+import { cn } from "@/lib/utils";
 import { computeMatchResults, computeThemeWeightsFromPriorityAnswers } from "@/lib/scoring";
 import { countChangedPositions, loadSnapshot, saveSnapshot } from "@/lib/match-storage";
 import { formatDate } from "@/lib/utils";
@@ -19,7 +22,14 @@ import type {
 
 type MatchData = { candidates: Candidate[]; positions: CandidatePosition[]; questions: Question[] };
 
-export function MatchHeroPanel({ answers }: { answers: UserAnswer[] }) {
+export function MatchHeroPanel({
+  answers,
+  questionCount,
+}: {
+  answers: UserAnswer[];
+  /** Real number of questions currently asked — never a hardcoded "18" that could go stale. */
+  questionCount: number;
+}) {
   const [data, setData] = useState<MatchData | null>(null);
   const [changedCount, setChangedCount] = useState(0);
   const [computedAt, setComputedAt] = useState<string | null>(null);
@@ -44,17 +54,47 @@ export function MatchHeroPanel({ answers }: { answers: UserAnswer[] }) {
       .catch(() => setData({ candidates: [], positions: [], questions: [] }));
   }, [answeredCount]);
 
+  // First-time visitor: the hero panel has to *explain* what a Match is,
+  // not just report that they haven't done one. The preview rows are
+  // anonymous and explicitly labelled as an example — never mistakable for
+  // a real ranking.
   if (answeredCount === 0) {
     return (
-      <div className="rounded-[20px] border border-border bg-card p-6 text-center shadow-[0_24px_70px_-38px_rgba(15,23,41,0.35)]">
-        <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-primary-soft text-primary">
-          <ScanSearch size={20} />
-        </span>
-        <p className="mt-3 text-sm text-muted">
-          Vous n&apos;avez pas encore fait le Match sur cet appareil.
+      <div className="rounded-[20px] border border-border bg-card p-6 shadow-[0_24px_70px_-38px_rgba(15,23,41,0.35)]">
+        <div className="flex items-center gap-1.5">
+          <p className="font-serif text-[1.05rem] font-semibold">Mon Match</p>
+          <Sparkle className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
+        </div>
+        <p className="mt-1.5 text-sm leading-relaxed text-muted">
+          {questionCount} questions, environ 3 minutes. Voici à quoi ressemble un résultat&nbsp;:
         </p>
-        <ButtonLink href="/match" variant="accent" size="sm" className="mt-4">
-          Faire mon Match
+
+        <ul className="mt-4 space-y-3">
+          {MATCH_PREVIEW_ROWS.map((row) => (
+            <li key={row.label} className="flex items-center gap-3">
+              <span className="w-[84px] shrink-0 truncate text-sm font-medium text-foreground/85">
+                {row.label}
+              </span>
+              <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-strong">
+                <div
+                  className={cn("h-full rounded-full transition-[width] duration-700 ease-out", row.tone)}
+                  style={{ width: `${row.value}%` }}
+                />
+              </div>
+              <span className="w-9 shrink-0 text-right font-mono text-sm font-semibold tabular-nums">
+                {row.value}%
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <p className="mt-3 flex items-center gap-1.5 text-xs text-muted-2">
+          <ScanSearch size={12} className="shrink-0" />
+          Exemple illustratif — vos résultats dépendent de vos réponses.
+        </p>
+
+        <ButtonLink href="/match" variant="accent" size="sm" className="mt-4 w-full">
+          Découvrir mon Match
         </ButtonLink>
       </div>
     );

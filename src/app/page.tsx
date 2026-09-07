@@ -1,12 +1,13 @@
 import { Hero } from "@/components/home/hero";
 import { ToolsSection } from "@/components/home/tools-section";
-import { TodayGrid, type UpdateItem } from "@/components/home/today-grid";
 import { ThemesSection } from "@/components/home/themes-section";
+import { TrustLine } from "@/components/home/trust-line";
 import {
   getAllPositions,
   getCandidates,
   getHomeHeadlinePoll,
   getProposals,
+  getPublishedMeasureAnalysisBundles,
   getQuestions,
   getThemes,
 } from "@/lib/data/queries";
@@ -15,38 +16,33 @@ import { computeImpacts } from "@/lib/simulator/measures";
 import { DEFAULT_PROFILE } from "@/lib/simulator/types";
 
 export default async function HomePage() {
-  const [candidates, themes, proposals, headline, questions, positions] = await Promise.all([
-    getCandidates(),
-    getThemes(),
-    getProposals(),
-    getHomeHeadlinePoll(),
-    getQuestions(),
-    getAllPositions(),
-  ]);
+  const [candidates, themes, proposals, headline, questions, positions, analysisBundles] =
+    await Promise.all([
+      getCandidates(),
+      getThemes(),
+      getProposals(),
+      getHomeHeadlinePoll(),
+      getQuestions(),
+      getAllPositions(),
+      getPublishedMeasureAnalysisBundles(),
+    ]);
 
-  const updates: UpdateItem[] = [...proposals]
-    .filter((p) => p.published_at)
-    .sort((a, b) => (a.published_at! < b.published_at! ? 1 : -1))
-    .slice(0, 3)
-    .map((proposal) => {
-      const candidate = candidates.find((c) => c.id === proposal.candidate_id);
-      const theme = themes.find((t) => t.id === proposal.theme_id);
-      return {
-        id: proposal.id,
-        title: proposal.title,
-        dateLabel: new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short" }).format(
-          new Date(proposal.published_at!)
-        ),
-        themeIcon: theme?.icon ?? "globe",
-        href: candidate ? `/candidats/${candidate.slug}` : "/candidats",
-      };
-    });
+  // Compteur de propositions par thème pour les pills "Les sujets qui
+  // comptent" — dérivé des propositions déjà chargées pour la page (même
+  // décompte que la page thème elle-même), jamais une requête par thème.
+  const proposalCountByTheme: Record<string, number> = {};
+  for (const proposal of proposals) {
+    proposalCountByTheme[proposal.theme_id] = (proposalCountByTheme[proposal.theme_id] ?? 0) + 1;
+  }
 
   // Aperçu du Comparateur : deux candidats réels, positions réellement
   // documentées — jamais un score inventé. On retient le premier désaccord
-  // net et le premier point de convergence trouvés parmi les thèmes.
-  const compareA = candidates.find((c) => c.slug === "francois-ruffin");
-  const compareB = candidates.find((c) => c.slug === "marine-tondelier");
+  // net et le premier point de convergence trouvés parmi les thèmes. Cette
+  // paire est choisie pour avoir plusieurs thèmes réellement comparables
+  // (accords ET désaccords) dans les données actuelles — voir /comparer
+  // pour changer de candidats.
+  const compareA = candidates.find((c) => c.slug === "jean-luc-melenchon");
+  const compareB = candidates.find((c) => c.slug === "bruno-retailleau");
   const compareRows = (compareA && compareB
     ? themes.map((theme) => ({
         theme,
@@ -74,13 +70,11 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero candidates={candidates} headline={headline} />
-      <TodayGrid
-        candidateCount={candidates.length}
-        proposalCount={proposals.length}
-        updates={updates}
-      />
-      <ThemesSection themes={themes} />
+      <Hero candidates={candidates} headline={headline} questionCount={questions.length} />
+      <TrustLine proposalCount={proposals.length} candidateCount={candidates.length} />
+      {/* "Ce que vous pouvez faire ici" avant "explorez par thème" : un
+          visiteur qui découvre le site a besoin de comprendre l'outil avant
+          qu'on lui propose de naviguer par sujet. */}
       <ToolsSection
         questionCount={questions.length}
         proposalCount={proposals.length}
@@ -90,7 +84,9 @@ export default async function HomePage() {
         compareAgreement={compareAgreement ?? null}
         compareDisagreement={compareDisagreement ?? null}
         simulatorSummary={simulatorSummary}
+        analysisCount={analysisBundles.length}
       />
+      <ThemesSection themes={themes} proposalCounts={proposalCountByTheme} />
     </>
   );
 }

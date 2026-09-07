@@ -1,5 +1,6 @@
 import { CompareShowcaseCard } from "@/components/home/compare-showcase-card";
 import { MatchShowcaseCard } from "@/components/home/match-showcase-card";
+import { PassageAuReelShowcaseBand } from "@/components/home/passage-au-reel-showcase-band";
 import { PollsShowcaseCard } from "@/components/home/polls-showcase-card";
 import { SimulatorShowcaseBand } from "@/components/home/simulator-showcase-band";
 import type { HeadlinePoll } from "@/lib/data/queries";
@@ -15,6 +16,7 @@ export function ToolsSection({
   compareAgreement,
   compareDisagreement,
   simulatorSummary,
+  analysisCount,
 }: {
   questionCount: number;
   proposalCount: number;
@@ -24,15 +26,20 @@ export function ToolsSection({
   compareAgreement: { theme: Theme; verdict: ThemeVerdict } | null;
   compareDisagreement: { theme: Theme; verdict: ThemeVerdict } | null;
   simulatorSummary: { concernCount: number; quantifiedCount: number; totalEuro: number };
+  /** Published "Passage au réel" analyses — the band hides itself when there are none. */
+  analysisCount: number;
 }) {
   return (
-    <section className="container-app pb-20 pt-6">
+    // pt- généreux : la section suit désormais directement la fine bande de
+    // preuve sous le hero, et non plus une section à l'espacement complet.
+    <section className="container-app pb-14 pt-14">
       <div className="max-w-2xl">
         <h2 className="text-balance font-serif text-[1.9rem] font-semibold tracking-tight sm:text-[2.2rem]">
-          La présidentielle, sans le brouillard.
+          Cinq outils, une seule règle&nbsp;: tout est sourcé.
         </h2>
         <p className="mt-3 text-muted">
-          Voici ce que vous pouvez réellement faire avec Poliscope — sans parti pris.
+          Chaque position, chaque chiffre renvoie à sa source d&apos;origine — vous pouvez toujours
+          vérifier par vous-même, sans qu&apos;on vous dise quoi penser.
         </p>
       </div>
 
@@ -58,6 +65,8 @@ export function ToolsSection({
         totalEuro={simulatorSummary.totalEuro}
         className="mt-4"
       />
+
+      <PassageAuReelShowcaseBand analysisCount={analysisCount} className="mt-4" />
     </section>
   );
 }

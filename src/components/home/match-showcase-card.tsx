@@ -3,12 +3,7 @@ import { ArrowUpRight, Lock, Sun } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { Sparkle } from "@/components/ui/swoosh";
 import { cn } from "@/lib/utils";
-
-const PREVIEW_ROWS = [
-  { label: "Candidat A", value: 72, tone: "bg-primary" },
-  { label: "Candidat B", value: 58, tone: "bg-accent" },
-  { label: "Candidat C", value: 41, tone: "bg-muted-2" },
-] as const;
+import { MATCH_PREVIEW_ROWS } from "./match-preview-rows";
 
 export function MatchShowcaseCard({
   questionCount,
@@ -46,7 +41,7 @@ export function MatchShowcaseCard({
             Aperçu d&apos;un résultat
           </p>
           <ul className="mt-3 space-y-3">
-            {PREVIEW_ROWS.map((row) => (
+            {MATCH_PREVIEW_ROWS.map((row) => (
               <li key={row.label} className="flex items-center gap-3">
                 <span className="w-[84px] shrink-0 truncate text-sm font-medium text-foreground/85">
                   {row.label}
@@ -72,7 +67,7 @@ export function MatchShowcaseCard({
       <div className="mt-7">
         <div className="flex flex-wrap items-center gap-4">
           <ButtonLink href="/match" variant="accent" size="lg">
-            Faire mon Match
+            Découvrir mon Match
             <Sun size={17} />
           </ButtonLink>
           <p className="flex items-center gap-1.5 text-xs text-muted-2">

@@ -23,6 +23,16 @@ export function isQuantifiedProposal(proposal: { title: string; summary: string 
   return /\d/.test(proposal.title) || /\d/.test(proposal.summary);
 }
 
+/** "#1d6ff2" + 0.08 -> "rgba(29,111,242,0.08)" — for a hover tint derived from a per-item color set inline, never a hardcoded Tailwind class. */
+export function hexToRgba(hex: string, alpha: number): string {
+  const clean = hex.replace("#", "");
+  const full = clean.length === 3 ? clean.split("").map((c) => c + c).join("") : clean;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 export function formatDate(date: string | Date) {
   const d = typeof date === "string" ? new Date(date) : date;
   return new Intl.DateTimeFormat("fr-FR", {
