@@ -61,6 +61,10 @@ export function Hero({
           sizes="(max-width: 639px) 68vw, 1px"
           className="h-auto w-full"
         />
+        {/* Voile blanc : atténue l'aquarelle pour que le texte qui passe
+            par-dessus reste lisible. Masqué comme l'image, donc il s'efface
+            avec elle sur les bords. */}
+        <span className="absolute inset-0 bg-white/55" />
       </div>
 
       {/* Desktop : l'illustration occupe toute la hauteur de la section, collée
