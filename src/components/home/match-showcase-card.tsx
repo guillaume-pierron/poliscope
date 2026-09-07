@@ -38,27 +38,32 @@ export function MatchShowcaseCard({
 
       <div className="relative grid flex-1 gap-10 lg:grid-cols-2 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.05fr)_minmax(0,0.92fr)] xl:gap-8">
         {/* ─── La promesse ─── */}
-        <div className="flex flex-col">
-          <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            Mon Match
-            <span className="h-px w-9 bg-primary/50" />
-          </p>
+        {/* justify-between : la carte étant étirée par sa voisine, l'excédent
+            de hauteur se répartit entre les blocs plutôt que de se creuser
+            d'un seul coup au-dessus du lien du bas. */}
+        <div className="flex flex-col justify-between gap-7">
+          <div>
+            <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+              Mon Match
+              <span className="h-px w-9 bg-primary/50" />
+            </p>
 
-          <h3 className="mt-4 font-serif text-[2.4rem] font-semibold leading-[1] tracking-tight sm:text-[2.9rem]">
-            Mon Match
-          </h3>
+            <h3 className="mt-4 font-serif text-[2.4rem] font-semibold leading-[1] tracking-tight sm:text-[2.9rem]">
+              Mon Match
+            </h3>
 
-          <p className="mt-4 max-w-md text-[1.05rem] leading-relaxed">
-            Répondez à {questionCount} questions et découvrez quels candidats sont les plus proches
-            de{" "}
-            <span className="relative inline-block">
-              vos idées
-              <Swoosh className="text-primary/60" />
-            </span>
-            .
-          </p>
+            <p className="mt-4 max-w-md text-[1.05rem] leading-relaxed">
+              Répondez à {questionCount} questions et découvrez quels candidats sont les plus
+              proches de{" "}
+              <span className="relative inline-block">
+                vos idées
+                <Swoosh className="text-primary/60" />
+              </span>
+              .
+            </p>
+          </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3">
             <Stat icon={ListChecks} value={`${questionCount} questions`} detail="Environ 3 minutes" />
             <Stat
               icon={Users}
@@ -67,7 +72,7 @@ export function MatchShowcaseCard({
             />
           </div>
 
-          <div className="mt-7">
+          <div>
             <ButtonLink href="/match" variant="accent" size="lg" className="w-full sm:w-auto">
               Découvrir mon Match
               <ArrowRight size={17} />
@@ -80,7 +85,7 @@ export function MatchShowcaseCard({
 
           <Link
             href="/candidats"
-            className="focus-ring group mt-auto flex items-center gap-1.5 border-t border-primary/15 pt-5 text-sm font-medium text-primary hover:underline max-xl:mt-8"
+            className="focus-ring group flex items-center gap-1.5 border-t border-primary/15 pt-5 text-sm font-medium text-primary hover:underline"
           >
             Explorer les {proposalCount} propositions sourcées
             <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5" />

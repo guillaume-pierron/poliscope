@@ -23,7 +23,7 @@ export function PollsShowcaseCard({
     <Link
       href="/sondages"
       className={cn(
-        "focus-ring group relative flex flex-col overflow-hidden rounded-[22px] border border-accent/20 bg-accent-soft/50 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/35 hover:shadow-[0_20px_44px_-26px_rgba(15,23,41,0.28)]",
+        "focus-ring group relative flex flex-col overflow-hidden rounded-[22px] border border-accent/20 bg-accent-soft/50 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/35 hover:shadow-[0_20px_44px_-26px_rgba(15,23,41,0.28)]",
         className
       )}
     >
@@ -61,7 +61,7 @@ export function PollsShowcaseCard({
 
       {headline && top.length > 0 ? (
         <>
-          <ul className="mt-5 space-y-3">
+          <ul className="mt-4 space-y-3">
             {top.map((result) => {
               const candidate = candidates.find((c) => c.id === result.candidate_id);
               if (!candidate) return null;
@@ -104,7 +104,7 @@ export function PollsShowcaseCard({
         <p className="mt-5 text-sm text-muted-2">Aucun sondage disponible pour l&apos;instant.</p>
       )}
 
-      <div className="mt-5 flex items-end justify-between gap-3">
+      <div className="mt-4 flex items-end justify-between gap-3">
         <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-primary-soft px-4 py-2.5 text-sm font-semibold text-primary transition-colors group-hover:bg-primary-soft/80">
           Voir les sondages
           <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />

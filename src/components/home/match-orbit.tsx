@@ -36,7 +36,7 @@ export function MatchOrbit({ candidates }: { candidates: Candidate[] }) {
   }));
 
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[380px]">
+    <div className="relative mx-auto aspect-square w-full max-w-[420px]">
       {/* Orbites */}
       <span
         aria-hidden="true"

@@ -30,7 +30,7 @@ export function CompareShowcaseCard({
     <Link
       href={href}
       className={cn(
-        "focus-ring group relative flex flex-col overflow-hidden rounded-[22px] border border-border bg-card p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_20px_44px_-26px_rgba(15,23,41,0.28)]",
+        "focus-ring group relative flex flex-col overflow-hidden rounded-[22px] border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_20px_44px_-26px_rgba(15,23,41,0.28)]",
         className
       )}
     >
@@ -58,7 +58,7 @@ export function CompareShowcaseCard({
       </div>
 
       {candidates && (
-        <div className="relative mt-5 flex items-center gap-3">
+        <div className="relative mt-4 flex items-center gap-3">
           <Side candidate={candidates.a} />
           <span className="shrink-0 rounded-full bg-primary-soft px-2.5 py-1 text-xs font-semibold text-primary">
             VS
@@ -98,7 +98,7 @@ export function CompareShowcaseCard({
         )
       )}
 
-      <div className="relative mt-5 flex items-end justify-between gap-3">
+      <div className="relative mt-4 flex items-end justify-between gap-3">
         <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-primary-soft px-4 py-2.5 text-sm font-semibold text-primary transition-colors group-hover:bg-primary-soft/80">
           Comparer deux candidats
           <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
