@@ -17,6 +17,7 @@ export function ToolsSection({
   compareDisagreement,
   simulatorSummary,
   analysisCount,
+  themes,
 }: {
   questionCount: number;
   proposalCount: number;
@@ -28,6 +29,7 @@ export function ToolsSection({
   simulatorSummary: { concernCount: number; quantifiedCount: number; totalEuro: number };
   /** Published "Passage au réel" analyses — the band hides itself when there are none. */
   analysisCount: number;
+  themes: Theme[];
 }) {
   return (
     // pt- généreux : la section suit désormais directement la fine bande de
@@ -49,6 +51,7 @@ export function ToolsSection({
           questionCount={questionCount}
           proposalCount={proposalCount}
           candidates={candidates}
+          themes={themes}
           className="lg:row-span-2"
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:contents">

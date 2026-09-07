@@ -85,6 +85,7 @@ export default async function HomePage() {
         compareDisagreement={compareDisagreement ?? null}
         simulatorSummary={simulatorSummary}
         analysisCount={analysisBundles.length}
+        themes={themes}
       />
       <ThemesSection themes={themes} proposalCounts={proposalCountByTheme} />
     </>
