@@ -74,7 +74,9 @@ export function MatchOrbit({ candidates }: { candidates: Candidate[] }) {
       <HandNote className="absolute -left-5 -top-7 w-[9rem] -rotate-6 text-left leading-tight sm:-left-12">
         Des candidats sur vos sujets
       </HandNote>
-      <HandNote className="absolute -bottom-9 -right-3 w-[9rem] rotate-3 text-right leading-tight sm:-right-10">
+      {/* Calée à l'intérieur de l'orbite : débordant à droite, elle passait
+          sous le panneau voisin dans la disposition à trois colonnes. */}
+      <HandNote className="absolute -bottom-9 right-2 w-[9rem] rotate-3 text-right leading-tight sm:right-6">
         Comparez leurs propositions
       </HandNote>
 
