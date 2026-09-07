@@ -5,7 +5,7 @@ import { PollsShowcaseCard } from "@/components/home/polls-showcase-card";
 import { SimulatorShowcaseBand } from "@/components/home/simulator-showcase-band";
 import type { HeadlinePoll } from "@/lib/data/queries";
 import type { ThemeVerdict } from "@/lib/compare";
-import type { Candidate, Theme } from "@/lib/types";
+import type { Candidate, MeasureAnalysisBundle, Proposal, Theme } from "@/lib/types";
 
 export function ToolsSection({
   questionCount,
@@ -16,6 +16,7 @@ export function ToolsSection({
   compareRows,
   simulatorSummary,
   analysisCount,
+  analysisShowcase,
   themes,
 }: {
   questionCount: number;
@@ -27,6 +28,7 @@ export function ToolsSection({
   simulatorSummary: { concernCount: number; quantifiedCount: number; totalEuro: number };
   /** Published "Passage au réel" analyses — the band hides itself when there are none. */
   analysisCount: number;
+  analysisShowcase: { bundle: MeasureAnalysisBundle; proposal: Proposal } | null;
   themes: Theme[];
 }) {
   return (
@@ -68,7 +70,11 @@ export function ToolsSection({
         className="mt-4"
       />
 
-      <PassageAuReelShowcaseBand analysisCount={analysisCount} className="mt-4" />
+      <PassageAuReelShowcaseBand
+        analysisCount={analysisCount}
+        showcase={analysisShowcase}
+        className="mt-4"
+      />
     </section>
   );
 }

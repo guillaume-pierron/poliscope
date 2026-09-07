@@ -1,15 +1,14 @@
 import Link from "next/link";
-import { ArrowRight, Calculator, Info } from "lucide-react";
+import { ArrowRight, BarChart3, Calculator, Info, UserRound } from "lucide-react";
 import { DEFAULT_PROFILE } from "@/lib/simulator/types";
 import { cn } from "@/lib/utils";
 
-const PROFILE_CHIPS = [
+const PROFILE_TITLE = "Salarié, célibataire, locataire";
+const PROFILE_DETAIL = [
   `${DEFAULT_PROFILE.netMonthlyIncome.toLocaleString("fr-FR")} € net`,
-  "Célibataire",
-  "Locataire",
   "Voiture",
   `${DEFAULT_PROFILE.kmPerYear.toLocaleString("fr-FR")} km/an`,
-];
+].join(" · ");
 
 export function SimulatorShowcaseBand({
   concernCount,
@@ -31,63 +30,68 @@ export function SimulatorShowcaseBand({
       )}
     >
       <div className="flex items-start gap-4">
-        <span className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-card text-accent">
-          <Calculator size={19} strokeWidth={1.75} />
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-card text-accent">
+          <Calculator size={20} strokeWidth={1.75} />
         </span>
         <div className="min-w-0">
-          <h3 className="font-serif text-[1.4rem] font-semibold tracking-tight sm:text-[1.55rem]">
-            Ce que les programmes pourraient changer pour vous.
+          <h3 className="font-serif text-[1.4rem] font-semibold tracking-tight sm:text-[1.6rem]">
+            Simulez ce que les programmes pourraient changer pour vous.
           </h3>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">
             Décrivez votre situation et découvrez quelles mesures vous concernent, avec un montant
-            lorsque celui-ci peut être calculé sérieusement.
+            estimé quand cela est chiffré.
           </p>
         </div>
       </div>
 
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-1 flex-col gap-4 rounded-2xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:gap-6">
-          <div className="min-w-0">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-2">
-              Exemple de profil
-            </p>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {PROFILE_CHIPS.map((chip) => (
-                <span
-                  key={chip}
-                  className="rounded-full border border-border-strong bg-surface px-2.5 py-1 text-xs font-medium text-foreground/80"
-                >
-                  {chip}
-                </span>
-              ))}
+      <div className="flex flex-col gap-5 xl:flex-row xl:items-stretch">
+        <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-center">
+          {/* Le profil d'exemple est le profil par défaut du simulateur : les
+              chiffres du résultat en découlent réellement. */}
+          <div className="flex flex-1 items-center gap-4 rounded-2xl border border-border bg-card p-5">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
+              <UserRound size={20} strokeWidth={1.75} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs text-muted-2">Exemple de profil</p>
+              <p className="mt-0.5 truncate text-sm font-semibold">{PROFILE_TITLE}</p>
+              <p className="mt-0.5 truncate text-xs text-muted-2">{PROFILE_DETAIL}</p>
             </div>
+            <span className="shrink-0 text-sm font-medium text-primary group-hover:underline">
+              Modifier
+            </span>
           </div>
 
-          <ArrowRight size={18} className="hidden shrink-0 text-muted-2 sm:block" />
+          <ArrowRight size={18} className="mx-auto shrink-0 text-muted-2 max-sm:rotate-90" />
 
-          <div className="shrink-0">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-2">Résultat</p>
-            <p className="mt-2 text-sm font-medium text-foreground/85">
-              {concernCount} mesures vous concernent
-            </p>
-            <p className="text-sm font-medium text-foreground/85">
-              {quantifiedCount} impact{quantifiedCount > 1 ? "s" : ""} calculable
-              {quantifiedCount > 1 ? "s" : ""}
-            </p>
-            <p className="font-mono text-lg font-semibold text-success">
-              +{Math.round(totalEuro)} €/mois estimés
-            </p>
+          <div className="flex flex-1 items-center gap-4 rounded-2xl border border-success/25 bg-success-soft/60 p-5">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-card text-success">
+              <BarChart3 size={20} strokeWidth={1.75} />
+            </span>
+            <div className="min-w-0">
+              <p className="text-xs text-muted-2">Résultat pour ce profil</p>
+              <p className="mt-0.5 text-sm font-medium text-foreground/85">
+                {concernCount} mesures vous concernent
+              </p>
+              <p className="text-sm font-medium text-foreground/85">
+                {quantifiedCount} impact{quantifiedCount > 1 ? "s" : ""} calculable
+                {quantifiedCount > 1 ? "s" : ""}
+              </p>
+              <p className="mt-1 font-mono text-xl font-semibold text-success">
+                +{Math.round(totalEuro)} €/mois estimés
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="flex shrink-0 flex-col items-start gap-2 lg:items-end">
+        <div className="flex shrink-0 flex-col items-start justify-center gap-2.5 xl:max-w-[15rem] xl:border-l xl:border-accent/20 xl:pl-6">
           <span className="focus-ring inline-flex items-center gap-1.5 rounded-xl bg-foreground px-6 py-3 text-sm font-medium text-card transition-transform group-hover:-translate-y-0.5">
             Simuler mon impact
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
           </span>
-          <p className="flex items-center gap-1.5 text-xs text-muted-2">
-            <Info size={12} />
-            Estimation partielle · uniquement sur les mesures chiffrables
+          <p className="flex items-start gap-1.5 text-xs text-muted-2">
+            <Info size={12} className="mt-0.5 shrink-0" />
+            Estimation partielle — uniquement sur les mesures chiffrables
           </p>
         </div>
       </div>

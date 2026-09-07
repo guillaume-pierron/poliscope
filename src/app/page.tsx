@@ -81,6 +81,19 @@ export default async function HomePage() {
     { concernCount: 0, quantifiedCount: 0, totalEuro: 0 }
   );
 
+  // L'analyse mise en avant : celle dont les quatre indicateurs sont les
+  // mieux documentés, pour que le bandeau ne montre pas des cases vides.
+  const analysisShowcaseBundle =
+    analysisBundles.find(
+      (b) => b.budgetEstimates.length > 0 && b.analysis.beneficiaries_count_central !== null
+    ) ??
+    analysisBundles.find((b) => b.budgetEstimates.length > 0) ??
+    analysisBundles[0] ??
+    null;
+  const analysisShowcaseProposal = analysisShowcaseBundle
+    ? (proposals.find((p) => p.id === analysisShowcaseBundle.analysis.proposal_id) ?? null)
+    : null;
+
   return (
     <>
       <Hero candidates={candidates} headline={headline} questionCount={questions.length} />
@@ -97,6 +110,11 @@ export default async function HomePage() {
         compareRows={compareSelection}
         simulatorSummary={simulatorSummary}
         analysisCount={analysisBundles.length}
+        analysisShowcase={
+          analysisShowcaseBundle && analysisShowcaseProposal
+            ? { bundle: analysisShowcaseBundle, proposal: analysisShowcaseProposal }
+            : null
+        }
         themes={themes}
       />
       <ThemesSection themes={themes} proposalCounts={proposalCountByTheme} />
