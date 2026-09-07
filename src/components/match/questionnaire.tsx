@@ -2,9 +2,22 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, Clock, HelpCircle, Scale } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  ChevronDown,
+  ChevronUp,
+  ChevronsDown,
+  ChevronsUp,
+  Clock,
+  Info,
+  Minus,
+  Scale,
+  Sprout,
+} from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { CivicSceneDoodle, CloudDoodle, PaperPlaneDoodle, PlantDoodle } from "@/components/ui/doodles";
+import { HandNote } from "@/components/ui/hand-note";
 import { ThemeIcon } from "@/lib/theme-icons";
 import { cn } from "@/lib/utils";
 import { calculateQuestionDiscrimination } from "@/lib/scoring";
@@ -18,13 +31,17 @@ import type {
 } from "@/lib/types";
 import { QUESTION_DISCRIMINATION_LABELS } from "@/lib/types";
 
-/** Intensity glyphs for the five likert answers, from most to least agreement — keyed by value, so both wordings (agreement, intensity) share them. */
-const INTENSITY_GLYPHS: Record<number, string> = {
-  2: "++",
-  1: "+",
-  0: "○",
-  [-1]: "–",
-  [-2]: "– –",
+/**
+ * Repères visuels des cinq réponses likert, du plus favorable au plus opposé.
+ * Indexés par valeur, donc partagés par les deux formulations (accord,
+ * intensité) — la convention de signe est la même partout (voir questions.ts).
+ */
+const INTENSITY_ICONS: Record<number, { icon: typeof ChevronsUp; tone: string }> = {
+  2: { icon: ChevronsUp, tone: "bg-success-soft text-success" },
+  1: { icon: ChevronUp, tone: "bg-success-soft text-success" },
+  0: { icon: Minus, tone: "bg-surface-strong text-muted" },
+  [-1]: { icon: ChevronDown, tone: "bg-danger-soft text-danger" },
+  [-2]: { icon: ChevronsDown, tone: "bg-danger-soft text-danger" },
 };
 
 /**
@@ -33,20 +50,26 @@ const INTENSITY_GLYPHS: Record<number, string> = {
  * the visitor moves to another question, without extra effect plumbing.
  */
 function QuestionContext({ context }: { context: string | null }) {
-  const [open, setOpen] = useState(false);
+  // Ouvert d'emblée : ce qui explique pourquoi la question est posée ne doit
+  // pas demander un clic — c'est ce qui rend le questionnaire lisible.
+  const [open, setOpen] = useState(true);
   if (!context) return null;
 
   return (
-    <div className="mt-3">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="focus-ring inline-flex items-center gap-1.5 text-xs font-medium text-muted transition-colors hover:text-foreground"
-      >
-        <HelpCircle size={13} />
-        {open ? "Masquer le contexte" : "Pourquoi cette question ?"}
-      </button>
-      {open && <p className="animate-fade-in mt-2 text-sm leading-relaxed text-muted">{context}</p>}
+    <div className="mt-4 flex items-start gap-2.5">
+      <Info size={17} className="mt-0.5 shrink-0 text-primary" />
+      <div className="min-w-0">
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className="focus-ring text-sm font-semibold text-primary transition-opacity hover:opacity-80"
+        >
+          Pourquoi cette question&nbsp;?
+        </button>
+        {open && (
+          <p className="animate-fade-in mt-1 text-sm leading-relaxed text-muted">{context}</p>
+        )}
+      </div>
     </div>
   );
 }
@@ -169,27 +192,56 @@ export function Questionnaire() {
   }
 
   return (
-    <div className="overflow-hidden py-10 md:py-16">
-      <div className="container-app max-w-2xl">
-        <div className="relative">
-          <CloudDoodle className="pointer-events-none absolute -bottom-6 -left-20 hidden h-8 w-16 opacity-60 lg:block" />
-          <PaperPlaneDoodle className="pointer-events-none absolute -bottom-16 -left-36 hidden h-10 w-10 opacity-50 xl:block" />
-          <PlantDoodle className="pointer-events-none absolute -right-16 top-16 hidden h-24 w-12 opacity-60 lg:block xl:-right-24" />
+    <div className="relative overflow-hidden py-10 md:py-16">
+      {/* Décor latéral — images fournies par le site (voir
+          public/illustrations/README.txt). En fond CSS : tant que le fichier
+          n'est pas déposé, rien ne s'affiche, au lieu d'une image cassée. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 hidden w-[26vw] max-w-[420px] bg-[url('/illustrations/match-side-left.png')] bg-contain bg-bottom bg-no-repeat lg:block lg:top-24"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 right-0 hidden w-[16vw] max-w-[260px] bg-[url('/illustrations/match-side-right.png')] bg-contain bg-bottom bg-no-repeat xl:block xl:top-1/2"
+      />
 
-          <div className="mb-8 flex items-center gap-4 text-sm">
-            <span className="shrink-0 font-medium text-foreground">
-              {index + 1} sur {total}
+      <HandNote className="pointer-events-none absolute left-[6vw] top-40 hidden w-[9rem] -rotate-6 text-center leading-tight xl:block">
+        Une société plus éclairée
+      </HandNote>
+      <HandNote className="pointer-events-none absolute right-[7vw] top-24 hidden w-[10rem] rotate-3 text-center leading-tight xl:block">
+        Des idées d&apos;aujourd&apos;hui pour demain
+      </HandNote>
+      <HandNote className="pointer-events-none absolute right-[6vw] top-[26rem] hidden w-[10rem] -rotate-3 text-center leading-tight xl:block">
+        Le débat qui compte
+      </HandNote>
+      <p
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[5vw] top-[34rem] hidden w-[13rem] font-serif text-[1.05rem] leading-relaxed text-foreground/70 xl:block"
+      >
+        Mieux comprendre les idées d&apos;aujourd&apos;hui pour une société de demain.
+      </p>
+
+      <div className="container-app relative z-10 max-w-2xl">
+        <div className="relative">
+          <div className="mb-3 flex items-center gap-4 text-sm">
+            <span className="shrink-0 font-semibold text-foreground">
+              Question {index + 1} sur {total}
             </span>
             <Progress value={((index + 1) / total) * 100} className="flex-1" />
             <span className="flex shrink-0 items-center gap-1.5 text-muted-2">
               <Clock size={14} />
-              ~{estimatedMinutesLeft} min
+              ~ {estimatedMinutesLeft} min
             </span>
           </div>
 
+          <p className="mb-7 flex items-center justify-center gap-2 text-sm text-muted">
+            <Sprout size={15} className="shrink-0 text-success" />
+            Répondez instinctivement, il n&apos;y a pas de bonne ou de mauvaise réponse.
+          </p>
+
           <div
             key={question.id}
-            className="animate-rise relative rounded-[24px] border border-border bg-card p-7 sm:p-9"
+            className="animate-rise relative rounded-[24px] border border-border bg-card p-7 shadow-[0_24px_70px_-46px_rgba(15,23,41,0.4)] sm:p-9"
           >
           <div className="flex items-start justify-between gap-4">
             {theme && !isPriority && (
@@ -204,7 +256,12 @@ export function Questionnaire() {
                 Vos priorités
               </span>
             )}
-            <CivicSceneDoodle className="hidden h-16 w-24 shrink-0 sm:block" />
+            {/* Vignette de la carte — même principe : fond CSS, donc absente
+                tant que le fichier n'est pas déposé. */}
+            <span
+              aria-hidden="true"
+              className="hidden h-20 w-28 shrink-0 bg-[url('/illustrations/match-question.png')] bg-contain bg-right-top bg-no-repeat sm:block"
+            />
           </div>
 
           <h1 className="mt-5 text-balance font-serif text-2xl font-semibold leading-snug sm:text-[1.75rem]">
@@ -224,41 +281,44 @@ export function Questionnaire() {
             {options.map((option) => {
               const value = isLikert ? option.value! : option.id;
               const selected = currentValue === value;
-              const glyph = isLikert ? (INTENSITY_GLYPHS[option.value!] ?? "○") : null;
+              const intensity = isLikert ? INTENSITY_ICONS[option.value!] : undefined;
               const optionTheme = option.theme_id ? themeById.get(option.theme_id) : undefined;
+              const IntensityIcon = intensity?.icon;
               return (
                 <button
                   key={option.id}
                   type="button"
                   onClick={() => selectValue(value)}
                   className={cn(
-                    "focus-ring flex w-full items-center gap-3 rounded-2xl border px-4 py-3.5 text-left text-sm font-medium transition-all duration-150",
+                    "focus-ring flex w-full items-center gap-3.5 rounded-2xl border px-4 py-3.5 text-left transition-all duration-150",
                     selected
-                      ? "border-primary bg-primary-soft text-primary"
+                      ? "border-primary bg-primary-soft/60"
                       : "border-border-strong bg-card hover:bg-surface"
                   )}
                 >
                   <span
                     className={cn(
-                      "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold tracking-tight",
-                      selected ? "bg-card text-primary" : "bg-primary-soft text-primary"
+                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
+                      intensity?.tone ?? "bg-primary-soft text-primary"
                     )}
                   >
                     {optionTheme ? (
                       <ThemeIcon icon={optionTheme.icon} className="h-4 w-4" />
+                    ) : IntensityIcon ? (
+                      <IntensityIcon size={19} strokeWidth={2.4} />
                     ) : (
-                      (glyph ?? <span className="h-2 w-2 rounded-full bg-current" />)
+                      <span className="h-2 w-2 rounded-full bg-current" />
                     )}
                   </span>
                   <span className="flex-1">
-                    <span className="block">{option.label}</span>
+                    <span className="block text-sm font-semibold">{option.label}</span>
                     {option.description && (
-                      <span className="mt-0.5 block text-xs font-normal text-muted">{option.description}</span>
+                      <span className="mt-0.5 block text-xs text-muted">{option.description}</span>
                     )}
                   </span>
                   {selected && (
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-white">
-                      <Check size={14} strokeWidth={3} />
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+                      <Check size={15} strokeWidth={3} />
                     </span>
                   )}
                 </button>
@@ -273,7 +333,7 @@ export function Questionnaire() {
             type="button"
             onClick={goPrevious}
             disabled={index === 0}
-            className="focus-ring flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-foreground disabled:opacity-40"
+            className="focus-ring flex items-center gap-1.5 rounded-full border border-border-strong bg-card px-5 py-2.5 text-sm font-medium transition-colors hover:bg-surface disabled:opacity-40"
           >
             <ArrowLeft size={16} />
             Précédent
@@ -302,6 +362,8 @@ export function Questionnaire() {
             <ArrowRight size={16} />
           </button>
         </div>
+
+        <p className="mt-3 text-center text-xs text-muted-2">Vous pourrez revenir en arrière.</p>
       </div>
     </div>
   );
