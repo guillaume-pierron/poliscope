@@ -13,8 +13,7 @@ export function ToolsSection({
   headline,
   candidates,
   compareCandidates,
-  compareAgreement,
-  compareDisagreement,
+  compareRows,
   simulatorSummary,
   analysisCount,
   themes,
@@ -24,8 +23,7 @@ export function ToolsSection({
   headline: HeadlinePoll | null;
   candidates: Candidate[];
   compareCandidates: { a: Candidate; b: Candidate } | null;
-  compareAgreement: { theme: Theme; verdict: ThemeVerdict } | null;
-  compareDisagreement: { theme: Theme; verdict: ThemeVerdict } | null;
+  compareRows: { theme: Theme; verdict: ThemeVerdict }[];
   simulatorSummary: { concernCount: number; quantifiedCount: number; totalEuro: number };
   /** Published "Passage au réel" analyses — the band hides itself when there are none. */
   analysisCount: number;
@@ -57,8 +55,7 @@ export function ToolsSection({
         <div className="grid gap-4 sm:grid-cols-2 lg:contents">
           <CompareShowcaseCard
             candidates={compareCandidates}
-            agreement={compareAgreement}
-            disagreement={compareDisagreement}
+            rows={compareRows}
           />
           <PollsShowcaseCard headline={headline} candidates={candidates} />
         </div>

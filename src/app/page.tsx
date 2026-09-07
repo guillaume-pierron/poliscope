@@ -52,8 +52,18 @@ export default async function HomePage() {
       }))
     : []
   ).filter((r) => r.verdict !== "inconnu");
-  const compareAgreement = compareRows.find((r) => r.verdict === "accord");
-  const compareDisagreement = compareRows.find((r) => r.verdict === "desaccord");
+  // Un verdict de chaque nature d'abord, pour que l'aperçu montre la variété
+  // réelle du comparateur plutôt que trois fois le même constat ; complété
+  // par les thèmes suivants si l'une des natures manque.
+  const compareHighlights = [
+    compareRows.find((r) => r.verdict === "accord"),
+    compareRows.find((r) => r.verdict === "desaccord"),
+    compareRows.find((r) => r.verdict === "nuance"),
+  ].filter((r) => r !== undefined);
+  const compareSelection = [
+    ...compareHighlights,
+    ...compareRows.filter((r) => !compareHighlights.includes(r)),
+  ].slice(0, 3);
 
   // Aperçu du Simulateur : mesures réellement calculées pour le profil par
   // défaut (2000€ net, célibataire, locataire, véhiculé) — jamais un
@@ -81,8 +91,7 @@ export default async function HomePage() {
         headline={headline}
         candidates={candidates}
         compareCandidates={compareA && compareB ? { a: compareA, b: compareB } : null}
-        compareAgreement={compareAgreement ?? null}
-        compareDisagreement={compareDisagreement ?? null}
+        compareRows={compareSelection}
         simulatorSummary={simulatorSummary}
         analysisCount={analysisBundles.length}
         themes={themes}
