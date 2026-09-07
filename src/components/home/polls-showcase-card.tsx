@@ -23,7 +23,10 @@ export function PollsShowcaseCard({
     <Link
       href="/sondages"
       className={cn(
-        "focus-ring group relative flex flex-col overflow-hidden rounded-[22px] border border-accent/20 bg-accent-soft/50 p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/35 hover:shadow-[0_20px_44px_-26px_rgba(15,23,41,0.28)]",
+        // Fond blanc et non crème : le bandeau du simulateur, juste en
+        // dessous, est crème sur toute la largeur — la même couleur ici
+        // faisait lire les deux comme une seule zone continue.
+        "focus-ring group relative flex flex-col overflow-hidden rounded-[22px] border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_20px_44px_-26px_rgba(15,23,41,0.28)]",
         className
       )}
     >
@@ -47,7 +50,7 @@ export function PollsShowcaseCard({
         </div>
 
         {headline && (
-          <span className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-xs">
+          <span className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-surface px-3 py-1.5 text-xs">
             <span className="h-1.5 w-1.5 rounded-full bg-success" />
             <span className="text-muted-2">
               Dernière vague
@@ -77,7 +80,7 @@ export function PollsShowcaseCard({
                   <span className="w-[104px] shrink-0 truncate text-sm font-medium">
                     {candidate.name}
                   </span>
-                  <span className="h-2 flex-1 overflow-hidden rounded-full bg-card">
+                  <span className="h-2 flex-1 overflow-hidden rounded-full bg-surface-strong">
                     <span
                       className="block h-full rounded-full"
                       style={{ width: `${(result.value / maxValue) * 100}%`, background: color }}
