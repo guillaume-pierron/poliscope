@@ -39,3 +39,13 @@ match-question.png     Petite vignette en haut à droite de la carte de
 
 Le poids du fichier source importe peu : l'optimiseur le ramène à quelques
 dizaines de Ko en WebP. Inutile de compresser avant de déposer.
+
+--- Page Candidats (/candidats) — OPTIONNEL ---
+
+candidates-header.png   Illustration décorative en haut à droite de la page.
+                        Affichée en 208 × 112 px, visible à partir de
+                        1280 px de large.
+
+Celle-ci est chargée en fond CSS : tant que le fichier n'existe pas, rien
+ne s'affiche. Elle n'est donc PAS requise au build — mais elle n'est pas
+non plus optimisée : compresse-la avant de la déposer (moins de 150 Ko).
