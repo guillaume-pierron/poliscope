@@ -1,18 +1,39 @@
 import Link from "next/link";
 import { ArrowUpRight, Lock, Sun } from "lucide-react";
+import { CandidateAvatar } from "@/components/candidates/candidate-avatar";
 import { ButtonLink } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { MATCH_PREVIEW_ROWS } from "./match-preview-rows";
+import type { Candidate } from "@/lib/types";
+
+/**
+ * Emplacements du nuage de portraits. Fixes plutôt qu'aléatoires : un tirage
+ * au rendu donnerait un balayage différent côté serveur et côté client.
+ */
+const FLOATING_SPOTS = [
+  { left: "1%", top: "8%", size: "lg", delay: "0s" },
+  { left: "22%", top: "48%", size: "md", delay: "1.4s" },
+  { left: "37%", top: "4%", size: "md", delay: "0.6s" },
+  { left: "53%", top: "52%", size: "lg", delay: "2.1s" },
+  { left: "68%", top: "10%", size: "sm", delay: "1s" },
+  { left: "80%", top: "44%", size: "md", delay: "2.6s" },
+  { left: "13%", top: "76%", size: "sm", delay: "3.1s" },
+] as const;
 
 export function MatchShowcaseCard({
   questionCount,
   proposalCount,
+  candidates,
   className,
 }: {
   questionCount: number;
   proposalCount: number;
+  candidates: Candidate[];
   className?: string;
 }) {
+  const floating = FLOATING_SPOTS.slice(0, candidates.length).map((spot, i) => ({
+    ...spot,
+    candidate: candidates[i],
+  }));
   return (
     <div
       className={cn(
@@ -34,32 +55,26 @@ export function MatchShowcaseCard({
           des candidats.
         </p>
 
-        <div className="mt-6 max-w-sm rounded-2xl border border-border bg-card p-5">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-2">
-            Aperçu d&apos;un résultat
-          </p>
-          <ul className="mt-3 space-y-3">
-            {MATCH_PREVIEW_ROWS.map((row) => (
-              <li key={row.label} className="flex items-center gap-3">
-                <span className="w-[84px] shrink-0 truncate text-sm font-medium text-foreground/85">
-                  {row.label}
-                </span>
-                <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-strong">
-                  <div
-                    className={cn("h-full rounded-full transition-[width] duration-700 ease-out", row.tone)}
-                    style={{ width: `${row.value}%` }}
-                  />
-                </div>
-                <span className="w-9 shrink-0 text-right font-mono text-sm font-semibold tabular-nums">
-                  {row.value}%
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-3 text-xs text-muted-2">
-            Exemple illustratif — vos résultats dépendent de vos réponses.
-          </p>
+        <div className="relative mt-6 h-[190px] sm:h-[210px]" aria-hidden="true">
+          {floating.map(({ candidate, left, top, size, delay }) => (
+            <span
+              key={candidate.id}
+              className="animate-float absolute"
+              style={{ left, top, animationDelay: delay }}
+            >
+              <CandidateAvatar
+                name={candidate.name}
+                color={candidate.party?.color}
+                photoUrl={candidate.photo_url}
+                size={size}
+                className="shadow-[0_10px_24px_-12px_rgba(15,23,41,0.45)] ring-4 ring-card"
+              />
+            </span>
+          ))}
         </div>
+        <p className="text-sm text-muted">
+          {candidates.length} candidats déclarés, comparés sur les mêmes questions.
+        </p>
       </div>
 
       <div className="mt-7">

@@ -48,6 +48,7 @@ export function ToolsSection({
         <MatchShowcaseCard
           questionCount={questionCount}
           proposalCount={proposalCount}
+          candidates={candidates}
           className="lg:row-span-2"
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:contents">
