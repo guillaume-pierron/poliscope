@@ -74,8 +74,11 @@ export function Simulator({ candidates }: { candidates: Candidate[] }) {
   return (
     <div className="grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-10">
       {/* ─── Formulaire ─── */}
+      {/* min-w-0 : sans lui, la largeur mini d'un élément de grille est celle
+          de son contenu — ici le <select>, dont la largeur intrinsèque suit
+          son option la plus longue — ce qui élargissait la page en mobile. */}
       <form
-        className="h-fit space-y-5 rounded-[20px] border border-border bg-card p-6 lg:sticky lg:top-24"
+        className="h-fit min-w-0 space-y-5 rounded-[20px] border border-border bg-card p-6 lg:sticky lg:top-24"
         onSubmit={(e) => e.preventDefault()}
       >
         <div>
@@ -227,7 +230,7 @@ export function Simulator({ candidates }: { candidates: Candidate[] }) {
       </form>
 
       {/* ─── Résultats ─── */}
-      <div>
+      <div className="min-w-0">
         <div className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4 text-sm text-muted">
           <Info size={16} className="mt-0.5 shrink-0" />
           <p>
