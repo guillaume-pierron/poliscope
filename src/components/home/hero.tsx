@@ -3,6 +3,7 @@ import Link from "next/link";
 // Import statique : l'URL générée porte un hash du contenu, donc remplacer
 // le fichier suffit à invalider le cache de l'optimiseur d'images.
 import heroIllustration from "../../../public/illustrations/hero.png";
+import heroIllustrationDesktop from "../../../public/illustrations/hero_deskop.png";
 import { ButtonLink } from "@/components/ui/button";
 import { HomeHeroPanel } from "./home-hero-panel";
 import { Sparkle, Swoosh } from "@/components/ui/swoosh";
@@ -54,13 +55,15 @@ export function Hero({
 
       <div className="container-app relative z-10 grid gap-10 py-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-center lg:gap-14 lg:py-16">
         <div className="flex items-center gap-4 xl:gap-7">
-          {/* Illustration — remplaçable : public/illustrations/hero.svg */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/illustrations/hero.svg"
+          {/* Illustration desktop — l'image étant opaque, ses bords droit et
+              bas sont fondus pour se raccorder au dégradé de la section. */}
+          <Image
+            src={heroIllustrationDesktop}
             alt=""
             aria-hidden="true"
-            className="hidden w-[200px] shrink-0 select-none lg:block xl:w-[260px]"
+            priority
+            sizes="(min-width: 1280px) 260px, (min-width: 1024px) 200px, 1px"
+            className="hidden h-auto w-[200px] shrink-0 select-none [mask-composite:intersect] [mask-image:linear-gradient(to_left,transparent,black_22%),linear-gradient(to_bottom,black_88%,transparent)] lg:block xl:w-[260px]"
           />
 
           <div className="animate-rise relative z-10">
