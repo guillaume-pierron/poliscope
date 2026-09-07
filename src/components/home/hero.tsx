@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { HomeHeroPanel } from "./home-hero-panel";
@@ -30,7 +31,26 @@ export function Hero({
 }) {
   return (
     <section className="mesh-bg relative overflow-hidden border-b border-border">
-      <div className="container-app grid gap-10 py-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-center lg:gap-14 lg:py-16">
+      {/* Mobile seulement : l'aquarelle sert de fond au premier écran. Sa
+          moitié gauche est volontairement vide pour laisser passer le texte,
+          et le bas est rogné puis fondu pour éviter une coupure nette. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[540px] select-none [mask-image:linear-gradient(to_bottom,black_78%,transparent)] sm:hidden"
+      >
+        <Image
+          src="/illustrations/hero.png"
+          alt=""
+          fill
+          priority
+          // Desktop ne l'affiche jamais : on demande alors la plus petite
+          // variante possible plutôt que de télécharger l'aquarelle pour rien.
+          sizes="(max-width: 639px) 100vw, 1px"
+          className="object-cover object-top"
+        />
+      </div>
+
+      <div className="container-app relative z-10 grid gap-10 py-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-center lg:gap-14 lg:py-16">
         <div className="flex items-center gap-4 xl:gap-7">
           {/* Illustration — remplaçable : public/illustrations/hero.svg */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -42,22 +62,6 @@ export function Hero({
           />
 
           <div className="animate-rise relative z-10">
-            {/* Mobile seulement : décor du premier écran (illustration + annotations). */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -right-6 -top-4 -z-10 w-[58%] max-w-[250px] select-none sm:hidden"
-            >
-              <div className="relative">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/illustrations/hero.svg" alt="" className="w-full opacity-70" />
-                <Sparkle className="absolute -left-3 top-2 h-5 w-5 text-primary/70" />
-                <Sparkle className="absolute right-6 -top-2 h-4 w-4 rotate-45 text-accent/80" />
-              </div>
-              <HandNote className="mt-1 block -rotate-6 pl-2 text-left">
-                Des faits pour vos choix
-              </HandNote>
-            </div>
-
             <span className="mb-4 inline-flex rounded-full bg-primary-soft px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary sm:hidden">
               Élection présidentielle 2027
             </span>
@@ -72,6 +76,10 @@ export function Hero({
                 chaque jour.
               </span>
             </h1>
+
+            <HandNote className="mt-3 block -rotate-3 pr-6 text-right sm:hidden">
+              Des faits pour vos choix
+            </HandNote>
 
             <p className="mt-7 max-w-[460px] text-[1.02rem] leading-relaxed text-muted max-sm:mt-6 max-sm:max-w-[78%]">
               Comparez les candidats, leurs programmes et l&apos;impact réel de leurs mesures,
