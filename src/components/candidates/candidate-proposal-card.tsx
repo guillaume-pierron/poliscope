@@ -60,7 +60,7 @@ export function CandidateProposalCard({
           </div>
         </div>
 
-        <div className="hidden shrink-0 text-right text-xs text-muted-2 sm:block">
+        <div className="hidden w-48 shrink-0 text-right text-xs text-muted-2 sm:block">
           <p>Source : {proposal.source_name}</p>
           {proposal.verified_at && (
             <p className="mt-1 flex items-center justify-end gap-1">
