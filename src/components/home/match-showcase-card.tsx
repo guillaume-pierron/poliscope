@@ -1,23 +1,12 @@
 import Link from "next/link";
-import { ArrowUpRight, Lock, Sun } from "lucide-react";
-import { CandidateAvatar } from "@/components/candidates/candidate-avatar";
+import { ArrowRight, ArrowUpRight, ListChecks, Lock, Users } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
+import { HandNote } from "@/components/ui/hand-note";
+import { Swoosh } from "@/components/ui/swoosh";
+import { MatchOrbit } from "./match-orbit";
+import { MatchTopThree } from "./match-top-three";
 import { cn } from "@/lib/utils";
 import type { Candidate } from "@/lib/types";
-
-/**
- * Emplacements du nuage de portraits. Fixes plutôt qu'aléatoires : un tirage
- * au rendu donnerait un balayage différent côté serveur et côté client.
- */
-const FLOATING_SPOTS = [
-  { left: "1%", top: "8%", size: "lg", delay: "0s" },
-  { left: "22%", top: "48%", size: "md", delay: "1.4s" },
-  { left: "37%", top: "4%", size: "md", delay: "0.6s" },
-  { left: "53%", top: "52%", size: "lg", delay: "2.1s" },
-  { left: "68%", top: "10%", size: "sm", delay: "1s" },
-  { left: "80%", top: "44%", size: "md", delay: "2.6s" },
-  { left: "13%", top: "76%", size: "sm", delay: "3.1s" },
-] as const;
 
 export function MatchShowcaseCard({
   questionCount,
@@ -30,73 +19,105 @@ export function MatchShowcaseCard({
   candidates: Candidate[];
   className?: string;
 }) {
-  const floating = FLOATING_SPOTS.slice(0, candidates.length).map((spot, i) => ({
-    ...spot,
-    candidate: candidates[i],
-  }));
   return (
     <div
       className={cn(
-        "flex flex-col justify-between rounded-[24px] border border-primary/15 bg-primary-soft/60 p-7 sm:p-8",
+        "relative overflow-hidden rounded-[24px] border border-primary/15 bg-primary-soft/60 p-6 sm:p-8",
         className
       )}
     >
-      <div>
-        <div className="flex items-center gap-1.5">
-          <h3 className="font-serif text-[1.7rem] font-semibold tracking-tight sm:text-[1.9rem]">
+      {/* Aplat doux dans l'angle, comme sur la maquette. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full bg-primary/10"
+      />
+
+      <div className="relative grid gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] xl:gap-10">
+        {/* ─── Colonne de gauche : la promesse ─── */}
+        <div className="flex flex-col">
+          <p className="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+            Mon Match
+            <span className="h-px w-8 bg-primary/40" />
+          </p>
+
+          <h3 className="mt-3 font-serif text-[2.1rem] font-semibold leading-[1.05] tracking-tight sm:text-[2.5rem]">
             Mon Match
           </h3>
-        </div>
-        <p className="mt-1.5 text-[1.02rem] font-medium text-foreground/85">
-          Quels candidats sont les plus proches de vos réponses&nbsp;?
-        </p>
-        <p className="mt-2.5 max-w-md text-sm leading-relaxed text-muted">
-          Répondez à {questionCount} questions et comparez vos positions avec celles, documentées,
-          des candidats.
-        </p>
 
-        <div className="relative mt-6 h-[190px] sm:h-[210px]" aria-hidden="true">
-          {floating.map(({ candidate, left, top, size, delay }) => (
-            <span
-              key={candidate.id}
-              className="animate-float absolute"
-              style={{ left, top, animationDelay: delay }}
-            >
-              <CandidateAvatar
-                name={candidate.name}
-                color={candidate.party?.color}
-                photoUrl={candidate.photo_url}
-                size={size}
-                className="shadow-[0_10px_24px_-12px_rgba(15,23,41,0.45)] ring-4 ring-card"
-              />
+          <p className="mt-3 max-w-md text-[1.05rem] leading-relaxed">
+            Répondez à {questionCount} questions et découvrez quels candidats sont les plus proches
+            de{" "}
+            <span className="relative inline-block">
+              vos idées
+              <Swoosh className="text-primary/60" />
             </span>
-          ))}
-        </div>
-        <p className="text-sm text-muted">
-          {candidates.length} candidats déclarés, comparés sur les mêmes questions.
-        </p>
-      </div>
-
-      <div className="mt-7">
-        <div className="flex flex-wrap items-center gap-4">
-          <ButtonLink href="/match" variant="accent" size="lg">
-            Découvrir mon Match
-            <Sun size={17} />
-          </ButtonLink>
-          <p className="flex items-center gap-1.5 text-xs text-muted-2">
-            <Lock size={12} />
-            Sans inscription · résultats calculés sur votre appareil
+            .
           </p>
+
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Stat icon={ListChecks} value={`${questionCount} questions`} detail="Environ 3 minutes" />
+            <Stat
+              icon={Users}
+              value={`${candidates.length} candidats comparés`}
+              detail="Sur les mêmes enjeux"
+            />
+          </div>
+
+          <div className="mt-7">
+            <ButtonLink href="/match" variant="accent" size="lg" className="w-full sm:w-auto">
+              Découvrir mon Match
+              <ArrowRight size={17} />
+            </ButtonLink>
+            <p className="mt-3 flex items-center gap-1.5 text-xs text-muted-2">
+              <Lock size={12} />
+              Sans inscription · résultats calculés sur votre appareil
+            </p>
+          </div>
+
+          {/* L'orbite tient compagnie au texte sur grand écran, passe dessous sinon. */}
+          <div className="mt-8 xl:mt-10">
+            <MatchOrbit candidates={candidates} />
+          </div>
+
+          <Link
+            href="/candidats"
+            className="focus-ring group mt-8 flex items-center gap-1.5 border-t border-primary/15 pt-5 text-sm font-medium text-primary hover:underline"
+          >
+            Explorer les {proposalCount} propositions sourcées
+            <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+          </Link>
         </div>
 
-        <Link
-          href="/candidats"
-          className="focus-ring group mt-5 flex items-center gap-1.5 border-t border-primary/15 pt-5 text-sm font-medium text-primary hover:underline"
-        >
-          Explorer les {proposalCount} propositions sourcées
-          <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-        </Link>
+        {/* ─── Colonne de droite : le classement réel du visiteur ─── */}
+        <div className="flex flex-col justify-center">
+          <HandNote className="mb-3 hidden w-[9rem] -rotate-3 xl:block">
+            Vos idées comptent.
+          </HandNote>
+          <MatchTopThree candidateCount={candidates.length} />
+        </div>
       </div>
+    </div>
+  );
+}
+
+function Stat({
+  icon: Icon,
+  value,
+  detail,
+}: {
+  icon: typeof Users;
+  value: string;
+  detail: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
+        <Icon size={17} />
+      </span>
+      <span className="min-w-0">
+        <span className="block text-sm font-semibold">{value}</span>
+        <span className="block text-xs text-muted-2">{detail}</span>
+      </span>
     </div>
   );
 }

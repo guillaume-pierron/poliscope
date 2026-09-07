@@ -7,31 +7,10 @@ import heroIllustrationDesktop from "../../../public/illustrations/hero_deskop.p
 import { ButtonLink } from "@/components/ui/button";
 import { HomeHeroPanel } from "./home-hero-panel";
 import { Swoosh } from "@/components/ui/swoosh";
+import { HandNote } from "@/components/ui/hand-note";
 import { ArrowRight, Clock, Lock, Sun, Target } from "lucide-react";
 import type { HeadlinePoll } from "@/lib/data/queries";
 import type { Candidate } from "@/lib/types";
-
-/** Annotation manuscrite décorative — toujours aria-hidden, jamais porteuse d'information. */
-function HandNote({
-  children,
-  className,
-  tone = "primary",
-}: {
-  children: React.ReactNode;
-  className?: string;
-  tone?: "primary" | "danger";
-}) {
-  const textClass = tone === "danger" ? "text-danger" : "text-primary";
-  const strokeClass = tone === "danger" ? "text-danger/60" : "text-primary/60";
-  return (
-    <span aria-hidden="true" className={className}>
-      <span className={`relative inline-block font-hand text-[1.15rem] leading-[1.15] ${textClass}`}>
-        {children}
-        <Swoosh className={`-bottom-1.5 ${strokeClass}`} />
-      </span>
-    </span>
-  );
-}
 
 export function Hero({
   candidates,
