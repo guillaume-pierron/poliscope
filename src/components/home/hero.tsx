@@ -39,17 +39,16 @@ export function Hero({
           et le bas est rogné puis fondu pour éviter une coupure nette. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[540px] select-none [mask-image:linear-gradient(to_bottom,black_78%,transparent)] sm:hidden"
+        className="pointer-events-none absolute -top-2 right-0 w-[47%] max-w-[195px] select-none [mask-composite:intersect] [mask-image:linear-gradient(to_right,transparent,black_24%),linear-gradient(to_bottom,black_86%,transparent)] sm:hidden"
       >
         <Image
           src={heroIllustration}
           alt=""
-          fill
           priority
           // Desktop ne l'affiche jamais : on demande alors la plus petite
           // variante possible plutôt que de télécharger l'aquarelle pour rien.
-          sizes="(max-width: 639px) 100vw, 1px"
-          className="object-cover object-top"
+          sizes="(max-width: 639px) 47vw, 1px"
+          className="h-auto w-full"
         />
       </div>
 
