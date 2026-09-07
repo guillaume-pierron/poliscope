@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Info } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -16,6 +17,31 @@ export default function MethodologiePage() {
       </p>
 
       <div className="prose-content mt-10 space-y-10">
+        <section className="rounded-2xl border border-primary/20 bg-primary-soft/40 p-5">
+          <h2 className="text-lg font-semibold">Quels candidats sont couverts&nbsp;?</h2>
+          <p className="mt-3 leading-relaxed text-foreground/85">
+            Un candidat est ajouté à Poliscope dès lors que sa candidature est{" "}
+            <strong>officiellement déclarée</strong> et qu&apos;il a été{" "}
+            <strong>testé par au moins un institut de sondage national reconnu</strong> dans les
+            trois derniers mois. C&apos;est un critère vérifiable, le même pour tout le monde —
+            jamais un choix éditorial sur qui « mérite » d&apos;être couvert.
+          </p>
+          <p className="mt-3 leading-relaxed text-foreground/85">
+            Le champ des candidatures pour 2027 est large (une trentaine de personnes déclarées ou
+            pressenties, dont beaucoup n&apos;obtiendront jamais les 500 parrainages d&apos;élus
+            nécessaires). Poliscope n&apos;essaie pas de couvrir tout le monde dès le premier jour
+            avec la même profondeur : chaque fiche candidat suppose une biographie sourcée, des
+            propositions sourcées et des positions sourcées sur les questions du Match — un travail
+            qui prend du temps par candidat. La liste s&apos;élargit progressivement, dans l&apos;ordre
+            où ce travail de sourçage est fait, jamais en fonction de la notoriété ou de la ligne
+            politique. Voir la page{" "}
+            <Link href="/candidats" className="underline underline-offset-2">
+              Candidats
+            </Link>{" "}
+            pour la liste à jour.
+          </p>
+        </section>
+
         <section>
           <h2 className="text-xl font-semibold">1. Trois types de questions, selon ce qu&apos;elles mesurent</h2>
           <p className="mt-3 leading-relaxed text-foreground/85">
@@ -228,6 +254,70 @@ export default function MethodologiePage() {
               Confidentialité
             </a>{" "}
             pour le détail.
+          </p>
+        </section>
+
+        <section id="passage-au-reel" className="scroll-mt-24">
+          <h2 className="text-xl font-semibold">12. « Passage au réel » : faisabilité et impact des mesures</h2>
+          <p className="mt-3 leading-relaxed text-foreground/85">
+            Pour un petit nombre de mesures, Poliscope va plus loin que la position sourcée : est-elle
+            juridiquement applicable ? Budgétairement documentée ? Réalisable ? Quels effets peut-on
+            raisonnablement attendre ? Le principe absolu de cette section :{" "}
+            <strong>mieux vaut afficher « on ne sait pas encore » qu&apos;un chiffre impossible à
+            défendre.</strong> Aucun montant, aucun effet économique n&apos;est jamais estimé sans
+            modèle, source ou calcul transparent qui permette de le justifier.
+          </p>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-border bg-surface p-4">
+              <p className="font-semibold text-foreground">Pourquoi pas un score unique ?</p>
+              <p className="mt-1.5 text-sm text-muted">
+                « Faisable à 74 % » donnerait une fausse précision sur quelque chose qui ne se réduit
+                pas à un nombre. La faisabilité est donc présentée par catégorie (ex. « Faisable sous
+                conditions ») accompagnée d&apos;une liste de constats (✓ / ⚠) qui explique pourquoi —
+                jamais la probabilité que la mesure soit votée ou réussisse politiquement.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-surface p-4">
+              <p className="font-semibold text-foreground">Donnée, hypothèse ou modèle ?</p>
+              <p className="mt-1.5 text-sm text-muted">
+                Chaque chiffre affiché est étiqueté selon son origine : donnée officielle, chiffrage du
+                candidat lui-même (jamais présenté comme neutre), résultat de modèle, étude externe, ou
+                hypothèse posée par Poliscope faute de source — toujours signalée comme telle.
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-4 leading-relaxed text-foreground/85">
+            Trois horizons standards structurent les effets attendus : court terme (0-2 ans), moyen
+            terme (3-5 ans), long terme (6-10 ans). Quand l&apos;incertitude le justifie, une estimation
+            peut être déclinée en trois scénarios (prudent / central / favorable) — chacun listant
+            explicitement les hypothèses qui changent d&apos;un scénario à l&apos;autre. Une seule
+            estimation fiable ? Elle seule est affichée : les scénarios ne sont jamais créés
+            artificiellement pour remplir l&apos;interface.
+          </p>
+          <p className="mt-3 leading-relaxed text-foreground/85">
+            Les intervalles sont volontairement préférés à une fausse précision : « 6 à 9 Md€ » plutôt
+            que « 7,384 Md€ ». Un niveau de confiance (élevé / moyen / faible) accompagne chaque
+            estimation — il reflète la qualité des données disponibles, jamais une probabilité de
+            succès.
+          </p>
+          <p className="mt-3 leading-relaxed text-foreground/85">
+            Chaque analyse liste ses hypothèses (nom, valeur, source) et ses sources, pour que
+            n&apos;importe quel chiffre puisse être retracé : source → hypothèse → méthode → résultat.
+            Les analyses sont volontairement peu nombreuses pour l&apos;instant — mieux vaut un petit
+            nombre d&apos;analyses solides qu&apos;un grand nombre d&apos;analyses approximatives — et
+            chacune passe par un brouillon interne avant publication ; une IA peut aider à repérer des
+            sources ou structurer l&apos;information, mais ne publie jamais un résultat elle-même.
+          </p>
+          <p className="mt-3 leading-relaxed text-foreground/85">
+            Enfin, cette section évalue des <strong>mesures</strong>, jamais des candidats : il
+            n&apos;existe pas de « score de réalisme » global d&apos;un programme ou d&apos;une
+            personnalité. Voir{" "}
+            <a href="/passage-au-reel" className="underline underline-offset-2">
+              les analyses déjà publiées
+            </a>
+            .
           </p>
         </section>
       </div>
