@@ -60,10 +60,13 @@ export default async function HomePage() {
     compareRows.find((r) => r.verdict === "desaccord"),
     compareRows.find((r) => r.verdict === "nuance"),
   ].filter((r) => r !== undefined);
+  // Deux thèmes seulement : la carte « Comparer » et celle des sondages
+  // fixent ensemble la hauteur de « Mon Match », qui les jouxte sur deux
+  // rangées — une ligne de plus creusait un vide au bas de cette dernière.
   const compareSelection = [
     ...compareHighlights,
     ...compareRows.filter((r) => !compareHighlights.includes(r)),
-  ].slice(0, 3);
+  ].slice(0, 2);
 
   // Aperçu du Simulateur : mesures réellement calculées pour le profil par
   // défaut (2000€ net, célibataire, locataire, véhiculé) — jamais un

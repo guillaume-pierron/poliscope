@@ -24,7 +24,10 @@ export function MatchShowcaseCard({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[24px] border border-primary/15 bg-primary-soft/50 p-6 sm:p-8",
+        // flex-col + flex-1 sur la grille : la carte est étirée par le
+        // row-span voisin, son contenu doit donc occuper cette hauteur plutôt
+        // que de laisser un vide en bas.
+        "relative flex flex-col overflow-hidden rounded-[24px] border border-primary/15 bg-primary-soft/50 p-6 sm:p-8",
         className
       )}
     >
@@ -33,7 +36,7 @@ export function MatchShowcaseCard({
         className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-primary/10"
       />
 
-      <div className="relative grid gap-10 lg:grid-cols-2 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.05fr)_minmax(0,0.92fr)] xl:gap-8">
+      <div className="relative grid flex-1 gap-10 lg:grid-cols-2 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.05fr)_minmax(0,0.92fr)] xl:gap-8">
         {/* ─── La promesse ─── */}
         <div className="flex flex-col">
           <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
