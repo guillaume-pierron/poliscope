@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+// Import statique : l'URL générée porte un hash du contenu, donc remplacer
+// le fichier suffit à invalider le cache de l'optimiseur d'images.
+import heroIllustration from "../../../public/illustrations/hero.png";
 import { ButtonLink } from "@/components/ui/button";
 import { HomeHeroPanel } from "./home-hero-panel";
 import { Sparkle, Swoosh } from "@/components/ui/swoosh";
@@ -39,7 +42,7 @@ export function Hero({
         className="pointer-events-none absolute inset-x-0 top-0 h-[540px] select-none [mask-image:linear-gradient(to_bottom,black_78%,transparent)] sm:hidden"
       >
         <Image
-          src="/illustrations/hero.png"
+          src={heroIllustration}
           alt=""
           fill
           priority
