@@ -310,6 +310,310 @@ export const PROPOSAL_STATUS_LABELS: Record<ProposalStatus, string> = {
   precision_ulterieure: "Précision apportée ultérieurement",
 };
 
+// =============================================================================
+// "Passage au réel" — faisabilité et impact réel des mesures.
+//
+// Règle absolue de tout ce domaine : aucun chiffre inventé, aucune hypothèse
+// cachée, aucun jugement politique présenté comme un fait. Un champ vide (ou
+// une valeur "non_estime"/"non_documente") est toujours préférable à une
+// estimation qu'on ne pourrait pas défendre auprès d'un lecteur qui demande
+// "d'où vient ce chiffre ?". Voir /methodologie pour l'explication publique.
+// =============================================================================
+
+/** Le texte source d'une loi/mesure précise l'acte juridique nécessaire — jamais une estimation de la probabilité que ce texte soit voté. */
+export type LegalPath =
+  | "decret"
+  | "loi_ordinaire"
+  | "loi_organique"
+  | "loi_finances"
+  | "referendum"
+  | "revision_constitutionnelle"
+  | "negociation_europeenne"
+  | "autre";
+
+export const LEGAL_PATH_LABELS: Record<LegalPath, string> = {
+  decret: "Décret",
+  loi_ordinaire: "Loi ordinaire",
+  loi_organique: "Loi organique",
+  loi_finances: "Loi de finances",
+  referendum: "Référendum",
+  revision_constitutionnelle: "Révision constitutionnelle",
+  negociation_europeenne: "Négociation / modification européenne",
+  autre: "Autre",
+};
+
+/**
+ * Quantité d'information disponible pour modéliser sérieusement la mesure —
+ * jamais un jugement sur sa qualité politique. Une mesure peut être
+ * "insuffisamment détaillée" et par ailleurs très populaire ou très solide
+ * politiquement : ce n'est pas ce que ce champ mesure.
+ */
+export type PrecisionLevel = "precise" | "partiellement_precis" | "insuffisant";
+
+export const PRECISION_LEVEL_LABELS: Record<PrecisionLevel, string> = {
+  precise: "Précise",
+  partiellement_precis: "Partiellement précise",
+  insuffisant: "Insuffisamment détaillée",
+};
+
+/**
+ * Catégorie de faisabilité — jamais un pourcentage unique. Un statut est
+ * toujours accompagné d'un `feasibility_checklist` dérivé (voir
+ * lib/passage-au-reel/feasibility.ts) qui explique le "pourquoi".
+ */
+export type FeasibilityStatus =
+  | "faisable_parametres_connus"
+  | "faisable_sous_conditions"
+  | "mise_en_oeuvre_complexe"
+  | "informations_insuffisantes"
+  | "obstacle_juridique_majeur";
+
+export const FEASIBILITY_STATUS_LABELS: Record<FeasibilityStatus, string> = {
+  faisable_parametres_connus: "Faisable avec paramètres connus",
+  faisable_sous_conditions: "Faisable sous conditions",
+  mise_en_oeuvre_complexe: "Mise en œuvre complexe",
+  informations_insuffisantes: "Informations insuffisantes",
+  obstacle_juridique_majeur: "Obstacle juridique majeur identifié",
+};
+
+/**
+ * Reflète la qualité et la quantité des données disponibles pour analyser la
+ * mesure — jamais la probabilité que la mesure soit adoptée ou réussisse
+ * politiquement. Mêmes trois niveaux que la couverture du Match, par
+ * cohérence avec le reste du site (voir CoverageLevel).
+ */
+export type ConfidenceLevel = "elevee" | "moyenne" | "faible";
+
+export const CONFIDENCE_LEVEL_LABELS: Record<ConfidenceLevel, string> = {
+  elevee: "Confiance élevée",
+  moyenne: "Confiance moyenne",
+  faible: "Confiance faible",
+};
+
+/** Réponse tri-état pour un fait de mise en œuvre — jamais "oui/non" forcé quand la source ne permet pas de trancher. */
+export type ImplementationAnswer = "oui" | "non" | "incertain" | "non_documente";
+
+export const IMPLEMENTATION_ANSWER_LABELS: Record<ImplementationAnswer, string> = {
+  oui: "Oui",
+  non: "Non",
+  incertain: "Incertain",
+  non_documente: "Non documenté",
+};
+
+/**
+ * Statut de publication d'une analyse. "not_analyzed" n'est jamais stocké en
+ * base : c'est l'état par défaut d'une proposition pour laquelle aucune ligne
+ * measure_analyses n'existe encore (voir getMeasureAnalysisBundle). Les
+ * quatre autres sont les valeurs réellement stockées.
+ */
+export type AnalysisStatus = "not_analyzed" | "in_progress" | "review_required" | "published" | "outdated";
+
+export const ANALYSIS_STATUS_LABELS: Record<AnalysisStatus, string> = {
+  not_analyzed: "Non analysée",
+  in_progress: "Brouillon",
+  review_required: "À valider",
+  published: "Publiée",
+  outdated: "À actualiser",
+};
+
+export type ImpactHorizon = "court" | "moyen" | "long";
+
+export const IMPACT_HORIZON_LABELS: Record<ImpactHorizon, string> = {
+  court: "Court terme (0-2 ans)",
+  moyen: "Moyen terme (3-5 ans)",
+  long: "Long terme (6-10 ans)",
+};
+
+/** "unique" : une seule estimation fiable existe — ne jamais fabriquer 3 scénarios pour remplir l'interface quand il n'y en a qu'un. */
+export type ImpactScenario = "unique" | "prudent" | "central" | "favorable";
+
+export const IMPACT_SCENARIO_LABELS: Record<ImpactScenario, string> = {
+  unique: "Estimation disponible",
+  prudent: "Scénario prudent",
+  central: "Scénario central",
+  favorable: "Scénario favorable",
+};
+
+export type ImpactCategory =
+  | "revenu_menages"
+  | "finances_publiques"
+  | "emploi"
+  | "pib"
+  | "inflation"
+  | "investissement"
+  | "consommation"
+  | "dette_publique"
+  | "balance_commerciale"
+  | "emissions_co2"
+  | "energie"
+  | "logement"
+  | "sante"
+  | "inegalites"
+  | "autre";
+
+export const IMPACT_CATEGORY_LABELS: Record<ImpactCategory, string> = {
+  revenu_menages: "Revenu des ménages",
+  finances_publiques: "Finances publiques",
+  emploi: "Emploi",
+  pib: "PIB",
+  inflation: "Inflation",
+  investissement: "Investissement",
+  consommation: "Consommation",
+  dette_publique: "Dette publique",
+  balance_commerciale: "Balance commerciale",
+  emissions_co2: "Émissions de CO2",
+  energie: "Énergie",
+  logement: "Logement",
+  sante: "Santé",
+  inegalites: "Inégalités",
+  autre: "Autre",
+};
+
+/** D'où vient une hypothèse — une hypothèse posée par Poliscope faute de source doit toujours être étiquetée "manual_assumption" et affichée comme telle. */
+export type AssumptionType = "official" | "candidate" | "model" | "external_study" | "manual_assumption";
+
+export const ASSUMPTION_TYPE_LABELS: Record<AssumptionType, string> = {
+  official: "Donnée officielle",
+  candidate: "Chiffrage du candidat",
+  model: "Résultat de modèle",
+  external_study: "Étude externe",
+  manual_assumption: "Hypothèse Poliscope",
+};
+
+/** D'où vient un chiffrage budgétaire — jamais présenté comme "neutre" quand c'est le candidat lui-même qui l'annonce. */
+export type BudgetSourceType = "candidate" | "independent_body" | "academic" | "other";
+
+export const BUDGET_SOURCE_TYPE_LABELS: Record<BudgetSourceType, string> = {
+  candidate: "Chiffrage du candidat",
+  independent_body: "Organisme indépendant",
+  academic: "Étude académique",
+  other: "Autre source",
+};
+
+/**
+ * L'analyse "Passage au réel" d'une mesure (`proposals.id`). Regroupe le
+ * volet juridique et le volet mise en œuvre directement (peu de champs
+ * chacun) — budget, impacts et hypothèses vivent dans leurs propres tables
+ * car ce sont naturellement des listes, pas des champs uniques.
+ */
+export interface MeasureAnalysis {
+  id: string;
+  proposal_id: string;
+  status: Exclude<AnalysisStatus, "not_analyzed">;
+  /** 2-4 phrases neutres résumant ce qu'on sait, ce qu'on peut calculer, ce qui reste incertain. */
+  summary: string | null;
+
+  // --- Faisabilité globale ---
+  feasibility_status: FeasibilityStatus | null;
+  precision_level: PrecisionLevel | null;
+  confidence_level: ConfidenceLevel | null;
+
+  // --- Juridique ---
+  legal_path: LegalPath | null;
+  legal_constitutional_change_required: boolean;
+  legal_eu_change_required: boolean;
+  /** Dépendances institutionnelles ou obstacles identifiés, en clair. */
+  legal_notes: string | null;
+  legal_implementation_delay_min_months: number | null;
+  legal_implementation_delay_max_months: number | null;
+
+  // --- Mise en œuvre opérationnelle ---
+  implementation_existing_administration: ImplementationAnswer;
+  implementation_new_recruitment_needed: ImplementationAnswer;
+  implementation_notes: string | null;
+
+  // --- Bénéficiaires ("qui est concerné ?") ---
+  /** Ex. ["Salariés au SMIC", "Retraités"] — descriptif, jamais un score. */
+  beneficiaries_groups: string[];
+  beneficiaries_description: string | null;
+  beneficiaries_count_min: number | null;
+  beneficiaries_count_central: number | null;
+  beneficiaries_count_max: number | null;
+  beneficiaries_source_name: string | null;
+  beneficiaries_source_url: string | null;
+
+  /** Id d'une SimulatorMeasure (lib/simulator/measures.ts) quand une mesure équivalente y est déjà modélisée — jamais deviné, toujours posé à la main par l'admin. */
+  simulator_measure_id: string | null;
+
+  reviewed_at: string | null;
+  reviewed_by: string | null;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * Un chiffrage budgétaire, une ligne par source. Plusieurs lignes pour une
+ * même analyse sont attendues et normales (ex. chiffrage du candidat ET
+ * d'un organisme indépendant qui ne sont pas d'accord) — l'UI les affiche
+ * toutes plutôt que de les fondre en une fausse moyenne.
+ */
+export interface MeasureBudgetEstimate {
+  id: string;
+  measure_analysis_id: string;
+  source_type: BudgetSourceType;
+  source_name: string;
+  source_url: string | null;
+  annual_cost_min: number | null;
+  annual_cost_central: number | null;
+  annual_cost_max: number | null;
+  annual_revenue_min: number | null;
+  annual_revenue_central: number | null;
+  annual_revenue_max: number | null;
+  currency: string;
+  reference_year: number | null;
+  financing_identified: ImplementationAnswer;
+  notes: string | null;
+}
+
+/**
+ * Un impact chiffré (ou non) pour un horizon et un scénario donnés. `scenario`
+ * vaut "unique" tant qu'une seule estimation fiable existe — ne jamais créer
+ * prudent/central/favorable artificiellement pour remplir l'UI.
+ */
+export interface MeasureImpact {
+  id: string;
+  measure_analysis_id: string;
+  impact_type: ImpactCategory;
+  horizon: ImpactHorizon;
+  scenario: ImpactScenario;
+  /** Une phrase libre si l'ampleur dépend du profil (ex. "salariés au SMIC") plutôt qu'un chiffre national. */
+  population: string | null;
+  value_min: number | null;
+  value_central: number | null;
+  value_max: number | null;
+  unit: string;
+  confidence_level: ConfidenceLevel;
+  /** Modèle/méthode utilisé, en clair (ex. "Calcul direct à partir du barème annoncé", "Étude X (2025)"). Jamais vide pour une ligne publiée. */
+  method: string;
+  source_name: string | null;
+  source_url: string | null;
+  /** Hypothèses qui changent d'un scénario à l'autre — obligatoire dès que scenario != "unique". */
+  scenario_assumptions: string | null;
+  publication_date: string | null;
+}
+
+/** Une hypothèse utilisée par un calcul de cette analyse (budget, impact, ou bénéficiaires). */
+export interface MeasureAssumption {
+  id: string;
+  measure_analysis_id: string;
+  name: string;
+  value: string;
+  unit: string | null;
+  assumption_type: AssumptionType;
+  justification: string | null;
+  source_name: string | null;
+  source_url: string | null;
+}
+
+/** Le paquet complet nécessaire pour afficher une fiche "Passage au réel" — jamais assemblé partiellement. */
+export interface MeasureAnalysisBundle {
+  analysis: MeasureAnalysis;
+  budgetEstimates: MeasureBudgetEstimate[];
+  impacts: MeasureImpact[];
+  assumptions: MeasureAssumption[];
+}
+
 export const ORIENTATION_LABELS: Record<Orientation, string> = {
   gauche: "Gauche",
   "centre-gauche": "Centre gauche",

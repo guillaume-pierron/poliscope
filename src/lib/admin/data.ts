@@ -9,6 +9,12 @@ import { candidates } from "@/lib/data/local/candidates";
 import { proposals } from "@/lib/data/local/proposals";
 import { questions } from "@/lib/data/local/questions";
 import { candidatePositions } from "@/lib/data/local/positions";
+import {
+  measureAnalyses,
+  measureAssumptions,
+  measureBudgetEstimates,
+  measureImpacts,
+} from "@/lib/data/local/measure-analyses";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const LOCAL_DATASETS: Record<EntityKey, any[]> = {
@@ -18,6 +24,10 @@ const LOCAL_DATASETS: Record<EntityKey, any[]> = {
   propositions: proposals,
   questions,
   positions: candidatePositions,
+  analyses: measureAnalyses,
+  budgets: measureBudgetEstimates,
+  impacts: measureImpacts,
+  hypotheses: measureAssumptions,
 };
 
 /** True when admin reads/writes hit a real Supabase project rather than the bundled demo dataset. */

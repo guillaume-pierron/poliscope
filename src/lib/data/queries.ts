@@ -2,6 +2,11 @@ import "server-only";
 import type {
   Candidate,
   CandidatePosition,
+  MeasureAnalysis,
+  MeasureAnalysisBundle,
+  MeasureAssumption,
+  MeasureBudgetEstimate,
+  MeasureImpact,
   Party,
   Poll,
   PollScenario,
@@ -25,6 +30,7 @@ import {
   pollScenarios as localPollScenarios,
   pollResults as localPollResults,
 } from "./local/polls";
+import { measureAnalysisBundles as localMeasureAnalysisBundles } from "./local/measure-analyses";
 
 /**
  * Data access layer. Poliscope ships with a fully-featured local demo
@@ -291,4 +297,56 @@ export async function getPollResults(scenarioId: string): Promise<PollResult[]> 
     }
   }
   return localPollResults.filter((r) => r.scenario_id === scenarioId);
+}
+
+/**
+ * "Passage au réel" — lecture publique. Ne renvoie jamais un brouillon : la
+ * RLS Supabase restreint déjà `measure_analyses`/tables filles à
+ * `status = 'published'` pour la clé anonyme (voir la migration), et le
+ * fallback local applique le même filtre pour rester cohérent en démo.
+ * Le back-office (lib/admin/data.ts) passe par le client service_role, qui
+ * voit tous les statuts, y compris les brouillons.
+ */
+export async function getPublishedMeasureAnalysisBundles(): Promise<MeasureAnalysisBundle[]> {
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = await createSupabaseServerClient();
+      const [{ data: analyses, error: e1 }, { data: budgets, error: e2 }, { data: impacts, error: e3 }, { data: assumptions, error: e4 }] =
+        await Promise.all([
+          supabase.from("measure_analyses").select("*").eq("status", "published"),
+          supabase.from("measure_budget_estimates").select("*"),
+          supabase.from("measure_impacts").select("*"),
+          supabase.from("measure_assumptions").select("*"),
+        ]);
+      if (e1 || e2 || e3 || e4) throw e1 ?? e2 ?? e3 ?? e4;
+      if (analyses && analyses.length) {
+        const publishedIds = new Set((analyses as MeasureAnalysis[]).map((a) => a.id));
+        return (analyses as MeasureAnalysis[]).map((analysis) => ({
+          analysis,
+          budgetEstimates: ((budgets ?? []) as MeasureBudgetEstimate[]).filter(
+            (b) => b.measure_analysis_id === analysis.id && publishedIds.has(analysis.id)
+          ),
+          impacts: ((impacts ?? []) as MeasureImpact[]).filter((i) => i.measure_analysis_id === analysis.id),
+          assumptions: ((assumptions ?? []) as MeasureAssumption[]).filter(
+            (a) => a.measure_analysis_id === analysis.id
+          ),
+        }));
+      }
+    } catch {
+      // fall through to local demo data
+    }
+  }
+  return localMeasureAnalysisBundles.filter((b) => b.analysis.status === "published");
+}
+
+export async function getPublishedMeasureAnalysisBundleForProposal(
+  proposalId: string
+): Promise<MeasureAnalysisBundle | null> {
+  const bundles = await getPublishedMeasureAnalysisBundles();
+  return bundles.find((b) => b.analysis.proposal_id === proposalId) ?? null;
+}
+
+export async function getProposalById(id: string): Promise<Proposal | undefined> {
+  const all = await getProposals();
+  return all.find((p) => p.id === id);
 }

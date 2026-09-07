@@ -11,10 +11,13 @@ export function CandidateProposalsSection({
   proposals,
   themes,
   candidateSlug,
+  analyzedProposalIds,
 }: {
   proposals: Proposal[];
   themes: Theme[];
   candidateSlug: string;
+  /** Proposal ids with a *published* "Passage au réel" analysis. */
+  analyzedProposalIds: Set<string>;
 }) {
   const [activeThemeId, setActiveThemeId] = useState<string | null>(null);
 
@@ -88,6 +91,7 @@ export function CandidateProposalsSection({
             proposal={proposal}
             theme={themes.find((t) => t.id === proposal.theme_id)}
             candidateSlug={candidateSlug}
+            hasAnalysis={analyzedProposalIds.has(proposal.id)}
           />
         ))}
       </div>

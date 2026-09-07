@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeftRight, CheckCircle2, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { PassageAuReelLink } from "@/components/passage-au-reel/passage-au-reel-link";
 import { ThemeIcon } from "@/lib/theme-icons";
 import { formatDate, isQuantifiedProposal } from "@/lib/utils";
 import { PROPOSAL_STATUS_LABELS, type Proposal, type Theme } from "@/lib/types";
@@ -16,10 +17,13 @@ export function CandidateProposalCard({
   proposal,
   theme,
   candidateSlug,
+  hasAnalysis,
 }: {
   proposal: Proposal;
   theme: Theme | undefined;
   candidateSlug: string;
+  /** True only when a *published* "Passage au réel" analysis exists for this proposal. */
+  hasAnalysis?: boolean;
 }) {
   const quantified = isQuantifiedProposal(proposal);
 
@@ -77,13 +81,16 @@ export function CandidateProposalCard({
           Voir la source
           <ExternalLink size={13} />
         </a>
-        <Link
-          href={`/comparer?a=${candidateSlug}`}
-          className="focus-ring inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-foreground"
-        >
-          <ArrowLeftRight size={13} />
-          Comparer cette mesure
-        </Link>
+        <div className="flex items-center gap-4">
+          {hasAnalysis && <PassageAuReelLink proposalId={proposal.id} />}
+          <Link
+            href={`/comparer?a=${candidateSlug}`}
+            className="focus-ring inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-foreground"
+          >
+            <ArrowLeftRight size={13} />
+            Comparer cette mesure
+          </Link>
+        </div>
       </div>
     </article>
   );

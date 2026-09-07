@@ -18,6 +18,12 @@ import { questions } from "../src/lib/data/local/questions";
 import { candidatePositions } from "../src/lib/data/local/positions";
 import { proposals } from "../src/lib/data/local/proposals";
 import { polls, pollScenarios, pollResults } from "../src/lib/data/local/polls";
+import {
+  measureAnalyses,
+  measureAssumptions,
+  measureBudgetEstimates,
+  measureImpacts,
+} from "../src/lib/data/local/measure-analyses";
 
 function uuid(kind: string, key: string) {
   return `uuid_generate_v5(uuid_ns_url(), 'poliscope:${kind}:${key}')`;
@@ -122,6 +128,34 @@ for (const r of pollResults) {
   const candidate = candidates.find((c) => c.id === r.candidate_id)!;
   lines.push(
     `insert into poll_results (id, scenario_id, candidate_id, value, low, high) values (${uuid("poll_result", r.id)}, ${uuid("poll_scenario", r.scenario_id)}, ${uuid("candidate", candidate.slug)}, ${r.value}, ${sqlNumber(r.low)}, ${sqlNumber(r.high)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- measure_analyses (Passage au réel)");
+for (const a of measureAnalyses) {
+  lines.push(
+    `insert into measure_analyses (id, proposal_id, status, summary, feasibility_status, precision_level, confidence_level, legal_path, legal_constitutional_change_required, legal_eu_change_required, legal_notes, legal_implementation_delay_min_months, legal_implementation_delay_max_months, implementation_existing_administration, implementation_new_recruitment_needed, implementation_notes, beneficiaries_groups, beneficiaries_description, beneficiaries_count_min, beneficiaries_count_central, beneficiaries_count_max, beneficiaries_source_name, beneficiaries_source_url, simulator_measure_id, reviewed_at, reviewed_by, published_at) values (${uuid("measure_analysis", a.id)}, ${uuid("proposal", a.proposal_id)}, ${sqlString(a.status)}, ${sqlString(a.summary)}, ${sqlString(a.feasibility_status)}, ${sqlString(a.precision_level)}, ${sqlString(a.confidence_level)}, ${sqlString(a.legal_path)}, ${sqlBool(a.legal_constitutional_change_required)}, ${sqlBool(a.legal_eu_change_required)}, ${sqlString(a.legal_notes)}, ${sqlNumber(a.legal_implementation_delay_min_months)}, ${sqlNumber(a.legal_implementation_delay_max_months)}, ${sqlString(a.implementation_existing_administration)}, ${sqlString(a.implementation_new_recruitment_needed)}, ${sqlString(a.implementation_notes)}, ${sqlJson(a.beneficiaries_groups)}, ${sqlString(a.beneficiaries_description)}, ${sqlNumber(a.beneficiaries_count_min)}, ${sqlNumber(a.beneficiaries_count_central)}, ${sqlNumber(a.beneficiaries_count_max)}, ${sqlString(a.beneficiaries_source_name)}, ${sqlString(a.beneficiaries_source_url)}, ${sqlString(a.simulator_measure_id)}, ${sqlString(a.reviewed_at)}, ${sqlString(a.reviewed_by)}, ${sqlString(a.published_at)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- measure_budget_estimates");
+for (const b of measureBudgetEstimates) {
+  lines.push(
+    `insert into measure_budget_estimates (id, measure_analysis_id, source_type, source_name, source_url, annual_cost_min, annual_cost_central, annual_cost_max, annual_revenue_min, annual_revenue_central, annual_revenue_max, currency, reference_year, financing_identified, notes) values (${uuid("measure_budget_estimate", b.id)}, ${uuid("measure_analysis", b.measure_analysis_id)}, ${sqlString(b.source_type)}, ${sqlString(b.source_name)}, ${sqlString(b.source_url)}, ${sqlNumber(b.annual_cost_min)}, ${sqlNumber(b.annual_cost_central)}, ${sqlNumber(b.annual_cost_max)}, ${sqlNumber(b.annual_revenue_min)}, ${sqlNumber(b.annual_revenue_central)}, ${sqlNumber(b.annual_revenue_max)}, ${sqlString(b.currency)}, ${sqlNumber(b.reference_year)}, ${sqlString(b.financing_identified)}, ${sqlString(b.notes)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- measure_impacts");
+for (const i of measureImpacts) {
+  lines.push(
+    `insert into measure_impacts (id, measure_analysis_id, impact_type, horizon, scenario, population, value_min, value_central, value_max, unit, confidence_level, method, source_name, source_url, scenario_assumptions, publication_date) values (${uuid("measure_impact", i.id)}, ${uuid("measure_analysis", i.measure_analysis_id)}, ${sqlString(i.impact_type)}, ${sqlString(i.horizon)}, ${sqlString(i.scenario)}, ${sqlString(i.population)}, ${sqlNumber(i.value_min)}, ${sqlNumber(i.value_central)}, ${sqlNumber(i.value_max)}, ${sqlString(i.unit)}, ${sqlString(i.confidence_level)}, ${sqlString(i.method)}, ${sqlString(i.source_name)}, ${sqlString(i.source_url)}, ${sqlString(i.scenario_assumptions)}, ${sqlString(i.publication_date)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- measure_assumptions");
+for (const a of measureAssumptions) {
+  lines.push(
+    `insert into measure_assumptions (id, measure_analysis_id, name, value, unit, assumption_type, justification, source_name, source_url) values (${uuid("measure_assumption", a.id)}, ${uuid("measure_analysis", a.measure_analysis_id)}, ${sqlString(a.name)}, ${sqlString(a.value)}, ${sqlString(a.unit)}, ${sqlString(a.assumption_type)}, ${sqlString(a.justification)}, ${sqlString(a.source_name)}, ${sqlString(a.source_url)}) on conflict (id) do nothing;`
   );
 }
 

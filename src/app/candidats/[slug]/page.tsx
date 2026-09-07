@@ -8,6 +8,7 @@ import { CandidateAtAGlanceCard } from "@/components/candidates/candidate-at-a-g
 import { CandidateDeepenCard } from "@/components/candidates/candidate-deepen-card";
 import { CandidateProposalsSection } from "@/components/candidates/candidate-proposals-section";
 import { CandidatePositionList } from "@/components/candidates/candidate-position-list";
+import { PassageAuReelCandidateSummary } from "@/components/passage-au-reel/passage-au-reel-candidate-summary";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { ORIENTATION_LABELS } from "@/lib/types";
@@ -17,6 +18,7 @@ import {
   getCandidates,
   getPositionsForCandidate,
   getProposalsForCandidate,
+  getPublishedMeasureAnalysisBundles,
   getQuestions,
   getThemes,
 } from "@/lib/data/queries";
@@ -51,14 +53,18 @@ export default async function CandidatePage({
   const [candidate, themes] = await Promise.all([getCandidateBySlug(slug), getThemes()]);
   if (!candidate) notFound();
 
-  const [proposals, positions, questions] = await Promise.all([
+  const [proposals, positions, questions, allAnalysisBundles] = await Promise.all([
     getProposalsForCandidate(candidate.id),
     getPositionsForCandidate(candidate.id),
     getQuestions(),
+    getPublishedMeasureAnalysisBundles(),
   ]);
 
   const sourceCount = new Set(proposals.map((p) => p.source_url)).size;
   const quantifiedCount = proposals.filter(isQuantifiedProposal).length;
+  const proposalIds = new Set(proposals.map((p) => p.id));
+  const candidateAnalysisBundles = allAnalysisBundles.filter((b) => proposalIds.has(b.analysis.proposal_id));
+  const analyzedProposalIds = new Set(candidateAnalysisBundles.map((b) => b.analysis.proposal_id));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -125,7 +131,7 @@ export default async function CandidatePage({
                   Comparer ce candidat
                 </ButtonLink>
                 <ButtonLink href="/match" variant="accent" size="sm">
-                  Faire mon Match
+                  Découvrir mon Match
                 </ButtonLink>
                 {candidate.official_website && (
                   <a
@@ -146,6 +152,7 @@ export default async function CandidatePage({
             proposals={proposals}
             themes={themes}
             candidateSlug={candidate.slug}
+            analyzedProposalIds={analyzedProposalIds}
           />
           {proposals.length === 0 && (
             <p className="rounded-xl border border-dashed border-border p-5 text-sm text-muted-2">
@@ -186,6 +193,7 @@ export default async function CandidatePage({
             quantifiedCount={quantifiedCount}
             sourceCount={sourceCount}
           />
+          <PassageAuReelCandidateSummary bundles={candidateAnalysisBundles} />
           <CandidatePointsCards candidate={candidate} />
           <CandidateDeepenCard slug={candidate.slug} />
         </div>

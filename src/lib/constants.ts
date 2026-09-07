@@ -8,6 +8,7 @@ export const NAV_LINKS = [
   { href: "/match", label: "Mon Match" },
   { href: "/candidats", label: "Candidats" },
   { href: "/comparer", label: "Comparer" },
+  { href: "/passage-au-reel", label: "Passage au réel" },
   { href: "/sondages", label: "Sondages" },
   { href: "/methodologie", label: "Méthodologie" },
 ] as const;
