@@ -35,7 +35,8 @@ export function ToolsSection({
     <section className="container-app pb-14 pt-14">
       <div className="max-w-2xl">
         <h2 className="text-balance font-serif text-[1.9rem] font-semibold tracking-tight sm:text-[2.2rem]">
-          Cinq outils, une seule règle&nbsp;: tout est sourcé.
+          Cinq outils, une seule règle&nbsp;:{" "}
+          <span className="text-primary">tout est sourcé</span>.
         </h2>
         <p className="mt-3 text-muted">
           Chaque position, chaque chiffre renvoie à sa source d&apos;origine — vous pouvez toujours
