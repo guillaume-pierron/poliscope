@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ThemeIcon } from "@/lib/theme-icons";
-import { Swoosh, Sparkle } from "@/components/ui/swoosh";
+import { Swoosh } from "@/components/ui/swoosh";
 import { hexToRgba } from "@/lib/utils";
 import type { Theme } from "@/lib/types";
 
@@ -23,7 +23,6 @@ export function ThemesSection({
             Les sujets qui comptent
             <Swoosh className="text-primary/70" />
           </span>
-          <Sparkle className="ml-1 mt-1 h-3.5 w-3.5 shrink-0 text-primary" />
         </h2>
 
         <div className="flex flex-1 flex-wrap gap-2.5 xl:pt-1">

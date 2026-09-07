@@ -23,17 +23,3 @@ export function Swoosh({ className }: { className?: string }) {
     </svg>
   );
 }
-
-/** Small three-stroke sparkle accent, as on the logo and section titles. */
-export function Sparkle({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
-      <path
-        d="M12 3.5v6M17.5 7l-3.6 3.6M6.5 7l3.6 3.6"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}

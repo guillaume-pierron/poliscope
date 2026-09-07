@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Check, Clock, HelpCircle, Scale } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { Sparkle } from "@/components/ui/swoosh";
 import { CivicSceneDoodle, CloudDoodle, PaperPlaneDoodle, PlantDoodle } from "@/components/ui/doodles";
 import { ThemeIcon } from "@/lib/theme-icons";
 import { cn } from "@/lib/utils";
@@ -176,7 +175,6 @@ export function Questionnaire() {
           <CloudDoodle className="pointer-events-none absolute -bottom-6 -left-20 hidden h-8 w-16 opacity-60 lg:block" />
           <PaperPlaneDoodle className="pointer-events-none absolute -bottom-16 -left-36 hidden h-10 w-10 opacity-50 xl:block" />
           <PlantDoodle className="pointer-events-none absolute -right-16 top-16 hidden h-24 w-12 opacity-60 lg:block xl:-right-24" />
-          <Sparkle className="pointer-events-none absolute -left-10 top-4 hidden h-4 w-4 text-primary/40 lg:block" />
 
           <div className="mb-8 flex items-center gap-4 text-sm">
             <span className="shrink-0 font-medium text-foreground">

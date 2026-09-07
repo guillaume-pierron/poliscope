@@ -6,7 +6,6 @@ import { ArrowRight, RefreshCcw, ScanSearch, SplitSquareHorizontal } from "lucid
 import { CandidateAvatar } from "@/components/candidates/candidate-avatar";
 import { ButtonLink } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Sparkle } from "@/components/ui/swoosh";
 import { MATCH_PREVIEW_ROWS } from "./match-preview-rows";
 import { cn } from "@/lib/utils";
 import { computeMatchResults, computeThemeWeightsFromPriorityAnswers } from "@/lib/scoring";
@@ -63,7 +62,6 @@ export function MatchHeroPanel({
       <div className="rounded-[20px] border border-border bg-card p-6 shadow-[0_24px_70px_-38px_rgba(15,23,41,0.35)]">
         <div className="flex items-center gap-1.5">
           <p className="font-serif text-[1.05rem] font-semibold">Mon Match</p>
-          <Sparkle className="mt-0.5 h-3 w-3 shrink-0 text-primary" />
         </div>
         <p className="mt-1.5 text-sm leading-relaxed text-muted">
           {questionCount} questions, environ 3 minutes. Voici à quoi ressemble un résultat&nbsp;:

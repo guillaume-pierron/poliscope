@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Lock, Sun } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
-import { Sparkle } from "@/components/ui/swoosh";
 import { cn } from "@/lib/utils";
 import { MATCH_PREVIEW_ROWS } from "./match-preview-rows";
 
@@ -26,7 +25,6 @@ export function MatchShowcaseCard({
           <h3 className="font-serif text-[1.7rem] font-semibold tracking-tight sm:text-[1.9rem]">
             Mon Match
           </h3>
-          <Sparkle className="mt-1 h-3.5 w-3.5 shrink-0 text-primary" />
         </div>
         <p className="mt-1.5 text-[1.02rem] font-medium text-foreground/85">
           Quels candidats sont les plus proches de vos réponses&nbsp;?

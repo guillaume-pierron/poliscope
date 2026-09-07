@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { CandidateAvatar } from "@/components/candidates/candidate-avatar";
 import { Button, ButtonLink } from "@/components/ui/button";
-import { Sparkle } from "@/components/ui/swoosh";
 import { CityStreetIllustration } from "@/components/ui/doodles";
 import { ThemeProposalCard } from "./theme-proposal-card";
 import { ThemeIcon } from "@/lib/theme-icons";
@@ -403,7 +402,6 @@ function ComparisonSidebar({
   return (
     <div className="sticky top-24 rounded-2xl border border-border bg-card p-5">
       <div className="flex items-center gap-1.5">
-        <Sparkle className="h-3.5 w-3.5 text-primary" />
         <h2 className="font-serif text-lg font-semibold">Comparaison rapide</h2>
       </div>
       <p className="mt-1 text-xs text-muted-2">

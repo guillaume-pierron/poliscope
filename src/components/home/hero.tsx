@@ -6,7 +6,7 @@ import heroIllustration from "../../../public/illustrations/hero.png";
 import heroIllustrationDesktop from "../../../public/illustrations/hero_deskop.png";
 import { ButtonLink } from "@/components/ui/button";
 import { HomeHeroPanel } from "./home-hero-panel";
-import { Sparkle, Swoosh } from "@/components/ui/swoosh";
+import { Swoosh } from "@/components/ui/swoosh";
 import { ArrowRight, Clock, Lock, Sun, Target } from "lucide-react";
 import type { HeadlinePoll } from "@/lib/data/queries";
 import type { Candidate } from "@/lib/types";
@@ -176,10 +176,6 @@ export function Hero({
               <span className="relative flex items-start gap-4">
                 <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-card text-primary">
                   <Target size={22} strokeWidth={1.75} />
-                  <Sparkle
-                    aria-hidden="true"
-                    className="absolute -left-1 -top-1 h-3.5 w-3.5 -rotate-12 text-accent"
-                  />
                 </span>
                 <span className="min-w-0 flex-1 pr-[6.5rem]">
                   <span className="block text-xs font-semibold uppercase tracking-wide text-primary">
