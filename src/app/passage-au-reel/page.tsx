@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Compass } from "lucide-react";
+import Link from "next/link";
+import { Compass, Sparkles } from "lucide-react";
 import { PassageAuReelExplorer, type AnalyzedMeasure } from "@/components/passage-au-reel/passage-au-reel-explorer";
 import { getCandidates, getProposals, getPublishedMeasureAnalysisBundles, getThemes } from "@/lib/data/queries";
 
@@ -46,6 +47,14 @@ export default async function PassageAuReelPage() {
           </a>
           .
         </p>
+
+        <Link
+          href="/simulateur"
+          className="focus-ring mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+        >
+          <Sparkles size={14} />
+          Voir l&apos;impact sur votre propre situation
+        </Link>
       </div>
 
       <div className="mt-9">
