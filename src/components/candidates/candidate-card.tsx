@@ -31,9 +31,9 @@ export function CandidateCard({
       {/* Seul marqueur coloré de la carte : sur une grille de treize
           candidats, multiplier les rappels de la couleur du parti donnait à
           chaque marque une présence que ce site n'a pas à lui accorder. */}
-      <span aria-hidden="true" className="absolute inset-y-0 left-0 w-1.5" style={{ background: color }} />
+      <span aria-hidden="true" className="absolute inset-y-0 left-0 w-1" style={{ background: color }} />
 
-      <div className="flex flex-1 flex-col p-5 pl-7">
+      <div className="flex flex-1 flex-col p-5 pl-6">
         <div className="flex items-start gap-4">
           <CandidateAvatar
             name={candidate.name}
