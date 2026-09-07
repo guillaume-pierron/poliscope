@@ -78,4 +78,25 @@ export const parties: Party[] = [
     orientation: "droite",
     color: "#0d9488",
   },
+  {
+    id: "party-pcf",
+    name: "Parti communiste français",
+    short_name: "PCF",
+    orientation: "gauche",
+    color: "#cc0000",
+  },
+  {
+    id: "party-lo",
+    name: "Lutte Ouvrière",
+    short_name: "LO",
+    orientation: "extreme-gauche",
+    color: "#a3123a",
+  },
+  {
+    id: "party-dlf",
+    name: "Debout la France",
+    short_name: "DLF",
+    orientation: "droite",
+    color: "#1e3a5f",
+  },
 ];

@@ -141,6 +141,45 @@ export const candidates: Candidate[] = [
     is_demo: false,
     order_index: 10,
   },
+  {
+    id: "candidate-fabien-roussel",
+    slug: "fabien-roussel",
+    name: "Fabien Roussel",
+    photo_url: "/candidates/fabien-roussel.jpg",
+    party_id: "party-pcf",
+    biography:
+      "Né le 16 avril 1969 à Béthune, Fabien Roussel a d'abord été journaliste avant de devenir secrétaire national du Parti communiste français depuis novembre 2018. Ancien député du Nord (2017-2024), il est maire de Saint-Amand-les-Eaux depuis janvier 2025. Candidat à la présidentielle en 2022 (2,28 %, 8e place), il se représente en 2027.",
+    official_website: "http://www.fabienroussel2027.fr/",
+    election_id: activeElection.id,
+    is_demo: false,
+    order_index: 11,
+  },
+  {
+    id: "candidate-nathalie-arthaud",
+    slug: "nathalie-arthaud",
+    name: "Nathalie Arthaud",
+    photo_url: "/candidates/nathalie-arthaud.jpg",
+    party_id: "party-lo",
+    biography:
+      "Née le 23 février 1970 à Peyrins (Drôme), Nathalie Arthaud est professeure agrégée d'économie-gestion. Porte-parole de Lutte Ouvrière depuis décembre 2008, elle a succédé à Arlette Laguiller comme visage du parti. Candidate à la présidentielle en 2012, 2017 et 2022 (autour de 0,6 % à chaque fois), elle se présente pour la quatrième fois en 2027.",
+    official_website: "https://www.lutte-ouvriere.org/",
+    election_id: activeElection.id,
+    is_demo: false,
+    order_index: 12,
+  },
+  {
+    id: "candidate-nicolas-dupont-aignan",
+    slug: "nicolas-dupont-aignan",
+    name: "Nicolas Dupont-Aignan",
+    photo_url: "/candidates/nicolas-dupont-aignan.jpg",
+    party_id: "party-dlf",
+    biography:
+      "Né le 7 mars 1961 à Paris, Nicolas Dupont-Aignan est diplômé de Sciences Po Paris et de l'ENA. Ancien membre du RPR puis de l'UMP, il fonde Debout la France en 2008, qu'il préside depuis. Maire de Yerres (1995-2017, puis à nouveau depuis 2020) et ancien député de l'Essonne (1997-2024), il a été candidat à la présidentielle en 2012, 2017 (4,7 %) et 2022, et se présente pour la cinquième fois en 2027.",
+    official_website: "https://www.debout-la-france.fr/",
+    election_id: activeElection.id,
+    is_demo: false,
+    order_index: 13,
+  },
 ];
 
 export function getCandidateBySlug(slug: string) {

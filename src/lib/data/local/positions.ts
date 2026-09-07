@@ -125,6 +125,29 @@ const rows: Row[] = [
   // q14 (normes environnementales sur les entreprises) : son volet écologique privilégie une fiscalité carbone neutre pour la compétitivité plutôt qu'un choix explicite entre renforcer ou alléger les normes — exclue plutôt que devinée.
   ["david-lisnard", "q15", "nucleaire", "Fait du nucléaire une « priorité écologique et stratégique », avec prolongation des réacteurs à 60 ans et construction de nouveaux EPR.", "https://www.unenouvelleenergie.fr/notre-programme/generer-un-renouveau-civique/"],
   // q16 (intégration européenne) : son programme combine un droit de regard référendaire national et un transfert de compétences vers l'UE dans des secteurs stratégiques ciblés — deux directions opposées sur un même axe, exclue plutôt que tranchée arbitrairement.
+
+  // Fabien Roussel
+  ["fabien-roussel", "q1", -2, "Propose au contraire de rétablir l'âge légal de départ à 60 ans.", "https://www.pcf.fr/retraites_pour_une_r_forme_digne_des_jours_heureux"],
+  // q2 (carrières longues / pénibilité) : pas de disposition spécifique trouvée distincte du retour général à 60 ans — exclue plutôt que devinée.
+  ["fabien-roussel", "q3", "augmenter-impots", "Finance son retour à la retraite à 60 ans par une taxation des revenus financiers plutôt que par une baisse de la dépense.", "https://www.pcf.fr/retraites_pour_une_r_forme_digne_des_jours_heureux"],
+  ["fabien-roussel", "q5", "augmenter-salaires", "Propose de porter le SMIC à 1 500 euros net et d'instaurer la semaine de 32 heures sans perte de salaire.", "https://www.europe1.fr/politique/a-marseille-fabien-roussel-prone-la-france-de-la-feuille-de-paie-4092220"],
+  // q6 (niveau d'immigration) : appelle à un débat « sans tabou » sur l'immigration mais ne se prononce pas sur un niveau cible — exclue plutôt que de lui prêter un chiffre.
+  ["fabien-roussel", "q15", "mix", "Défend explicitement un mix énergétique nucléaire et renouvelable.", "https://www.pcf.fr/le_programme"],
+  ["fabien-roussel", "q17", 2, "Propose de sortir la France du commandement militaire intégré de l'OTAN, au profit d'une sécurité collective européenne.", "https://www.pcf.fr/rapport_introductif_de_fabien_roussel_au_cn_du_10_01_2026"],
+
+  // Nathalie Arthaud
+  // q1/q2 (retraites) : son programme porte sur l'indexation des salaires et pensions sur les prix, pas sur l'âge légal de départ — exclues plutôt que devinées.
+  // q3 (redresser les finances publiques) : son programme ne s'inscrit dans aucune des 4 options proposées, qui présupposent toutes une gestion des finances de l'État capitaliste qu'elle rejette — exclue.
+  ["nathalie-arthaud", "q5", "augmenter-salaires", "Défend une échelle mobile des salaires et des pensions indexée automatiquement sur les prix.", "https://www.lutte-ouvriere.org/journal/article/2018-10-31-face-linflation-echelle-mobile_114571.html"],
+  ["nathalie-arthaud", "q6", 2, "Défend la liberté de circulation et d'installation pour tous les travailleurs, sans distinction de nationalité.", "https://www.breizh-info.com/2019/03/18/114345/nathalie-arthaud-lutte-ouvriere-travailleurs/"],
+  ["nathalie-arthaud", "q7", 2, "Sa défense de la liberté de circulation et d'installation des travailleurs migrants inclut la régularisation des travailleurs sans papiers.", "https://www.breizh-info.com/2019/03/18/114345/nathalie-arthaud-lutte-ouvriere-travailleurs/"],
+
+  // Nicolas Dupont-Aignan
+  ["nicolas-dupont-aignan", "q1", -2, "A lancé un référendum d'initiative partagée pour maintenir la retraite à 62 ans, contre le report à 64 ans.", "https://www.publicsenat.fr/actualites/politique/retraites-une-reforme-abominable-inutile-et-injuste-pour-nicolas-dupont-aignan"],
+  ["nicolas-dupont-aignan", "q6", -2, "Propose de sortir de l'espace Schengen pour rétablir un contrôle national des frontières.", "https://www.debout-la-france.fr/actualite/discours-de-rentree-les-10-points-du-projet-europeen-pour-une-france-libre-au-service-dun-monde-libre/"],
+  ["nicolas-dupont-aignan", "q15", "nucleaire", "Défend le maintien du nucléaire et le développement d'une filière thorium sur 25 à 30 ans.", "https://www.techniques-ingenieur.fr/actualite/articles/marine-pen-nicolas-dupont-aignan-42555/"],
+  ["nicolas-dupont-aignan", "q16", -2, "Son « projet européen » prévoit de supprimer la Commission européenne et la CJUE et d'affirmer la primauté du droit français.", "https://www.debout-la-france.fr/actualite/discours-de-rentree-les-10-points-du-projet-europeen-pour-une-france-libre-au-service-dun-monde-libre/"],
+  ["nicolas-dupont-aignan", "q17", 2, "Propose de sortir du commandement militaire intégré de l'OTAN, dans la tradition gaulliste.", "https://www.debout-la-france.fr/actualite/discours-de-rentree-les-10-points-du-projet-europeen-pour-une-france-libre-au-service-dun-monde-libre/"],
 ];
 
 /** Curated outlet names for the hostnames actually used above — never invented, just a readable label for a real domain. */
@@ -155,6 +178,11 @@ const KNOWN_SOURCES: Record<string, string> = {
   "rassemblementnational.fr": "Rassemblement National",
   "x.com": "X (ex-Twitter)",
   "unenouvelleenergie.fr": "Nouvelle Énergie — programme officiel",
+  "pcf.fr": "Parti communiste français",
+  "lutte-ouvriere.org": "Lutte Ouvrière",
+  "breizh-info.com": "Breizh-info",
+  "debout-la-france.fr": "Debout la France",
+  "techniques-ingenieur.fr": "Techniques de l'Ingénieur",
 };
 
 /** Derived from the URL's own hostname — never a guessed or invented outlet name. */

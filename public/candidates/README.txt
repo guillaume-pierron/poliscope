@@ -14,6 +14,9 @@ Cadrage conseillé : portrait carré, visage centré, l'avatar est affiché en r
 /candidates/bruno-retailleau.jpg
 /candidates/marine-le-pen.jpg
 /candidates/david-lisnard.jpg
+/candidates/fabien-roussel.jpg
+/candidates/nathalie-arthaud.jpg
+/candidates/nicolas-dupont-aignan.jpg
 
 Ce fichier n'a aucun effet sur le site — pense juste à ne pas le nommer
 "jean-luc-melenchon.jpg", etc. par erreur.
