@@ -37,14 +37,18 @@ function Segmented<T extends string>({
   options: { value: T; label: string }[];
 }) {
   return (
-    <div className="flex gap-1.5">
+    // Les libellés ne tiennent pas toujours sur une ligne en mobile (ex.
+    // « Locataire / Propriétaire / Hébergé ») : sans retour à la ligne, les
+    // éléments flex refusent de se réduire sous leur contenu et débordent de
+    // la page. La largeur mini de moitié force donc deux boutons par ligne.
+    <div className="flex flex-wrap gap-1.5">
       {options.map((opt) => (
         <button
           key={opt.value}
           type="button"
           onClick={() => onChange(opt.value)}
           className={cn(
-            "focus-ring flex-1 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors",
+            "focus-ring flex-1 rounded-xl border px-3 py-2.5 text-sm font-medium transition-colors max-sm:min-w-[calc(50%-0.1875rem)]",
             value === opt.value
               ? "border-primary bg-primary-soft text-primary"
               : "border-border-strong bg-card hover:bg-surface"
