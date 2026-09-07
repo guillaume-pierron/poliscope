@@ -63,7 +63,11 @@ export function Hero({
             aria-hidden="true"
             priority
             sizes="(min-width: 1280px) 260px, (min-width: 1024px) 200px, 1px"
-            className="hidden h-auto w-[200px] shrink-0 select-none [mask-composite:intersect] [mask-image:linear-gradient(to_left,transparent,black_22%),linear-gradient(to_bottom,black_88%,transparent)] lg:block xl:w-[260px]"
+            // Décalée jusqu'au bord de la fenêtre : le conteneur fait 94rem
+            // centré avec 2rem de padding, d'où cette distance. Décalage
+            // visuel seulement (position: relative), pour ne pas déplacer le
+            // texte qui suit.
+            className="relative hidden h-auto w-[200px] shrink-0 select-none [mask-composite:intersect] [mask-image:linear-gradient(to_left,transparent,black_22%),linear-gradient(to_bottom,black_88%,transparent)] lg:-left-8 lg:block min-[94rem]:left-[calc(45rem_-_50vw)] xl:w-[260px]"
           />
 
           <div className="animate-rise relative z-10">
