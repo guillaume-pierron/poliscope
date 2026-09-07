@@ -67,6 +67,17 @@ export function MatchOrbit({ candidates }: { candidates: Candidate[] }) {
         </span>
       </div>
 
+      {/* Les annotations sont peintes avant les portraits : au-dessus d'un
+          élément animé, elles seraient promues sur une couche composite avec
+          lui, et le texte pivoté y perd son lissage sous-pixel — il paraît
+          alors flou à côté des autres annotations de la page. */}
+      <HandNote className="absolute -left-5 -top-7 w-[9rem] -rotate-6 text-left leading-tight sm:-left-12">
+        Des candidats sur vos sujets
+      </HandNote>
+      <HandNote className="absolute -bottom-9 -right-3 w-[9rem] rotate-3 text-right leading-tight sm:-right-10">
+        Comparez leurs propositions
+      </HandNote>
+
       {/* Les candidats en orbite */}
       <div aria-hidden="true">
         {orbiting.map(({ candidate, left, top, size, delay }) => (
@@ -85,13 +96,6 @@ export function MatchOrbit({ candidates }: { candidates: Candidate[] }) {
           </span>
         ))}
       </div>
-
-      <HandNote className="absolute -left-4 -top-6 w-[9rem] -rotate-6 text-left leading-tight sm:-left-10">
-        Des candidats sur vos sujets
-      </HandNote>
-      <HandNote className="absolute -bottom-8 -right-2 w-[9rem] rotate-3 text-right leading-tight sm:-right-8">
-        Comparez leurs propositions
-      </HandNote>
     </div>
   );
 }
