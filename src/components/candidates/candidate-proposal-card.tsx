@@ -53,7 +53,7 @@ export function CandidateProposalCard({
             </div>
             <p className="mt-2.5 text-sm text-muted">{proposal.summary}</p>
             {proposal.description && (
-              <p className="mt-1.5 text-sm leading-relaxed text-foreground/80">
+              <p className="mt-3 text-sm leading-relaxed text-foreground/80">
                 {proposal.description}
               </p>
             )}
