@@ -53,22 +53,28 @@ export function Hero({
         />
       </div>
 
+      {/* Desktop : l'illustration occupe toute la hauteur de la section, collée
+          au bord gauche de la fenêtre. En recadrage, donc l'élargir ne
+          l'allonge pas ; son bord droit est fondu vers la zone de texte. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 hidden w-[360px] select-none [mask-image:linear-gradient(to_left,transparent,black_28%)] lg:block xl:w-[440px]"
+      >
+        <Image
+          src={heroIllustrationDesktop}
+          alt=""
+          fill
+          priority
+          sizes="(min-width: 1280px) 440px, (min-width: 1024px) 360px, 1px"
+          className="object-cover object-left"
+        />
+      </div>
+
       <div className="container-app relative z-10 grid gap-10 py-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-center lg:gap-14 lg:py-16">
         <div className="flex items-center gap-4 xl:gap-7">
-          {/* Illustration desktop — l'image étant opaque, ses bords droit et
-              bas sont fondus pour se raccorder au dégradé de la section. */}
-          <Image
-            src={heroIllustrationDesktop}
-            alt=""
-            aria-hidden="true"
-            priority
-            sizes="(min-width: 1280px) 260px, (min-width: 1024px) 200px, 1px"
-            // Décalée jusqu'au bord de la fenêtre : le conteneur fait 94rem
-            // centré avec 2rem de padding, d'où cette distance. Décalage
-            // visuel seulement (position: relative), pour ne pas déplacer le
-            // texte qui suit.
-            className="relative hidden h-auto w-[200px] shrink-0 select-none [mask-composite:intersect] [mask-image:linear-gradient(to_left,transparent,black_22%),linear-gradient(to_bottom,black_88%,transparent)] lg:-left-8 lg:block min-[94rem]:left-[calc(45rem_-_50vw)] xl:w-[260px]"
-          />
+          {/* Réserve la largeur laissée à l'illustration épinglée ci-dessus,
+              pour que le texte garde sa position. */}
+          <div aria-hidden="true" className="hidden w-[130px] shrink-0 lg:block xl:w-[200px]" />
 
           <div className="animate-rise relative z-10">
             <span className="mb-4 inline-flex rounded-full bg-primary-soft px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-primary sm:hidden">
