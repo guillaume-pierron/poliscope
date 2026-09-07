@@ -36,11 +36,11 @@ export function CandidateProposalCard({
           </span>
           <div className="min-w-0">
             {theme && (
-              <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary">
                 {theme.name}
               </p>
             )}
-            <h3 className="mt-1 text-base font-semibold leading-snug">{proposal.title}</h3>
+            <h3 className="text-base font-semibold leading-snug">{proposal.title}</h3>
             <div className="mt-2 flex flex-wrap gap-1.5">
               <Badge variant={STATUS_VARIANT[proposal.status]}>
                 {PROPOSAL_STATUS_LABELS[proposal.status]}
