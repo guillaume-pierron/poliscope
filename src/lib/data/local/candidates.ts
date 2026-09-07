@@ -128,6 +128,19 @@ export const candidates: Candidate[] = [
     is_demo: false,
     order_index: 9,
   },
+  {
+    id: "candidate-david-lisnard",
+    slug: "david-lisnard",
+    name: "David Lisnard",
+    photo_url: "/candidates/david-lisnard.jpg",
+    party_id: "party-nouvelle-energie",
+    biography:
+      "Né le 2 février 1969 à Limoges, David Lisnard est diplômé de l'Institut d'études politiques de Bordeaux. Maire de Cannes depuis 2014 et président de l'Association des maires de France depuis 2021, il a quitté Les Républicains le 31 mars 2026 pour se présenter à la présidentielle de 2027 via le mouvement Nouvelle Énergie, qu'il préside.",
+    official_website: "https://www.unenouvelleenergie.fr/",
+    election_id: activeElection.id,
+    is_demo: false,
+    order_index: 10,
+  },
 ];
 
 export function getCandidateBySlug(slug: string) {

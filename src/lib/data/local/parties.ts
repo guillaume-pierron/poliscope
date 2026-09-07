@@ -71,4 +71,11 @@ export const parties: Party[] = [
     orientation: "droite",
     color: "#9085e9",
   },
+  {
+    id: "party-nouvelle-energie",
+    name: "Nouvelle Énergie",
+    short_name: "NE",
+    orientation: "droite",
+    color: "#0d9488",
+  },
 ];

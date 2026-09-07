@@ -109,6 +109,22 @@ const rows: Row[] = [
   ["marine-le-pen", "q7", -2, "Son projet « C2i » prévoit l'interdiction de toute régularisation.", "https://www.publicsenat.fr/actualites/politique/immigration-le-referendum-voulu-par-marine-le-pen-est-il-constitutionnel-190598"],
   ["marine-le-pen", "q10", 2, "Propose un moratoire sur la fermeture de lits d'hôpitaux publics et une enveloppe pour les salaires des soignants.", "https://rassemblementnational.fr/discours/sante-protegeons-les-francais-discours-de-marine-le-pen"],
   ["marine-le-pen", "q15", "nucleaire", "Propose un moratoire sur l'éolien et défend le nucléaire comme pilier de la politique énergétique.", "https://www.tucoenergie.fr/blog/marine-le-pen-bfmtv"],
+
+  // David Lisnard
+  ["david-lisnard", "q1", 2, "Son programme porte l'âge légal de départ à la retraite à 65 ans.", "https://www.unenouvelleenergie.fr/notre-programme/reussir-une-nouvelle-ambition-francaise/"],
+  // q2 (carrières longues / pénibilité) : aucune disposition spécifique trouvée dans son programme sur un départ anticipé lié à la pénibilité — exclue plutôt que devinée.
+  ["david-lisnard", "q3", "reduire-depenses", "Son programme vise une règle d'or ramenant la dépense publique sous 50 % du PIB en cinq ans, avant toute autre priorité budgétaire.", "https://www.unenouvelleenergie.fr/notre-programme/etre-maitre-de-notre-destin/"],
+  ["david-lisnard", "q5", "reduire-taxes", "Propose une baisse de moitié des impôts de production et la suppression des charges employeur au niveau du SMIC.", "https://www.unenouvelleenergie.fr/notre-programme/reussir-une-nouvelle-ambition-francaise/"],
+  ["david-lisnard", "q6", -2, "Propose de diviser par huit la délivrance de titres de séjour.", "https://www.unenouvelleenergie.fr/notre-programme/immigration/"],
+  ["david-lisnard", "q7", -2, "Son programme vise au contraire à rétablir le délit de séjour irrégulier et à réduire fortement l'immigration légale.", "https://www.unenouvelleenergie.fr/notre-programme/immigration/"],
+  ["david-lisnard", "q9", 2, "Son plan sécurité prévoit peines plancher, suppression des réductions de peine automatiques et abaissement de la majorité pénale à 16 ans.", "https://www.unenouvelleenergie.fr/notre-programme/securite/"],
+  // q10 (budget et effectifs de l'hôpital public) : son plan santé mise sur la déréglementation et le transfert aux collectivités locales plutôt que sur une trajectoire de budget hospitalier public — ne correspond pas clairement à l'axe augmenter/diminuer mesuré, exclue.
+  ["david-lisnard", "q11", "repartition-territoriale", "Propose un conventionnement différencié selon les zones et la généralisation de maisons de santé pluridisciplinaires par canton.", "https://www.unenouvelleenergie.fr/notre-programme/sante/"],
+  ["david-lisnard", "q12", 2, "Propose de donner aux chefs d'établissement la liberté de recruter leurs équipes, d'appliquer leurs méthodes et de gérer leur budget.", "https://www.unenouvelleenergie.fr/notre-programme/education/"],
+  ["david-lisnard", "q13", 2, "Propose une augmentation de 20 % des rémunérations enseignantes en cinq ans.", "https://www.unenouvelleenergie.fr/notre-programme/education/"],
+  // q14 (normes environnementales sur les entreprises) : son volet écologique privilégie une fiscalité carbone neutre pour la compétitivité plutôt qu'un choix explicite entre renforcer ou alléger les normes — exclue plutôt que devinée.
+  ["david-lisnard", "q15", "nucleaire", "Fait du nucléaire une « priorité écologique et stratégique », avec prolongation des réacteurs à 60 ans et construction de nouveaux EPR.", "https://www.unenouvelleenergie.fr/notre-programme/generer-un-renouveau-civique/"],
+  // q16 (intégration européenne) : son programme combine un droit de regard référendaire national et un transfert de compétences vers l'UE dans des secteurs stratégiques ciblés — deux directions opposées sur un même axe, exclue plutôt que tranchée arbitrairement.
 ];
 
 /** Curated outlet names for the hostnames actually used above — never invented, just a readable label for a real domain. */
@@ -138,6 +154,7 @@ const KNOWN_SOURCES: Record<string, string> = {
   "tucoenergie.fr": "TUCOénergie",
   "rassemblementnational.fr": "Rassemblement National",
   "x.com": "X (ex-Twitter)",
+  "unenouvelleenergie.fr": "Nouvelle Énergie — programme officiel",
 };
 
 /** Derived from the URL's own hostname — never a guessed or invented outlet name. */
