@@ -323,6 +323,286 @@ const PILOTS: PilotDefinition[] = [
       },
     ],
   },
+
+  // ─────────────────────────────────────────────────────────────────────
+  // Pilote 4 — Jean-Luc Mélenchon : abrogation et retraite à 60 ans.
+  // Deux chiffrages du même institut à deux périmètres différents : le
+  // composant qui correspond exactement à la mesure, et l'ensemble du volet
+  // retraites dont il fait partie — pour ne pas laisser croire que le total
+  // porte sur cette seule proposition.
+  // ─────────────────────────────────────────────────────────────────────
+  {
+    key: "melenchon-retraite-60",
+    candidateSlug: "jean-luc-melenchon",
+    proposalTitle: "Abroger la réforme Macron et retraite à 60 ans",
+    analysis: {
+      status: "published",
+      summary:
+        "Les paramètres sont clairement posés par la source : âge légal ramené à 60 ans, 40 annuités pour une carrière complète, pensions portées au niveau du SMIC revalorisé. Le chiffrage disponible émane d'un seul institut et couvre un périmètre plus large que cette proposition : ses composantes sont donc présentées séparément. Aucune source publique identifiée ne chiffre les effets de retour attendus par le candidat (baisse du chômage, hausse des cotisations).",
+      feasibility_status: "faisable_parametres_connus",
+      precision_level: "precise",
+      confidence_level: "moyenne",
+      legal_path: "loi_ordinaire",
+      legal_constitutional_change_required: false,
+      legal_eu_change_required: false,
+      legal_notes:
+        "L'âge légal et la durée de cotisation relèvent de la loi ordinaire — la réforme de 2023 a elle-même été portée par une loi de financement rectificative de la sécurité sociale. Aucune révision constitutionnelle ni négociation européenne n'est requise.",
+      legal_implementation_delay_min_months: 6,
+      legal_implementation_delay_max_months: 24,
+      implementation_existing_administration: "oui",
+      implementation_new_recruitment_needed: NON_DOC,
+      implementation_notes:
+        "Les caisses de retraite appliquent déjà des paramètres d'âge et de durée ; leur modification ne suppose pas de nouvelle structure. Le volume de dossiers à traiter augmenterait fortement l'année de la bascule, sans que la source ne documente les moyens correspondants.",
+      beneficiaries_groups: ["Actifs proches de l'âge de départ", "Carrières longues"],
+      beneficiaries_description:
+        "Concerne l'ensemble des actifs du secteur privé et public, avec un effet immédiat pour les générations proches de 60 ans. Aucune source identifiée ne chiffre le nombre exact de personnes concernées année par année.",
+      beneficiaries_count_min: null,
+      beneficiaries_count_central: null,
+      beneficiaries_count_max: null,
+      beneficiaries_source_name: null,
+      beneficiaries_source_url: null,
+      simulator_measure_id: "melenchon-retraite-60",
+      reviewed_at: "2026-09-08",
+      reviewed_by: "Équipe éditoriale Poliscope",
+      published_at: "2026-09-08",
+    },
+    budgetEstimates: [
+      {
+        source_type: "independent_body",
+        source_name: "Institut Montaigne — composante « retour à l'âge de 60 ans »",
+        source_url:
+          "https://www.institutmontaigne.org/legislatives-2024/nouveau-front-populaire/abroger-la-reforme-des-retraites-restaurer-la-retraite-a-60-ans-en-prenant-en-compte-le-rsa-en-portant-le-minimum-contributif-au-smic/",
+        annual_cost_min: null,
+        annual_cost_central: 27,
+        annual_cost_max: null,
+        annual_revenue_min: null,
+        annual_revenue_central: null,
+        annual_revenue_max: null,
+        currency: "Md€",
+        reference_year: 2027,
+        financing_identified: "non",
+        notes:
+          "Composante isolée par l'institut au sein d'un chiffrage plus large : le retour à 60 ans (annulation de la réforme de 2010) est évalué à 27 Md€, l'abrogation de la réforme de 2023 à 8,2 Md€ supplémentaires. C'est la ligne qui correspond le plus directement à cette proposition.",
+      },
+      {
+        source_type: "independent_body",
+        source_name: "Institut Montaigne — ensemble du volet retraites chiffré",
+        source_url:
+          "https://www.institutmontaigne.org/legislatives-2024/nouveau-front-populaire/abroger-la-reforme-des-retraites-restaurer-la-retraite-a-60-ans-en-prenant-en-compte-le-rsa-en-portant-le-minimum-contributif-au-smic/",
+        annual_cost_min: 49,
+        annual_cost_central: 58,
+        annual_cost_max: 67,
+        annual_revenue_min: null,
+        annual_revenue_central: null,
+        annual_revenue_max: null,
+        currency: "Md€",
+        reference_year: 2027,
+        financing_identified: "non",
+        notes:
+          "Périmètre plus large que cette proposition : au retour à 60 ans et à l'abrogation de 2023 s'ajoutent la revalorisation du minimum contributif au SMIC (13,9 Md€), celle du minimum vieillesse (0,7 Md€) et la prise en compte des années de RSA (8,4 Md€). La fourchette reflète une marge de ±15 % appliquée par l'institut. Chiffrage limité au régime de retraite, sans les autres effets sur les finances sociales.",
+      },
+    ],
+    impacts: [],
+    assumptions: [
+      {
+        name: "Âge légal de départ visé",
+        value: "60",
+        unit: "ans",
+        assumption_type: "candidate",
+        justification: "Âge annoncé par le programme pour une carrière complète de 40 annuités.",
+        source_name: "Programme « L'Avenir en commun » 2025 — chapitre 8",
+        source_url: "https://melenchon2027.fr/programme2025/livre/chapitre8/s8/",
+      },
+      {
+        name: "Durée de cotisation pour une carrière complète",
+        value: "40",
+        unit: "annuités",
+        assumption_type: "candidate",
+        justification: "Durée annoncée par le programme, contre 43 annuités dans le droit en vigueur.",
+        source_name: "Programme « L'Avenir en commun » 2025 — chapitre 8",
+        source_url: "https://melenchon2027.fr/programme2025/livre/chapitre8/s8/",
+      },
+      {
+        name: "Délai de mise en œuvre législative",
+        value: "6 à 24",
+        unit: "mois",
+        assumption_type: "manual_assumption",
+        justification:
+          "Estimation Poliscope : une réforme paramétrique des retraites suppose un vote puis une adaptation des systèmes de liquidation des caisses, sans que la source ne fixe de calendrier.",
+        source_name: null,
+        source_url: null,
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────
+  // Pilote 5 — Marine Le Pen : retour à 62 ans, 60 ans pour carrières
+  // longues. Chiffrage indépendant précis, avec une fourchette large — et
+  // une proportion de population concernée documentée, à défaut d'un
+  // effectif.
+  // ─────────────────────────────────────────────────────────────────────
+  {
+    key: "lepen-retraite-62",
+    candidateSlug: "marine-le-pen",
+    proposalTitle: "Retour à la retraite à 62 ans, 60 ans pour carrières longues",
+    analysis: {
+      status: "published",
+      summary:
+        "La mesure combine un âge légal ramené à 62 ans et un départ anticipé à 60 ans pour les carrières commencées tôt. Un institut indépendant en propose un chiffrage détaillé, avec une fourchette large qui traduit l'incertitude sur le nombre de personnes éligibles au départ anticipé. Aucun plan de financement n'est identifié par la source.",
+      feasibility_status: "faisable_parametres_connus",
+      precision_level: "partiellement_precis",
+      confidence_level: "moyenne",
+      legal_path: "loi_ordinaire",
+      legal_constitutional_change_required: false,
+      legal_eu_change_required: false,
+      legal_notes:
+        "Comme toute modification de l'âge légal et de la durée de cotisation, la mesure relève de la loi ordinaire ou d'une loi de financement de la sécurité sociale. La source ne précise pas le véhicule législatif retenu.",
+      legal_implementation_delay_min_months: 6,
+      legal_implementation_delay_max_months: 24,
+      implementation_existing_administration: "oui",
+      implementation_new_recruitment_needed: NON_DOC,
+      implementation_notes:
+        "Le dispositif « carrières longues » existe déjà dans le droit en vigueur : son élargissement s'appuierait sur des règles de liquidation connues des caisses, sans création de structure nouvelle documentée.",
+      beneficiaries_groups: ["Actifs proches de 62 ans", "Personnes ayant commencé à travailler avant 20 ans"],
+      beneficiaries_description:
+        "Selon l'institut ayant chiffré la mesure, environ 57 % de la génération 1962 avait validé des trimestres avant 20 ans et relèverait donc du volet « carrières longues ». Cette proportion ne peut pas être convertie en un effectif annuel sans hypothèse supplémentaire, qui n'est pas documentée.",
+      beneficiaries_count_min: null,
+      beneficiaries_count_central: null,
+      beneficiaries_count_max: null,
+      beneficiaries_source_name: "Institut Montaigne",
+      beneficiaries_source_url:
+        "https://www.institutmontaigne.org/legislatives-2024/rassemblement-national/abroger-la-reforme-des-retraites-et-pour-ceux-ayant-commence-a-travailler-avant-20-ans-partir-a-40-annuites-de-cotisations/",
+      simulator_measure_id: "lepen-retraite-62",
+      reviewed_at: "2026-09-08",
+      reviewed_by: "Équipe éditoriale Poliscope",
+      published_at: "2026-09-08",
+    },
+    budgetEstimates: [
+      {
+        source_type: "independent_body",
+        source_name: "Institut Montaigne",
+        source_url:
+          "https://www.institutmontaigne.org/legislatives-2024/rassemblement-national/abroger-la-reforme-des-retraites-et-pour-ceux-ayant-commence-a-travailler-avant-20-ans-partir-a-40-annuites-de-cotisations/",
+        annual_cost_min: 31.5,
+        annual_cost_central: 34.7,
+        annual_cost_max: 44.7,
+        annual_revenue_min: null,
+        annual_revenue_central: null,
+        annual_revenue_max: null,
+        currency: "Md€",
+        reference_year: 2027,
+        financing_identified: "non",
+        notes:
+          "Chiffrage portant sur l'abrogation de la réforme de 2023 et le retour partiel sur les réformes de 2003 à 2014. L'ampleur de la fourchette tient à la part de la population éligible au départ anticipé : l'institut retient environ 57 % de la génération 1962 ayant validé des trimestres avant 20 ans.",
+      },
+    ],
+    impacts: [],
+    assumptions: [
+      {
+        name: "Âge légal de départ visé",
+        value: "62",
+        unit: "ans",
+        assumption_type: "candidate",
+        justification: "Âge réaffirmé par la candidate, avec un départ à 60 ans pour les carrières longues.",
+        source_name: "Public Sénat",
+        source_url:
+          "https://www.publicsenat.fr/actualites/politique/au-rn-la-reforme-des-retraites-divise-jordan-bardella-et-marine-le-pen-sur-le-programme-pour-la-presidentielle-2027",
+      },
+      {
+        name: "Part de la génération concernée par le départ anticipé",
+        value: "57",
+        unit: "%",
+        assumption_type: "external_study",
+        justification:
+          "Proportion de la génération 1962 ayant validé des trimestres avant 20 ans, retenue par l'institut pour expliquer le coût de la mesure.",
+        source_name: "Institut Montaigne",
+        source_url:
+          "https://www.institutmontaigne.org/legislatives-2024/rassemblement-national/abroger-la-reforme-des-retraites-et-pour-ceux-ayant-commence-a-travailler-avant-20-ans-partir-a-40-annuites-de-cotisations/",
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────
+  // Pilote 6 — Édouard Philippe : +20 % pour les enseignants. Cas inverse
+  // des deux précédents : les bénéficiaires sont précisément dénombrés par
+  // une source officielle, mais aucun chiffrage indépendant du coût n'a été
+  // trouvé — y compris pour vérifier l'affirmation du candidat selon
+  // laquelle la baisse démographique suffirait à financer la mesure.
+  // ─────────────────────────────────────────────────────────────────────
+  {
+    key: "philippe-enseignants",
+    candidateSlug: "edouard-philippe",
+    proposalTitle: "Hausse de 20 % de la rémunération des enseignants",
+    analysis: {
+      status: "published",
+      summary:
+        "La cible est claire — 20 % de hausse de la rémunération moyenne sur un quinquennat — et la population concernée est précisément dénombrée par la statistique publique. En revanche, aucun chiffrage indépendant du coût n'a pu être identifié, pas même pour éprouver l'affirmation du candidat selon laquelle la baisse du nombre d'élèves suffirait à financer la mesure sans dégrader les finances publiques. Le coût est donc affiché comme non chiffré plutôt qu'estimé.",
+      feasibility_status: "faisable_sous_conditions",
+      precision_level: "partiellement_precis",
+      confidence_level: "faible",
+      legal_path: "loi_finances",
+      legal_constitutional_change_required: false,
+      legal_eu_change_required: false,
+      legal_notes:
+        "La rémunération des enseignants titulaires relève du statut de la fonction publique : une revalorisation générale passe par décret indiciaire, mais son financement suppose une inscription en loi de finances. La source ne détaille ni la ventilation entre point d'indice, primes et heures supplémentaires, ni le calendrier annuel.",
+      legal_implementation_delay_min_months: 12,
+      legal_implementation_delay_max_months: 60,
+      implementation_existing_administration: "oui",
+      implementation_new_recruitment_needed: "non",
+      implementation_notes:
+        "La mesure porte sur la rémunération d'agents déjà en poste : elle ne suppose ni structure nouvelle, ni recrutement. Le candidat mentionne en revanche de « nouvelles conditions professionnelles » en contrepartie, sans que leur contenu soit précisé.",
+      beneficiaries_groups: ["Enseignants du public", "Enseignants du privé sous contrat"],
+      beneficiaries_description:
+        "L'ensemble des enseignants de l'enseignement scolaire. La source ne précise pas si le privé sous contrat, dont les maîtres sont rémunérés par l'État, est inclus dans le périmètre.",
+      beneficiaries_count_min: 712800,
+      beneficiaries_count_central: 852800,
+      beneficiaries_count_max: 852800,
+      beneficiaries_source_name: "DEPP — L'éducation nationale en chiffres, édition 2025",
+      beneficiaries_source_url:
+        "https://www.education.gouv.fr/sites/default/files/2025-08/l-ducation-nationale-en-chiffres-dition-2025-441804.pdf",
+      simulator_measure_id: "philippe-enseignants",
+      reviewed_at: "2026-09-08",
+      reviewed_by: "Équipe éditoriale Poliscope",
+      published_at: "2026-09-08",
+    },
+    budgetEstimates: [],
+    impacts: [],
+    assumptions: [
+      {
+        name: "Hausse visée de la rémunération moyenne",
+        value: "20",
+        unit: "%",
+        assumption_type: "candidate",
+        justification:
+          "Objectif annoncé sur un quinquennat, présenté comme devant porter les salaires au moins au niveau de la moyenne européenne, en particulier en milieu de carrière.",
+        source_name: "franceinfo",
+        source_url:
+          "https://www.franceinfo.fr/elections/presidentielle/presidentielle-2027-le-candidat-horizons-edouard-philippe-veut-augmenter-de-20-la-remuneration-moyenne-des-enseignants-sur-un-quinquennat_8159927.html",
+      },
+      {
+        name: "Enseignants de l'enseignement scolaire",
+        value: "852 800",
+        unit: "personnes",
+        assumption_type: "official",
+        justification:
+          "Dont 712 800 dans le public et 140 000 dans le privé sous contrat, à la rentrée 2024. La borne basse retenue pour les bénéficiaires correspond au seul secteur public, périmètre non tranché par la source.",
+        source_name: "DEPP — L'éducation nationale en chiffres, édition 2025",
+        source_url:
+          "https://www.education.gouv.fr/sites/default/files/2025-08/l-ducation-nationale-en-chiffres-dition-2025-441804.pdf",
+      },
+      {
+        name: "Financement par la baisse démographique",
+        value: "non vérifié",
+        unit: null,
+        assumption_type: "candidate",
+        justification:
+          "Le candidat affirme que la baisse du nombre d'élèves dégage les marges nécessaires. Aucune source indépendante identifiée ne confronte ce montant à celui de la revalorisation : l'affirmation est rapportée, pas validée.",
+        source_name: "franceinfo",
+        source_url:
+          "https://www.franceinfo.fr/elections/presidentielle/presidentielle-2027-le-candidat-horizons-edouard-philippe-veut-augmenter-de-20-la-remuneration-moyenne-des-enseignants-sur-un-quinquennat_8159927.html",
+      },
+    ],
+  },
 ];
 
 export const measureAnalysisBundles: MeasureAnalysisBundle[] = PILOTS.map((pilot, index) => {
