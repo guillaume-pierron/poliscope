@@ -258,7 +258,7 @@ export default function MethodologiePage() {
         </section>
 
         <section id="passage-au-reel" className="scroll-mt-24">
-          <h2 className="text-xl font-semibold">12. « Passage au réel » : faisabilité et impact des mesures</h2>
+          <h2 className="text-xl font-semibold">12. « Faisabilité & impact » : ce que l&apos;on peut réellement savoir sur une mesure</h2>
           <p className="mt-3 leading-relaxed text-foreground/85">
             Pour un petit nombre de mesures, Poliscope va plus loin que la position sourcée : est-elle
             juridiquement applicable ? Budgétairement documentée ? Réalisable ? Quels effets peut-on

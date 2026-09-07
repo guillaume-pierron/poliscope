@@ -48,7 +48,7 @@ export function PassageAuReelShowcaseBand({
         </div>
 
         <span className="focus-ring inline-flex w-fit shrink-0 items-center gap-1.5 rounded-xl bg-foreground px-6 py-3 text-sm font-medium text-card transition-transform group-hover:-translate-y-0.5">
-          Explorer le passage au réel
+          Explorer faisabilité & impact
           <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
         </span>
       </div>

@@ -97,7 +97,7 @@ export default async function MesurePage({ params }: { params: Promise<{ id: str
           <MeasureAnalysisPanel bundle={bundle} />
         ) : (
           <div className="rounded-2xl border border-dashed border-border-strong p-6 text-center">
-            <p className="font-medium">Passage au réel — analyse non disponible</p>
+            <p className="font-medium">Faisabilité & impact — analyse non disponible</p>
             <p className="mt-2 text-sm text-muted">
               Cette mesure n&apos;a pas encore fait l&apos;objet d&apos;une analyse de faisabilité publiée par
               Poliscope. Voir{" "}

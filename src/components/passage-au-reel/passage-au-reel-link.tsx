@@ -16,7 +16,7 @@ export function PassageAuReelLink({ proposalId, className }: { proposalId: strin
       }
     >
       <Compass size={13} className="shrink-0" />
-      Passage au réel
+      Faisabilité & impact
       <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
     </Link>
   );

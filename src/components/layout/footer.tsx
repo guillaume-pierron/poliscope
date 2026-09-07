@@ -11,7 +11,7 @@ const columns = [
       { href: "/candidats", label: "Candidats" },
       { href: "/sondages", label: "Sondages" },
       { href: "/simulateur", label: "Simulateur d'impact" },
-      { href: "/passage-au-reel", label: "Passage au réel" },
+      { href: "/passage-au-reel", label: "Faisabilité & impact" },
     ],
   },
   {

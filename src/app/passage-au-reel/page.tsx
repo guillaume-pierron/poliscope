@@ -4,7 +4,7 @@ import { PassageAuReelExplorer, type AnalyzedMeasure } from "@/components/passag
 import { getCandidates, getProposals, getPublishedMeasureAnalysisBundles, getThemes } from "@/lib/data/queries";
 
 export const metadata: Metadata = {
-  title: "Passage au réel",
+  title: "Faisabilité & impact",
   description:
     "Coût, faisabilité, délais, bénéficiaires et impacts : ce que l'on peut réellement savoir derrière chaque proposition.",
 };
@@ -33,10 +33,10 @@ export default async function PassageAuReelPage() {
       <div className="max-w-2xl">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-sm font-medium text-primary">
           <Compass size={15} />
-          Passage au réel
+          Faisabilité & impact
         </span>
         <h1 className="mt-4 text-balance font-serif text-[2.1rem] font-semibold leading-[1.1] tracking-tight sm:text-[2.5rem]">
-          Les programmes passent au réel.
+          Faisabilité et impact, mesure par mesure.
         </h1>
         <p className="mt-4 text-muted">
           Coût, faisabilité, délais, bénéficiaires et impacts : découvrez ce que l&apos;on peut réellement savoir

@@ -217,7 +217,7 @@ export const ENTITIES: Record<EntityKey, EntityConfig> = {
     key: "analyses",
     table: "measure_analyses",
     label: "Analyse",
-    labelPlural: "Passage au réel — Analyses",
+    labelPlural: "Faisabilité & impact — Analyses",
     titleField: "id",
     fields: [
       { name: "proposal_id", label: "Mesure (proposition)", type: "select", relation: "propositions", required: true },
@@ -337,7 +337,7 @@ export const ENTITIES: Record<EntityKey, EntityConfig> = {
     key: "budgets",
     table: "measure_budget_estimates",
     label: "Chiffrage budgétaire",
-    labelPlural: "Passage au réel — Budgets",
+    labelPlural: "Faisabilité & impact — Budgets",
     titleField: "source_name",
     fields: [
       { name: "measure_analysis_id", label: "Analyse", type: "select", relation: "analyses", required: true },
@@ -381,7 +381,7 @@ export const ENTITIES: Record<EntityKey, EntityConfig> = {
     key: "impacts",
     table: "measure_impacts",
     label: "Impact",
-    labelPlural: "Passage au réel — Impacts",
+    labelPlural: "Faisabilité & impact — Impacts",
     titleField: "impact_type",
     fields: [
       { name: "measure_analysis_id", label: "Analyse", type: "select", relation: "analyses", required: true },
@@ -458,7 +458,7 @@ export const ENTITIES: Record<EntityKey, EntityConfig> = {
     key: "hypotheses",
     table: "measure_assumptions",
     label: "Hypothèse",
-    labelPlural: "Passage au réel — Hypothèses",
+    labelPlural: "Faisabilité & impact — Hypothèses",
     titleField: "name",
     fields: [
       { name: "measure_analysis_id", label: "Analyse", type: "select", relation: "analyses", required: true },

@@ -25,7 +25,7 @@ export function PassageAuReelCandidateSummary({ bundles }: { bundles: MeasureAna
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6">
-      <p className="text-sm font-semibold">Passage au réel</p>
+      <p className="text-sm font-semibold">Faisabilité & impact</p>
       <div className="mt-4 grid grid-cols-3 gap-3">
         {stats.map((stat) => (
           <div key={stat.label} className="min-w-0">
