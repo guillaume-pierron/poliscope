@@ -81,6 +81,7 @@ function PollBody({ candidates, headline }: { candidates: Candidate[]; headline:
                 color={candidate.party?.color}
                 photoUrl={candidate.photo_url}
                 size="sm"
+                className="ring-2 ring-primary/35"
               />
               <p className="w-[118px] shrink-0 truncate text-sm font-medium xl:w-[150px]">
                 {candidate.name}

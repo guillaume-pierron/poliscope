@@ -65,7 +65,10 @@ export function MatchMiniOrbit({ candidates }: { candidates: Candidate[] }) {
             color={candidate.party?.color}
             photoUrl={candidate.photo_url}
             size="md"
-            className="ring-4 ring-card"
+            // ring-offset reprend le blanc qui séparait déjà le portrait des
+            // traits pointillés derrière lui ; le fin ring bleu vient
+            // s'ajouter par-dessus, légèrement en retrait.
+            className="ring-offset-4 ring-offset-card ring-2 ring-primary/40"
           />
         </span>
       ))}

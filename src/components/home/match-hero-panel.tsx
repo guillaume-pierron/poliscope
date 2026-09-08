@@ -168,6 +168,7 @@ export function MatchHeroPanel({
                 color={candidate.party?.color}
                 photoUrl={candidate.photo_url}
                 size="sm"
+                className="ring-2 ring-primary/35"
               />
               <p className="w-[100px] shrink-0 truncate text-sm font-medium xl:w-[130px]">
                 {candidate.name}
