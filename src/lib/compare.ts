@@ -1,5 +1,5 @@
 import { calculateChoiceSimilarity, calculateLikertSimilarity } from "@/lib/scoring";
-import type { CandidatePosition, Question } from "@/lib/types";
+import type { CandidatePosition, Proposal, Question, Theme } from "@/lib/types";
 
 export type ThemeVerdict = "accord" | "desaccord" | "nuance" | "inconnu";
 
@@ -55,4 +55,116 @@ export const VERDICT_LABELS: Record<ThemeVerdict, string> = {
   desaccord: "Positions opposées",
   nuance: "Positions nuancées",
   inconnu: "Non comparable",
+};
+
+/* ------------------------------------------------------------------------ *
+ *  Comparaison sujet par sujet
+ *
+ *  Le verdict d'un thème se calcule sur les questions du Match, alors que la
+ *  page montrait à côté des propositions en texte libre : deux sources de
+ *  données différentes, présentées comme si l'une expliquait l'autre. Les
+ *  fonctions ci-dessous descendent d'un cran, à la question, où la position
+ *  de chaque candidat et le verdict portent enfin sur la même chose.
+ * ------------------------------------------------------------------------ */
+
+/** Une position n'est exploitable que si elle porte réellement une valeur. */
+export function isDocumented(position: CandidatePosition | undefined): position is CandidatePosition {
+  return !!position && (position.numeric_score !== null || position.option_id !== null);
+}
+
+export interface SubjectComparison {
+  question: Question;
+  /** `null` quand ce candidat n'a pas de position documentée sur la question. */
+  positionA: CandidatePosition | null;
+  positionB: CandidatePosition | null;
+  /** `null` dès qu'il manque une des deux positions — jamais une similarité devinée. */
+  similarity: number | null;
+  verdict: ThemeVerdict;
+}
+
+export function compareSubject(
+  question: Question,
+  positions: CandidatePosition[],
+  candidateAId: string,
+  candidateBId: string
+): SubjectComparison {
+  const rawA = positions.find((p) => p.question_id === question.id && p.candidate_id === candidateAId);
+  const rawB = positions.find((p) => p.question_id === question.id && p.candidate_id === candidateBId);
+  const positionA = isDocumented(rawA) ? rawA : null;
+  const positionB = isDocumented(rawB) ? rawB : null;
+
+  let similarity: number | null = null;
+  if (positionA && positionB) {
+    if (question.answer_type === "likert") {
+      if (positionA.numeric_score !== null && positionB.numeric_score !== null) {
+        similarity = calculateLikertSimilarity(positionA.numeric_score, positionB.numeric_score);
+      }
+    } else if (positionA.option_id !== null && positionB.option_id !== null) {
+      similarity = calculateChoiceSimilarity(positionA.option_id, positionB.option_id, question.compatibility);
+    }
+  }
+
+  return {
+    question,
+    positionA,
+    positionB,
+    similarity,
+    verdict: verdictFromSimilarity(similarity),
+  };
+}
+
+export interface ThemeComparison {
+  theme: Theme;
+  /** Sujets du Match rattachés à ce thème, comparables ou non. */
+  subjects: SubjectComparison[];
+  /** Sujets où les deux candidats ont une position documentée. */
+  comparableCount: number;
+  proposalsA: Proposal[];
+  proposalsB: Proposal[];
+}
+
+/**
+ * Un bloc par thème. Les questions "priority" sont exclues : elles n'ont
+ * jamais de position candidat, elles pondèrent seulement le Match du
+ * visiteur (voir lib/types.ts).
+ */
+export function buildThemeComparisons(
+  themes: Theme[],
+  questions: Question[],
+  positions: CandidatePosition[],
+  proposalsA: Proposal[],
+  proposalsB: Proposal[],
+  candidateAId: string,
+  candidateBId: string
+): ThemeComparison[] {
+  return themes
+    .map((theme) => {
+      const subjects = questions
+        .filter((q) => q.theme_id === theme.id && q.answer_type !== "priority")
+        .map((q) => compareSubject(q, positions, candidateAId, candidateBId));
+
+      return {
+        theme,
+        subjects,
+        comparableCount: subjects.filter((s) => s.similarity !== null).length,
+        proposalsA: proposalsA.filter((p) => p.theme_id === theme.id),
+        proposalsB: proposalsB.filter((p) => p.theme_id === theme.id),
+      };
+    })
+    .filter(
+      (block) =>
+        block.subjects.length > 0 || block.proposalsA.length > 0 || block.proposalsB.length > 0
+    );
+}
+
+/**
+ * Libellés au niveau du sujet. « Sujet incomplet » plutôt que « Non
+ * comparable » : à ce niveau, l'absence vient toujours d'une position non
+ * documentée d'un côté, ce que la carte dit ensuite explicitement.
+ */
+export const SUBJECT_VERDICT_LABELS: Record<ThemeVerdict, string> = {
+  accord: "Positions proches",
+  nuance: "Position nuancée",
+  desaccord: "Opposition nette",
+  inconnu: "Sujet incomplet",
 };

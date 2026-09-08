@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { CompareView, type ThemeRow } from "@/components/compare/compare-view";
-import { themeSimilarity, verdictFromSimilarity } from "@/lib/compare";
+import { CompareView } from "@/components/compare/compare-view";
+import { buildThemeComparisons } from "@/lib/compare";
 import {
   getAllPositions,
   getCandidateBySlug,
+  getCandidates,
   getProposalsForCandidate,
   getQuestions,
   getThemes,
@@ -32,7 +33,7 @@ export async function generateMetadata({
   if (!a || !b) return {};
   return {
     title: `${a.name} vs ${b.name}`,
-    description: `Comparez les propositions de ${a.name} et ${b.name} thème par thème.`,
+    description: `Comparez les positions de ${a.name} et ${b.name}, sujet par sujet, à partir de sources vérifiables.`,
   };
 }
 
@@ -45,12 +46,13 @@ export default async function ComparePairPage({
   const parsed = parsePair(pair);
   if (!parsed) notFound();
 
-  const [candidateA, candidateB, themes, questions, positions] = await Promise.all([
+  const [candidateA, candidateB, themes, questions, positions, allCandidates] = await Promise.all([
     getCandidateBySlug(parsed.a),
     getCandidateBySlug(parsed.b),
     getThemes(),
     getQuestions(),
     getAllPositions(),
+    getCandidates(),
   ]);
 
   if (!candidateA || !candidateB || candidateA.id === candidateB.id) notFound();
@@ -60,19 +62,15 @@ export default async function ComparePairPage({
     getProposalsForCandidate(candidateB.id),
   ]);
 
-  const rows: ThemeRow[] = themes
-    .map((theme) => {
-      const itemsA = proposalsA.filter((p) => p.theme_id === theme.id);
-      const itemsB = proposalsB.filter((p) => p.theme_id === theme.id);
-      const similarity = themeSimilarity(theme.id, candidateA.id, candidateB.id, questions, positions);
-      return {
-        theme,
-        verdict: verdictFromSimilarity(similarity),
-        proposalsA: itemsA,
-        proposalsB: itemsB,
-      };
-    })
-    .filter((row) => row.proposalsA.length > 0 || row.proposalsB.length > 0);
+  const blocks = buildThemeComparisons(
+    themes,
+    questions,
+    positions,
+    proposalsA,
+    proposalsB,
+    candidateA.id,
+    candidateB.id
+  );
 
   return (
     <div className="container-app max-w-6xl py-8 md:py-12">
@@ -84,18 +82,12 @@ export default async function ComparePairPage({
         Retour aux comparaisons
       </Link>
 
-      <h1 className="mt-5 font-serif text-[2rem] font-semibold tracking-tight sm:text-[2.4rem]">
-        <span style={{ color: candidateA.party?.color }}>{candidateA.name}</span>{" "}
-        <span className="text-muted-2">vs</span>{" "}
-        <span style={{ color: candidateB.party?.color }}>{candidateB.name}</span>
-      </h1>
-      <p className="mt-2 text-muted">Comparaison thème par thème, propositions sourcées.</p>
-
-      <div className="mt-8">
+      <div className="mt-5">
         <CompareView
           candidateA={candidateA}
           candidateB={candidateB}
-          rows={rows}
+          blocks={blocks}
+          allCandidates={allCandidates}
           sourcedCountA={proposalsA.length}
           sourcedCountB={proposalsB.length}
         />
