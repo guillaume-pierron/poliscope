@@ -10,27 +10,21 @@ export const metadata: Metadata = {
     "Coût, faisabilité, délais, bénéficiaires et impacts : ce que l'on peut réellement savoir derrière chaque proposition.",
 };
 
-/** Les quatre lignes que porte chaque carte d'analyse, expliquées une fois pour toutes. */
+/**
+ * Les quatre lignes que porte chaque carte. Les trois premières se lisent
+ * seules une fois la carte sous les yeux : elles ne sont rappelées ici que
+ * pour dire d'où vient le chiffre. La quatrième a besoin d'être définie —
+ * on la lit spontanément comme « chances que la mesure passe », ce qu'elle
+ * n'est pas.
+ */
 const READING_KEYS = [
-  {
-    icon: Coins,
-    label: "Coût",
-    body: "Le chiffrage annuel publié par une source identifiée, en fourchette quand les estimations divergent.",
-  },
-  {
-    icon: Clock,
-    label: "Délai",
-    body: "Le temps de mise en œuvre estimé une fois la mesure votée — pas le temps qu'elle mettrait à être votée.",
-  },
-  {
-    icon: Users,
-    label: "Bénéficiaires",
-    body: "La population concernée, quand une source la chiffre. Sinon, les groupes qu'elle décrit.",
-  },
+  { icon: Coins, label: "Coût", body: "Le chiffrage annuel publié par une source identifiée." },
+  { icon: Clock, label: "Délai", body: "Le temps de mise en œuvre une fois la mesure votée." },
+  { icon: Users, label: "Bénéficiaires", body: "La population concernée, quand une source la chiffre." },
   {
     icon: Gauge,
     label: "Niveau de certitude",
-    body: "La solidité des données disponibles, jamais un pronostic sur l'adoption ou le succès de la mesure.",
+    body: "La solidité des données disponibles — jamais un pronostic sur l'adoption de la mesure.",
   },
 ];
 
