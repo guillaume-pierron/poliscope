@@ -116,21 +116,6 @@ export default async function CandidatePage({
             )}
           </div>
 
-          <div id="faisabilite" className="scroll-mt-24">
-            <h2 className="text-2xl font-semibold tracking-tight">Faisabilité &amp; impact</h2>
-            <p className="mt-2 text-sm text-muted">
-              Coût, délais et obstacles juridiques de ses mesures, quand des sources publiques
-              permettent de les établir —{" "}
-              <Link href="/passage-au-reel" className="underline underline-offset-2">
-                voir toutes les analyses
-              </Link>
-              .
-            </p>
-            <div className="mt-6">
-              <PassageAuReelCandidateSummary bundles={candidateAnalysisBundles} />
-            </div>
-          </div>
-
           <div>
             <h2 id="positions" className="scroll-mt-24 text-2xl font-semibold tracking-tight">
               Ses positions sur les questions du Match
@@ -158,7 +143,9 @@ export default async function CandidatePage({
           </div>
         </div>
 
-        {/* Right column: personal Match summary, always in this order */}
+        {/* Right column: personal Match summary, always in this order.
+            La carte a gauche, les cartes de synthèse à droite : c'est la
+            structure de la page, elle ne bouge pas au fil des refontes. */}
         <div className="space-y-6 lg:sticky lg:top-24">
           <CandidateProximityCard candidate={candidate} />
           <CandidateAtAGlanceCard
@@ -166,6 +153,13 @@ export default async function CandidatePage({
             quantifiedCount={quantifiedCount}
             sourceCount={sourceCount}
           />
+          {/* Cible de l'onglet « Faisabilité & impact » de la carte du haut :
+              sur mobile, où cette colonne passe sous le contenu principal,
+              l'onglet y amène vraiment ; sur desktop la colonne est déjà
+              visible, l'ancre ne fait alors que confirmer l'onglet actif. */}
+          <div id="faisabilite" className="scroll-mt-24">
+            <PassageAuReelCandidateSummary bundles={candidateAnalysisBundles} />
+          </div>
           <CandidatePointsCards candidate={candidate} />
           <CandidateDeepenCard slug={candidate.slug} />
         </div>
