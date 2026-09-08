@@ -97,11 +97,14 @@ export default async function CandidatePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <CandidateHeroCard candidate={candidate} tabs={tabs} />
-
-      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start lg:gap-8">
-        {/* Left column: proposals, analyses, Match positions, sources */}
+      <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start lg:gap-8">
+        {/* Left column: the candidate card, then proposals, Match positions,
+            sources. La carte reste dans cette colonne : la mettre en pleine
+            largeur repousserait les cartes de synthèse sous la ligne de
+            flottaison. */}
         <div className="min-w-0 space-y-10">
+          <CandidateHeroCard candidate={candidate} tabs={tabs} />
+
           <div id="propositions" className="scroll-mt-24">
             <CandidateProposalsSection
               proposals={proposals}

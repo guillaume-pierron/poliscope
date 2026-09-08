@@ -65,14 +65,14 @@ export function CandidateHeroCard({
               name={candidate.name}
               color={candidate.party?.color}
               photoUrl={candidate.photo_url}
-              className="h-44 w-44 rounded-full sm:h-52 sm:w-52"
+              className="h-40 w-40 rounded-full sm:h-44 sm:w-44"
               ringColor={color}
             />
             {/* Sigle du parti à défaut d'un logo — jamais une abréviation inventée. */}
             {candidate.party?.short_name && (
               <span
                 aria-hidden="true"
-                className="absolute -bottom-1 -right-1 flex h-12 w-12 items-center justify-center rounded-full border-4 border-card text-xs font-bold leading-none text-white"
+                className="absolute -bottom-0.5 -right-0.5 flex h-11 w-11 items-center justify-center rounded-full border-4 border-card text-xs font-bold leading-none text-white"
                 style={{ background: color }}
               >
                 {candidate.party.short_name}
@@ -97,7 +97,7 @@ export function CandidateHeroCard({
         </div>
 
         <div className="min-w-0 flex-1">
-          <h1 className="font-serif text-[2.1rem] font-semibold leading-tight tracking-tight sm:text-[2.6rem]">
+          <h1 className="text-balance font-serif text-[1.9rem] font-semibold leading-tight tracking-tight sm:text-[2.25rem]">
             {candidate.name}
           </h1>
           {candidate.party && (
@@ -111,7 +111,7 @@ export function CandidateHeroCard({
           <p className="mt-4 leading-relaxed text-foreground/85">{candidate.biography}</p>
 
           {facts.length > 0 && (
-            <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-4">
+            <dl className="mt-6 flex flex-wrap gap-x-7 gap-y-4">
               {facts.map(({ icon: Icon, label, value, detail }) => (
                 <div key={label} className="flex items-start gap-2.5">
                   <Icon size={17} className="mt-0.5 shrink-0 text-primary" />
