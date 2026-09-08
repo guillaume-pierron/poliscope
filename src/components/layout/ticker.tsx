@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Users, BarChart3 } from "lucide-react";
-import { getCandidates, getProposals, getThemes } from "@/lib/data/queries";
+import { ElectionCountdown } from "./election-countdown";
+import { getActiveElection, getCandidates, getProposals, getThemes } from "@/lib/data/queries";
 
 /**
  * Top status strip. The mockup showed a live news ticker ("EN DIRECT",
@@ -11,10 +12,11 @@ import { getCandidates, getProposals, getThemes } from "@/lib/data/queries";
  * the real feed — the markup already supports a meta/timestamp per item.
  */
 export async function Ticker() {
-  const [candidates, proposals, themes] = await Promise.all([
+  const [candidates, proposals, themes, election] = await Promise.all([
     getCandidates(),
     getProposals(),
     getThemes(),
+    getActiveElection(),
   ]);
 
   const items = [
@@ -45,6 +47,9 @@ export async function Ticker() {
           </span>
           À JOUR
         </span>
+
+        <span className="text-border-strong">|</span>
+        <ElectionCountdown roundDate={election.round_date} />
 
         {items.map((item, i) => (
           <div key={item.label} className="flex shrink-0 items-center gap-4">
