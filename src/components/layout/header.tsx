@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogOut, Sun } from "lucide-react";
@@ -11,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 export function Header() {
   const pathname = usePathname();
+  const scrolled = useScrolled();
 
   if (pathname === "/match") {
     return (
@@ -30,7 +32,18 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
+    // Transparent tant que la page est en haut ; le fond et le filet
+    // n'apparaissent qu'une fois du contenu passé dessous. La bordure reste
+    // toujours présente, seulement transparente : la retirer décalerait la
+    // page d'un pixel à chaque apparition.
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b transition-colors duration-300",
+        scrolled
+          ? "border-border bg-background/90 backdrop-blur-md"
+          : "border-transparent bg-transparent"
+      )}
+    >
       <div className="container-app flex h-[72px] items-center justify-between gap-6">
         <Logo />
 
@@ -69,4 +82,32 @@ export function Header() {
       </div>
     </header>
   );
+}
+
+/**
+ * `true` dès que la page n'est plus tout en haut. L'état n'est mis à jour
+ * qu'au changement de valeur : un setState à chaque pixel re-rendrait tout
+ * l'en-tête pendant le défilement.
+ *
+ * Faux au premier rendu, côté serveur comme côté client, puis corrigé au
+ * montage — ce qui couvre le rechargement d'une page déjà défilée.
+ */
+function useScrolled(threshold = 8) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    let current = false;
+    function update() {
+      const next = window.scrollY > threshold;
+      if (next !== current) {
+        current = next;
+        setScrolled(next);
+      }
+    }
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, [threshold]);
+
+  return scrolled;
 }
