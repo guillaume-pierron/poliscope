@@ -76,6 +76,7 @@ export function PollsShowcaseCard({
                     color={candidate.party?.color}
                     photoUrl={candidate.photo_url}
                     size="sm"
+                    className="ring-2 ring-primary/35"
                   />
                   <span className="w-[104px] shrink-0 truncate text-sm font-medium">
                     {candidate.name}

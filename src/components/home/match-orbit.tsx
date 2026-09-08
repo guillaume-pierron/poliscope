@@ -93,7 +93,10 @@ export function MatchOrbit({ candidates }: { candidates: Candidate[] }) {
               color={candidate.party?.color}
               photoUrl={candidate.photo_url}
               size={size}
-              className="shadow-[0_12px_30px_-16px_rgba(15,23,41,0.55)] ring-[5px] ring-card"
+              // ring-offset reproduit le blanc qui séparait déjà le portrait
+              // du fond ; ring (plus fin) ajoute le liseré bleu par-dessus,
+              // légèrement en retrait plutôt que collé à la photo.
+              className="shadow-[0_12px_30px_-16px_rgba(15,23,41,0.55)] ring-offset-[5px] ring-offset-card ring-2 ring-primary/40"
             />
           </span>
         ))}
