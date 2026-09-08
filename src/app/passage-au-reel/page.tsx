@@ -51,10 +51,12 @@ export default async function PassageAuReelPage() {
     <div className="container-app max-w-6xl py-10 md:py-14">
       <div className="relative">
         {/* Aquarelle décorative facultative : fond CSS, donc rien ne casse tant
-            que le fichier n'a pas été déposé (voir public/illustrations/README.txt). */}
+            que le fichier n'a pas été déposé (voir public/illustrations/README.txt).
+            `-bottom-9` compense exactement la marge du bandeau qui suit : quel que
+            soit le rapport de l'image, `bg-bottom` la pose sur son bord supérieur. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute right-0 top-0 hidden h-32 w-56 bg-[url('/illustrations/passage-au-reel-header.png')] bg-contain bg-right-top bg-no-repeat xl:block"
+          className="pointer-events-none absolute -bottom-9 right-0 hidden h-52 w-[26rem] bg-[url('/illustrations/passage-au-reel-header.png')] bg-contain bg-right-bottom bg-no-repeat xl:block"
         />
 
         <div className="max-w-2xl">

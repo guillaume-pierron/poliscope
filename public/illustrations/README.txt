@@ -52,9 +52,11 @@ non plus optimisée : compresse-la avant de la déposer (moins de 150 Ko).
 
 --- Page Faisabilité & impact (/passage-au-reel) — OPTIONNEL ---
 
-passage-au-reel-header.png   Aquarelle décorative en haut à droite de la page.
-                             Affichée en 224 × 128 px, visible à partir de
-                             1280 px de large.
+passage-au-reel-header.png   Aquarelle décorative posée sur le bandeau de
+                             lecture, à droite du titre. Affichée dans une boîte
+                             de 416 × 208 px (rapport 2:1), calée en bas à droite,
+                             visible à partir de 1280 px de large. Format
+                             paysage, sujet posé sur la ligne du bas.
 
 Comme celle de la page Candidats : fond CSS, donc pas requise au build, mais
 pas optimisée non plus — compresse-la avant de la déposer (moins de 150 Ko).
