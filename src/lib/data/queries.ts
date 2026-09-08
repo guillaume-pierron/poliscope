@@ -1,4 +1,6 @@
 import "server-only";
+import { statSync } from "node:fs";
+import { join } from "node:path";
 import type {
   Candidate,
   CandidatePosition,
@@ -43,6 +45,31 @@ import { measureAnalysisBundles as localMeasureAnalysisBundles } from "./local/m
 
 function withParty(candidate: Candidate): Candidate {
   return { ...candidate, party: localParties.find((p) => p.id === candidate.party_id) };
+}
+
+/**
+ * En développement uniquement : ajoute à `photo_url` un paramètre dérivé de
+ * la date de modification du fichier. Sans ça, remplacer une photo dans
+ * public/candidates/ ne change pas son URL, et le cache disque de
+ * l'optimiseur d'images de Next (.next/dev/cache/images, qui survit aux
+ * redémarrages) continue de servir l'ancien fichier tant qu'une variante
+ * (taille, densité d'écran) n'a jamais été demandée — d'où l'actualisation
+ * tantôt immédiate, tantôt à retardement, selon la variante déjà en cache.
+ *
+ * Jamais en production : les déploiements sont immuables, ce problème ne
+ * s'y pose pas, et lire le disque à chaque requête n'y aurait aucun intérêt.
+ */
+function withDevPhotoCacheBust(candidate: Candidate): Candidate {
+  if (process.env.NODE_ENV === "production") return candidate;
+  const url = candidate.photo_url;
+  if (!url || !url.startsWith("/")) return candidate;
+  try {
+    const { mtimeMs } = statSync(join(process.cwd(), "public", url));
+    return { ...candidate, photo_url: `${url}?v=${Math.round(mtimeMs)}` };
+  } catch {
+    // Fichier absent (avatar de repli aux initiales) : rien à faire.
+    return candidate;
+  }
 }
 
 export async function getActiveElection() {
@@ -122,12 +149,12 @@ export async function getCandidates(): Promise<Candidate[]> {
         .select("*, party:parties(*)")
         .order("order_index");
       if (error) throw error;
-      if (data && data.length) return data as Candidate[];
+      if (data && data.length) return (data as Candidate[]).map(withDevPhotoCacheBust);
     } catch {
       // fall through
     }
   }
-  return localCandidates.map(withParty);
+  return localCandidates.map(withParty).map(withDevPhotoCacheBust);
 }
 
 export async function getCandidateBySlug(slug: string): Promise<Candidate | undefined> {
@@ -140,13 +167,13 @@ export async function getCandidateBySlug(slug: string): Promise<Candidate | unde
         .eq("slug", slug)
         .maybeSingle();
       if (error) throw error;
-      if (data) return data as Candidate;
+      if (data) return withDevPhotoCacheBust(data as Candidate);
     } catch {
       // fall through
     }
   }
   const candidate = localGetCandidateBySlug(slug);
-  return candidate ? withParty(candidate) : undefined;
+  return candidate ? withDevPhotoCacheBust(withParty(candidate)) : undefined;
 }
 
 /**
