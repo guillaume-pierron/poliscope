@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Compass, Sparkles } from "lucide-react";
+import { Clock, Coins, Compass, Gauge, Users } from "lucide-react";
 import { PassageAuReelExplorer, type AnalyzedMeasure } from "@/components/passage-au-reel/passage-au-reel-explorer";
+import { HandNote } from "@/components/ui/hand-note";
 import { getCandidates, getProposals, getPublishedMeasureAnalysisBundles, getThemes } from "@/lib/data/queries";
 
 export const metadata: Metadata = {
@@ -9,6 +9,30 @@ export const metadata: Metadata = {
   description:
     "Coût, faisabilité, délais, bénéficiaires et impacts : ce que l'on peut réellement savoir derrière chaque proposition.",
 };
+
+/** Les quatre lignes que porte chaque carte d'analyse, expliquées une fois pour toutes. */
+const READING_KEYS = [
+  {
+    icon: Coins,
+    label: "Coût",
+    body: "Le chiffrage annuel publié par une source identifiée, en fourchette quand les estimations divergent.",
+  },
+  {
+    icon: Clock,
+    label: "Délai",
+    body: "Le temps de mise en œuvre estimé une fois la mesure votée — pas le temps qu'elle mettrait à être votée.",
+  },
+  {
+    icon: Users,
+    label: "Bénéficiaires",
+    body: "La population concernée, quand une source la chiffre. Sinon, les groupes qu'elle décrit.",
+  },
+  {
+    icon: Gauge,
+    label: "Niveau de certitude",
+    body: "La solidité des données disponibles, jamais un pronostic sur l'adoption ou le succès de la mesure.",
+  },
+];
 
 export default async function PassageAuReelPage() {
   const [bundles, proposals, candidates, themes] = await Promise.all([
@@ -30,31 +54,47 @@ export default async function PassageAuReelPage() {
     .filter((m): m is AnalyzedMeasure => m !== null);
 
   return (
-    <div className="container-app max-w-5xl py-10 md:py-14">
-      <div className="max-w-2xl">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-sm font-medium text-primary">
-          <Compass size={15} />
-          Faisabilité & impact
-        </span>
-        <h1 className="mt-4 text-balance font-serif text-[2.1rem] font-semibold leading-[1.1] tracking-tight sm:text-[2.5rem]">
-          Faisabilité et impact, mesure par mesure.
-        </h1>
-        <p className="mt-4 text-muted">
-          Coût, faisabilité, délais, bénéficiaires et impacts : découvrez ce que l&apos;on peut réellement savoir
-          derrière chaque proposition — et ce qui reste, honnêtement, incertain.{" "}
-          <a href="/methodologie#passage-au-reel" className="underline underline-offset-2">
-            Comment ces analyses sont construites
-          </a>
-          .
-        </p>
+    <div className="container-app max-w-6xl py-10 md:py-14">
+      <div className="relative">
+        {/* Aquarelle décorative facultative : fond CSS, donc rien ne casse tant
+            que le fichier n'a pas été déposé (voir public/illustrations/README.txt). */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute right-0 top-0 hidden h-32 w-56 bg-[url('/illustrations/passage-au-reel-header.png')] bg-contain bg-right-top bg-no-repeat xl:block"
+        />
 
-        <Link
-          href="/simulateur"
-          className="focus-ring mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-        >
-          <Sparkles size={14} />
-          Voir l&apos;impact sur votre propre situation
-        </Link>
+        <div className="max-w-2xl">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-soft px-3 py-1.5 text-sm font-medium text-primary">
+            <Compass size={15} />
+            Faisabilité & impact
+          </span>
+          <h1 className="mt-4 text-balance font-serif text-[2.1rem] font-semibold leading-[1.1] tracking-tight sm:text-[2.6rem]">
+            Ce qu&apos;une mesure peut vraiment changer.
+          </h1>
+          <p className="mt-4 text-muted">
+            Coût, délais, bénéficiaires, obstacles juridiques : chaque analyse rassemble ce que des sources
+            publiques permettent d&apos;établir sur une proposition — et dit clairement où elles s&apos;arrêtent.{" "}
+            <a href="/methodologie#passage-au-reel" className="underline underline-offset-2">
+              Comment ces analyses sont construites
+            </a>
+            .
+          </p>
+          <HandNote className="mt-4 block" tone="primary">
+            aucun chiffre sans source
+          </HandNote>
+        </div>
+      </div>
+
+      <div className="mt-9 grid gap-x-6 gap-y-5 rounded-2xl border border-border bg-surface/60 p-5 sm:grid-cols-2 lg:grid-cols-4">
+        {READING_KEYS.map(({ icon: Icon, label, body }) => (
+          <div key={label}>
+            <p className="flex items-center gap-2 text-sm font-semibold">
+              <Icon size={15} className="shrink-0 text-primary" />
+              {label}
+            </p>
+            <p className="mt-1.5 text-xs leading-relaxed text-muted">{body}</p>
+          </div>
+        ))}
       </div>
 
       <div className="mt-9">

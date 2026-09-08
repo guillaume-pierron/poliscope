@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { MeasureAnalysisSummaryCard } from "./measure-analysis-summary-card";
+import { ReadingGuide } from "./reading-guide";
 import { ThemeIcon } from "@/lib/theme-icons";
 import { cn } from "@/lib/utils";
 import type { Candidate, MeasureAnalysisBundle, Proposal, Theme } from "@/lib/types";
@@ -78,39 +79,52 @@ export function PassageAuReelExplorer({ measures, themes }: { measures: Analyzed
         ))}
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {QUICK_FILTERS.map((f) => (
-          <button
-            key={f.key}
-            type="button"
-            onClick={() => setQuickFilter(f.key)}
-            className={cn(
-              "focus-ring rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
-              quickFilter === f.key ? "bg-foreground text-card" : "bg-surface text-muted hover:bg-surface-strong"
-            )}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
-
-      {filtered.length === 0 ? (
-        <p className="mt-8 rounded-2xl border border-dashed border-border-strong p-8 text-center text-sm text-muted-2">
-          Aucune analyse ne correspond à ce filtre pour le moment.
-        </p>
-      ) : (
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map(({ bundle, proposal, candidate, theme }) => (
-            <MeasureAnalysisSummaryCard
-              key={bundle.analysis.id}
-              bundle={bundle}
-              proposal={proposal}
-              candidate={candidate}
-              theme={theme}
-            />
+      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div className="flex flex-wrap gap-1.5">
+          {QUICK_FILTERS.map((f) => (
+            <button
+              key={f.key}
+              type="button"
+              onClick={() => setQuickFilter(f.key)}
+              className={cn(
+                "focus-ring rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
+                quickFilter === f.key ? "bg-foreground text-card" : "bg-surface text-muted hover:bg-surface-strong"
+              )}
+            >
+              {f.label}
+            </button>
           ))}
         </div>
-      )}
+        {/* Le compteur porte sur les analyses publiées, pas sur les propositions
+            du site : les deux nombres n'ont rien à voir. */}
+        <p className="text-xs text-muted-2">
+          {filtered.length} analyse{filtered.length > 1 ? "s" : ""} affichée
+          {filtered.length > 1 ? "s" : ""}
+          {filtered.length !== measures.length && ` sur ${measures.length}`}
+        </p>
+      </div>
+
+      <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_19rem]">
+        {filtered.length === 0 ? (
+          <p className="rounded-2xl border border-dashed border-border-strong p-8 text-center text-sm text-muted-2">
+            Aucune analyse ne correspond à ce filtre pour le moment.
+          </p>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 min-[1400px]:grid-cols-3">
+            {filtered.map(({ bundle, proposal, candidate, theme }) => (
+              <MeasureAnalysisSummaryCard
+                key={bundle.analysis.id}
+                bundle={bundle}
+                proposal={proposal}
+                candidate={candidate}
+                theme={theme}
+              />
+            ))}
+          </div>
+        )}
+
+        <ReadingGuide className="lg:sticky lg:top-6" />
+      </div>
     </div>
   );
 }

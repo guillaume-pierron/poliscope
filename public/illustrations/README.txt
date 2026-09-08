@@ -49,3 +49,12 @@ candidates-header.png   Illustration décorative en haut à droite de la page.
 Celle-ci est chargée en fond CSS : tant que le fichier n'existe pas, rien
 ne s'affiche. Elle n'est donc PAS requise au build — mais elle n'est pas
 non plus optimisée : compresse-la avant de la déposer (moins de 150 Ko).
+
+--- Page Faisabilité & impact (/passage-au-reel) — OPTIONNEL ---
+
+passage-au-reel-header.png   Aquarelle décorative en haut à droite de la page.
+                             Affichée en 224 × 128 px, visible à partir de
+                             1280 px de large.
+
+Comme celle de la page Candidats : fond CSS, donc pas requise au build, mais
+pas optimisée non plus — compresse-la avant de la déposer (moins de 150 Ko).
