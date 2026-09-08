@@ -168,3 +168,32 @@ export const SUBJECT_VERDICT_LABELS: Record<ThemeVerdict, string> = {
   desaccord: "Opposition nette",
   inconnu: "Sujet incomplet",
 };
+
+/**
+ * Une phrase d'analyse strictement déduite des deux positions — jamais une
+ * synthèse rédigée sur le fond, que rien dans nos données ne permettrait
+ * d'écrire. Elle dit l'écart, pas ce qu'il signifie politiquement.
+ *
+ * `null` quand une des deux positions manque : l'appelant affiche alors
+ * lequel des deux candidats est documenté, ce qui est la seule chose que
+ * l'on sache dans ce cas.
+ */
+export function describeGap(subject: SubjectComparison): string | null {
+  const { question, positionA, positionB } = subject;
+  if (!positionA || !positionB) return null;
+
+  if (question.answer_type === "likert") {
+    if (positionA.numeric_score === null || positionB.numeric_score === null) return null;
+    const gap = Math.abs(positionA.numeric_score - positionB.numeric_score);
+    if (gap === 0) return "Même position sur l'échelle de réponse.";
+    if (gap === 4) return "Positions aux deux extrémités de l'échelle.";
+    const words = ["", "un cran", "deux crans", "trois crans"];
+    return `Positions séparées de ${words[gap]} sur l'échelle de réponse.`;
+  }
+
+  if (positionA.option_id === null || positionB.option_id === null) return null;
+  if (positionA.option_id === positionB.option_id) return "Même option retenue.";
+  return subject.similarity !== null && subject.similarity > 0
+    ? "Options différentes, mais rapprochées par la méthodologie."
+    : "Options différentes.";
+}

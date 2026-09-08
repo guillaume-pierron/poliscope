@@ -1,7 +1,6 @@
 import { CircleCheck, CircleMinus, CircleX, ExternalLink, Minus } from "lucide-react";
-import { CandidateAvatar } from "@/components/candidates/candidate-avatar";
-import { describePositionValue, positionTone } from "@/lib/match-format";
-import { SUBJECT_VERDICT_LABELS, type SubjectComparison } from "@/lib/compare";
+import { describePositionValue, positionTone, type PositionTone } from "@/lib/match-format";
+import { SUBJECT_VERDICT_LABELS, describeGap, type SubjectComparison } from "@/lib/compare";
 import { cn } from "@/lib/utils";
 import type { ThemeVerdict } from "@/lib/compare";
 import type { Candidate, CandidatePosition, Question } from "@/lib/types";
@@ -13,14 +12,44 @@ const VERDICT_STYLE: Record<
   accord: { icon: CircleCheck, text: "text-success", bubble: "bg-success-soft text-success" },
   nuance: { icon: CircleMinus, text: "text-accent", bubble: "bg-accent-soft text-accent" },
   desaccord: { icon: CircleX, text: "text-danger", bubble: "bg-danger-soft text-danger" },
-  inconnu: { icon: Minus, text: "text-muted-2", bubble: "bg-surface text-muted-2" },
+  inconnu: { icon: Minus, text: "text-muted-2", bubble: "bg-surface-strong text-muted-2" },
 };
 
 /**
- * Une question du Match, les deux positions documentées en vis-à-vis, et le
- * verdict qui porte exactement sur ces deux positions-là — et non, comme
- * auparavant, sur des propositions affichées à côté d'un score calculé
- * ailleurs.
+ * Teintes par sens de la réponse. Une question « choice » n'en reçoit
+ * aucune : ses options ne s'ordonnent pas, une couleur y suggérerait un
+ * pour/contre qui n'existe pas.
+ */
+const TONE_STYLE: Record<PositionTone, { card: string; badge: string; icon: typeof CircleCheck }> = {
+  positive: {
+    card: "border-success/20 bg-success-soft/50",
+    badge: "bg-success-soft text-success",
+    icon: CircleCheck,
+  },
+  negative: {
+    card: "border-danger/20 bg-danger-soft/50",
+    badge: "bg-danger-soft text-danger",
+    icon: CircleX,
+  },
+  neutral: {
+    card: "border-accent/20 bg-accent-soft/60",
+    badge: "bg-accent-soft text-accent",
+    icon: CircleMinus,
+  },
+  choice: {
+    card: "border-border bg-surface",
+    badge: "bg-surface-strong text-muted",
+    icon: CircleMinus,
+  },
+};
+
+/**
+ * Une ligne du tableau : la question, les deux positions en vis-à-vis, et le
+ * verdict qui porte exactement sur ces deux positions-là.
+ *
+ * Le nom des candidats vit dans l'en-tête du tableau, pas dans chaque
+ * cellule — sauf sous `lg`, où le tableau s'empile et où chaque cellule doit
+ * redire de qui elle parle.
  */
 export function CompareSubjectRow({
   subject,
@@ -34,9 +63,8 @@ export function CompareSubjectRow({
   const { question, positionA, positionB, verdict } = subject;
   const style = VERDICT_STYLE[verdict];
   const VerdictIcon = style.icon;
+  const gap = describeGap(subject);
 
-  // Seul cas où l'on peut nommer la cause du « sujet incomplet » sans rien
-  // supposer : une position manque, et on sait laquelle.
   const onlyDocumentedFor =
     verdict === "inconnu" && positionA && !positionB
       ? candidateA.name
@@ -45,57 +73,35 @@ export function CompareSubjectRow({
         : null;
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-border bg-card">
-      <div className="grid gap-px bg-border lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,1.1fr)_minmax(0,0.85fr)]">
-        <div className="bg-card p-4">
-          <h4 className="text-sm font-semibold leading-snug">{question.question}</h4>
-          {question.description && (
-            <p className="mt-1.5 text-xs leading-relaxed text-muted">{question.description}</p>
-          )}
-        </div>
-
-        <PositionCell candidate={candidateA} question={question} position={positionA} />
-        <PositionCell candidate={candidateB} question={question} position={positionB} />
-
-        <div className="flex flex-col justify-center bg-card p-4 text-center">
-          <span
-            className={cn(
-              "mx-auto flex h-8 w-8 items-center justify-center rounded-full",
-              style.bubble
-            )}
-          >
-            <VerdictIcon size={17} />
-          </span>
-          <p className={cn("mt-2 text-sm font-semibold leading-snug", style.text)}>
-            {SUBJECT_VERDICT_LABELS[verdict]}
-          </p>
-          {onlyDocumentedFor && (
-            <p className="mt-1 text-xs leading-relaxed text-muted-2">
-              Position documentée uniquement pour {onlyDocumentedFor}.
-            </p>
-          )}
-        </div>
+    <div className="grid gap-4 border-t border-border p-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.15fr)_minmax(0,1.15fr)_minmax(0,0.8fr)] lg:gap-5 lg:px-5 lg:py-5">
+      <div className="min-w-0">
+        <h4 className="text-sm font-semibold leading-snug">{question.question}</h4>
+        {question.description && (
+          <p className="mt-1.5 text-xs leading-relaxed text-muted-2">{question.description}</p>
+        )}
       </div>
-    </article>
+
+      <PositionCell candidate={candidateA} question={question} position={positionA} />
+      <PositionCell candidate={candidateB} question={question} position={positionB} />
+
+      <div className="flex flex-col items-center justify-center gap-1.5 rounded-xl bg-surface/60 p-3.5 text-center lg:bg-transparent lg:p-0">
+        <span className={cn("flex h-8 w-8 items-center justify-center rounded-full", style.bubble)}>
+          <VerdictIcon size={17} />
+        </span>
+        <p className={cn("text-sm font-semibold leading-tight", style.text)}>
+          {SUBJECT_VERDICT_LABELS[verdict]}
+        </p>
+        {/* Phrase strictement déduite de l'écart entre les deux réponses —
+            jamais une lecture politique de cet écart. */}
+        <p className="text-xs leading-relaxed text-muted-2">
+          {onlyDocumentedFor
+            ? `Position documentée uniquement pour ${onlyDocumentedFor}.`
+            : (gap ?? "Aucune position documentée des deux côtés.")}
+        </p>
+      </div>
+    </div>
   );
 }
-
-/** Teinte du fond selon le sens de la position — jamais pour une question
- *  « choice », où les options ne s'ordonnent pas et où une couleur
- *  suggérerait un pour/contre qui n'existe pas. */
-const TONE_BG: Record<string, string> = {
-  positive: "bg-primary-soft/40",
-  negative: "bg-danger-soft/40",
-  neutral: "bg-card",
-  choice: "bg-card",
-};
-
-const TONE_BADGE: Record<string, string> = {
-  positive: "bg-primary-soft text-primary",
-  negative: "bg-danger-soft text-danger",
-  neutral: "bg-surface text-muted",
-  choice: "bg-surface text-muted",
-};
 
 function PositionCell({
   candidate,
@@ -108,8 +114,12 @@ function PositionCell({
 }) {
   if (!position) {
     return (
-      <div className="bg-card p-4">
-        <CellHeader candidate={candidate} badge="Non renseignée" badgeClass={TONE_BADGE.neutral} />
+      <div className="min-w-0 rounded-xl border border-dashed border-border-strong p-3.5">
+        <CandidateLabel candidate={candidate} />
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-strong px-2.5 py-1 text-xs font-medium leading-none text-muted-2">
+          <Minus size={12} className="shrink-0" />
+          Non renseignée
+        </span>
         <p className="mt-2.5 text-sm leading-relaxed text-muted-2">
           Aucune position trouvée dans les sources analysées.
         </p>
@@ -118,20 +128,29 @@ function PositionCell({
   }
 
   const tone = positionTone(question.answer_type, position);
+  const style = TONE_STYLE[tone];
+  const ToneIcon = style.icon;
   const label = describePositionValue(question, position);
 
   return (
-    <div className={cn("p-4", TONE_BG[tone])}>
-      <CellHeader
-        candidate={candidate}
-        badge={label ?? "Position documentée"}
-        badgeClass={TONE_BADGE[tone]}
-      />
-      {/* Sans guillemets : ce texte est notre synthèse sourcée de la
+    <div className={cn("min-w-0 rounded-xl border p-3.5", style.card)}>
+      <CandidateLabel candidate={candidate} />
+      <span
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium leading-none",
+          style.badge
+        )}
+      >
+        <ToneIcon size={12} className="shrink-0" />
+        {label ?? "Position documentée"}
+      </span>
+
+      {/* Sans guillemets : cette phrase est notre synthèse sourcée de la
           position, pas une citation du candidat. */}
       {position.explanation && (
         <p className="mt-2.5 text-sm leading-relaxed text-foreground/85">{position.explanation}</p>
       )}
+
       {position.source_url && (
         <a
           href={position.source_url}
@@ -147,33 +166,11 @@ function PositionCell({
   );
 }
 
-function CellHeader({
-  candidate,
-  badge,
-  badgeClass,
-}: {
-  candidate: Candidate;
-  badge: string;
-  badgeClass: string;
-}) {
+/** Redit de qui parle la cellule quand le tableau s'empile, sous `lg`. */
+function CandidateLabel({ candidate }: { candidate: Candidate }) {
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <CandidateAvatar
-        name={candidate.name}
-        color={candidate.party?.color}
-        photoUrl={candidate.photo_url}
-        size="sm"
-        className="ring-2 ring-border-strong"
-      />
-      <span className="min-w-0 flex-1 truncate text-sm font-medium">{candidate.name}</span>
-      <span
-        className={cn(
-          "shrink-0 rounded-full px-2.5 py-1 text-xs font-medium leading-none",
-          badgeClass
-        )}
-      >
-        {badge}
-      </span>
-    </div>
+    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.06em] text-muted-2 lg:hidden">
+      {candidate.name}
+    </p>
   );
 }

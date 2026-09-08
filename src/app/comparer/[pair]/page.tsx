@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { CompareView } from "@/components/compare/compare-view";
 import { buildThemeComparisons } from "@/lib/compare";
 import {
@@ -74,24 +72,14 @@ export default async function ComparePairPage({
 
   return (
     <div className="container-app max-w-6xl py-8 md:py-12">
-      <Link
-        href="/comparer"
-        className="focus-ring inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
-      >
-        <ArrowLeft size={15} />
-        Retour aux comparaisons
-      </Link>
-
-      <div className="mt-5">
-        <CompareView
-          candidateA={candidateA}
-          candidateB={candidateB}
-          blocks={blocks}
-          allCandidates={allCandidates}
-          sourcedCountA={proposalsA.length}
-          sourcedCountB={proposalsB.length}
-        />
-      </div>
+      <CompareView
+        candidateA={candidateA}
+        candidateB={candidateB}
+        blocks={blocks}
+        allCandidates={allCandidates}
+        sourcedCountA={proposalsA.length}
+        sourcedCountB={proposalsB.length}
+      />
     </div>
   );
 }
