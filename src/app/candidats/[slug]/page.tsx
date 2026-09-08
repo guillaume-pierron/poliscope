@@ -130,8 +130,14 @@ export default async function CandidatePage({
 
         {/* Right column: personal Match summary, always in this order.
             La carte a gauche, les cartes de synthèse à droite : c'est la
-            structure de la page, elle ne bouge pas au fil des refontes. */}
-        <div className="min-w-0 space-y-6 lg:sticky lg:top-24">
+            structure de la page, elle ne bouge pas au fil des refontes.
+            Pas de `sticky` : cette colonne peut dépasser la hauteur de
+            l'écran (jusqu'à 7-8 accords/désaccords affichés), et un bloc
+            épinglé plus haut que la fenêtre garde son bas hors champ tant
+            que la colonne de gauche, bien plus longue, n'est pas arrivée à
+            sa fin — l'utilisateur devait alors tout dérouler pour voir la
+            fin de la colonne de droite. */}
+        <div className="min-w-0 space-y-6">
           <CandidateProximityCard candidate={candidate} />
           <CandidateAtAGlanceCard
             proposalCount={proposals.length}
