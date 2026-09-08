@@ -70,15 +70,10 @@ export default async function CandidatePage({
    * site. Une section vide garde son onglet : « 0 » est une information.
    */
   const tabs: CandidateTab[] = [
-    { id: "propositions", label: "Propositions", count: proposals.length, icon: "propositions" },
-    {
-      id: "faisabilite",
-      label: "Faisabilité & impact",
-      count: candidateAnalysisBundles.length,
-      icon: "faisabilite",
-    },
-    { id: "positions", label: "Positions du Match", count: positions.length, icon: "positions" },
-    { id: "sources", label: "Sources", count: sourceCount, icon: "sources" },
+    { id: "propositions", label: "Propositions", count: proposals.length },
+    { id: "faisabilite", label: "Faisabilité & impact", count: candidateAnalysisBundles.length },
+    { id: "positions", label: "Positions du Match", count: positions.length },
+    { id: "sources", label: "Sources", count: sourceCount },
   ];
 
   const jsonLd = {

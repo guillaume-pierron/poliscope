@@ -141,6 +141,20 @@ body {
   }
 }
 
+/*
+ * Masque la barre de défilement sans retirer le défilement lui-même.
+ * Réservé aux rubans d'onglets : sous Windows la barre native est opaque et
+ * réservée en permanence, ce qui pose un gros trait gris sous un ruban qui
+ * ne déborde que de quelques dizaines de pixels.
+ */
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 .focus-ring {
   outline: none;
 }

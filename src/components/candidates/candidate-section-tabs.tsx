@@ -1,19 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BarChart3, FileText, Link2, Scale } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-/**
- * Les composants d'icône ne peuvent pas traverser la frontière serveur →
- * client : la page passe une clé, la table de correspondance vit ici.
- */
-const TAB_ICONS = {
-  propositions: FileText,
-  faisabilite: BarChart3,
-  positions: Scale,
-  sources: Link2,
-} as const;
 
 export interface CandidateTab {
   /** id de la section visée, sans le « # ». */
@@ -21,13 +9,17 @@ export interface CandidateTab {
   label: string;
   /** Effectif réel de la section — omis plutôt que forcé à zéro. */
   count?: number;
-  icon: keyof typeof TAB_ICONS;
 }
 
 /**
  * Barre d'onglets du bas de la fiche. Ce sont de vraies ancres : chaque
  * onglet mène à une section réellement présente sur la page, et l'onglet
  * actif suit la section visible plutôt que d'être figé sur le premier.
+ *
+ * Sans icônes : dans la colonne de gauche, les quatre libellés français plus
+ * leurs pastilles dépassaient la largeur disponible et faisaient apparaître
+ * une barre de défilement. Les libellés portent tout le sens, les icônes
+ * n'ajoutaient que de la largeur.
  */
 export function CandidateSectionTabs({ tabs }: { tabs: CandidateTab[] }) {
   const [active, setActive] = useState(tabs[0]?.id);
@@ -57,11 +49,10 @@ export function CandidateSectionTabs({ tabs }: { tabs: CandidateTab[] }) {
   return (
     <nav
       aria-label="Sections de la fiche"
-      className="-mx-6 mt-7 overflow-x-auto border-t border-border px-6 sm:-mx-8 sm:px-8"
+      className="no-scrollbar -mx-6 mt-7 overflow-x-auto border-t border-border px-6 sm:-mx-8 sm:px-8"
     >
       <ul className="flex min-w-max gap-1">
-        {tabs.map(({ id, label, count, icon }) => {
-          const Icon = TAB_ICONS[icon];
+        {tabs.map(({ id, label, count }) => {
           const isActive = active === id;
           return (
             <li key={id}>
@@ -69,13 +60,12 @@ export function CandidateSectionTabs({ tabs }: { tabs: CandidateTab[] }) {
                 href={`#${id}`}
                 aria-current={isActive ? "true" : undefined}
                 className={cn(
-                  "focus-ring -mb-px flex items-center gap-2 border-b-2 px-3 py-3.5 text-sm font-medium transition-colors",
+                  "focus-ring -mb-px flex items-center gap-2 border-b-2 px-2.5 py-3.5 text-sm font-medium transition-colors",
                   isActive
                     ? "border-primary text-primary"
                     : "border-transparent text-muted hover:text-foreground"
                 )}
               >
-                <Icon size={16} className="shrink-0" />
                 {label}
                 {count !== undefined && (
                   <span
