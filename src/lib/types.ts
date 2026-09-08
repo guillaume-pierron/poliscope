@@ -89,6 +89,22 @@ export interface Candidate {
   election_id: string;
   is_demo: boolean;
   order_index: number;
+  /**
+   * État civil et fonction en cours. Ces champs ne sont pas une recherche
+   * indépendante : ils extraient ce que la biographie sourcée ci-dessus
+   * énonce déjà en prose, pour pouvoir l'afficher en repères lisibles.
+   *
+   * Optionnels à dessein : une base Supabase antérieure à la migration 0018
+   * ne les renvoie pas, et l'affichage omet alors le repère plutôt que de
+   * le combler.
+   */
+  /** ISO complet ("1951-08-19"), ou année seule ("1960") quand la source ne donne pas le jour. */
+  birth_date?: string | null;
+  birth_place?: string | null;
+  /** Fonction actuellement exercée, telle que la biographie l'énonce. */
+  current_role?: string | null;
+  /** Précision de rattachement (territoire, date de prise de fonction). */
+  current_role_detail?: string | null;
 }
 
 export interface Theme {

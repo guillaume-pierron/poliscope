@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BadgeCheck, Globe, SplitSquareHorizontal } from "lucide-react";
-import { CandidateHeroPhoto } from "@/components/candidates/candidate-hero-photo";
+import { CandidateHeroCard } from "@/components/candidates/candidate-hero-card";
+import type { CandidateTab } from "@/components/candidates/candidate-section-tabs";
 import { CandidateProximityCard, CandidatePointsCards } from "@/components/candidates/candidate-match-sidebar";
 import { CandidateAtAGlanceCard } from "@/components/candidates/candidate-at-a-glance-card";
 import { CandidateDeepenCard } from "@/components/candidates/candidate-deepen-card";
 import { CandidateProposalsSection } from "@/components/candidates/candidate-proposals-section";
 import { CandidatePositionList } from "@/components/candidates/candidate-position-list";
+import { CandidateSourcesSection } from "@/components/candidates/candidate-sources-section";
 import { PassageAuReelCandidateSummary } from "@/components/passage-au-reel/passage-au-reel-candidate-summary";
-import { Badge } from "@/components/ui/badge";
-import { ButtonLink } from "@/components/ui/button";
-import { ORIENTATION_LABELS } from "@/lib/types";
 import { isQuantifiedProposal } from "@/lib/utils";
 import {
   getCandidateBySlug,
@@ -66,6 +64,23 @@ export default async function CandidatePage({
   const candidateAnalysisBundles = allAnalysisBundles.filter((b) => proposalIds.has(b.analysis.proposal_id));
   const analyzedProposalIds = new Set(candidateAnalysisBundles.map((b) => b.analysis.proposal_id));
 
+  /**
+   * Les onglets de la carte pointent vers des sections réellement présentes
+   * plus bas, et leurs effectifs sont ceux de ce candidat — pas des totaux du
+   * site. Une section vide garde son onglet : « 0 » est une information.
+   */
+  const tabs: CandidateTab[] = [
+    { id: "propositions", label: "Propositions", count: proposals.length, icon: "propositions" },
+    {
+      id: "faisabilite",
+      label: "Faisabilité & impact",
+      count: candidateAnalysisBundles.length,
+      icon: "faisabilite",
+    },
+    { id: "positions", label: "Positions du Match", count: positions.length, icon: "positions" },
+    { id: "sources", label: "Sources", count: sourceCount, icon: "sources" },
+  ];
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -82,83 +97,39 @@ export default async function CandidatePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <Link
-        href="/candidats"
-        className="focus-ring inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
-      >
-        <ArrowLeft size={15} />
-        Retour à la liste des candidats
-      </Link>
+      <CandidateHeroCard candidate={candidate} tabs={tabs} />
 
-      <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start lg:gap-8">
-        {/* Left column: hero, proposals, Match positions reference */}
-        <div className="min-w-0 space-y-8">
-          <div className="flex flex-col gap-6 rounded-[24px] border border-border bg-card p-6 sm:flex-row sm:p-8">
-            <CandidateHeroPhoto
-              name={candidate.name}
-              color={candidate.party?.color}
-              photoUrl={candidate.photo_url}
-              className="h-56 w-full shrink-0 sm:h-auto sm:w-48"
+      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start lg:gap-8">
+        {/* Left column: proposals, analyses, Match positions, sources */}
+        <div className="min-w-0 space-y-10">
+          <div id="propositions" className="scroll-mt-24">
+            <CandidateProposalsSection
+              proposals={proposals}
+              themes={themes}
+              candidateSlug={candidate.slug}
+              analyzedProposalIds={analyzedProposalIds}
             />
-            <div className="min-w-0 flex-1">
-              <h1 className="font-serif text-[2.1rem] font-semibold leading-tight tracking-tight sm:text-[2.4rem]">
-                {candidate.name}
-              </h1>
-              <p className="mt-1.5 text-muted">
-                {candidate.party?.name}
-                {candidate.party && (
-                  <>
-                    {" · "}
-                    <span className="text-muted-2">
-                      {ORIENTATION_LABELS[candidate.party.orientation]}
-                    </span>
-                  </>
-                )}
+            {proposals.length === 0 && (
+              <p className="mt-6 rounded-xl border border-dashed border-border p-5 text-sm text-muted-2">
+                Aucune proposition documentée pour ce candidat à ce stade.
               </p>
-
-              <Badge variant="primary" className="mt-3">
-                <BadgeCheck size={13} />
-                Candidat déclaré
-              </Badge>
-
-              <p className="mt-4 max-w-2xl leading-relaxed text-foreground/85">
-                {candidate.biography}
-              </p>
-
-              <div className="mt-5 flex flex-wrap items-center gap-3">
-                <ButtonLink href={`/comparer?a=${candidate.slug}`} variant="outline" size="sm">
-                  <SplitSquareHorizontal size={16} />
-                  Comparer ce candidat
-                </ButtonLink>
-                <ButtonLink href="/match" variant="accent" size="sm">
-                  Découvrir mon Match
-                </ButtonLink>
-                {candidate.official_website && (
-                  <a
-                    href={candidate.official_website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="focus-ring inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
-                  >
-                    <Globe size={14} />
-                    Site officiel
-                  </a>
-                )}
-              </div>
-            </div>
+            )}
           </div>
 
-          <CandidateProposalsSection
-            proposals={proposals}
-            themes={themes}
-            candidateSlug={candidate.slug}
-            analyzedProposalIds={analyzedProposalIds}
-          />
-          {proposals.length === 0 && (
-            <p className="rounded-xl border border-dashed border-border p-5 text-sm text-muted-2">
-              Aucune proposition documentée pour ce candidat à ce stade.
+          <div id="faisabilite" className="scroll-mt-24">
+            <h2 className="text-2xl font-semibold tracking-tight">Faisabilité &amp; impact</h2>
+            <p className="mt-2 text-sm text-muted">
+              Coût, délais et obstacles juridiques de ses mesures, quand des sources publiques
+              permettent de les établir —{" "}
+              <Link href="/passage-au-reel" className="underline underline-offset-2">
+                voir toutes les analyses
+              </Link>
+              .
             </p>
-          )}
+            <div className="mt-6">
+              <PassageAuReelCandidateSummary bundles={candidateAnalysisBundles} />
+            </div>
+          </div>
 
           <div>
             <h2 id="positions" className="scroll-mt-24 text-2xl font-semibold tracking-tight">
@@ -175,6 +146,8 @@ export default async function CandidatePage({
               <CandidatePositionList positions={positions} questions={questions} />
             </div>
           </div>
+
+          <CandidateSourcesSection proposals={proposals} />
 
           <div className="rounded-xl border border-border bg-surface p-5 text-sm text-muted">
             Retrouvez le détail du calcul de proximité sur la page{" "}
@@ -193,7 +166,6 @@ export default async function CandidatePage({
             quantifiedCount={quantifiedCount}
             sourceCount={sourceCount}
           />
-          <PassageAuReelCandidateSummary bundles={candidateAnalysisBundles} />
           <CandidatePointsCards candidate={candidate} />
           <CandidateDeepenCard slug={candidate.slug} />
         </div>

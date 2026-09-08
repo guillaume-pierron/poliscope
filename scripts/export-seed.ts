@@ -79,7 +79,7 @@ for (const c of candidates) {
   const partyKey = c.party_id?.replace("party-", "");
   const electionSlug = elections.find((e) => e.id === c.election_id)?.slug ?? elections[0].slug;
   lines.push(
-    `insert into candidates (id, slug, name, photo_url, party_id, biography, official_website, election_id, is_demo, order_index) values (${uuid("candidate", c.slug)}, ${sqlString(c.slug)}, ${sqlString(c.name)}, ${sqlString(c.photo_url)}, ${partyKey ? uuid("party", partyKey) : "null"}, ${sqlString(c.biography)}, ${sqlString(c.official_website)}, ${uuid("election", electionSlug)}, ${sqlBool(c.is_demo)}, ${c.order_index}) on conflict (id) do nothing;`
+    `insert into candidates (id, slug, name, photo_url, party_id, biography, birth_date, birth_place, current_role, current_role_detail, official_website, election_id, is_demo, order_index) values (${uuid("candidate", c.slug)}, ${sqlString(c.slug)}, ${sqlString(c.name)}, ${sqlString(c.photo_url)}, ${partyKey ? uuid("party", partyKey) : "null"}, ${sqlString(c.biography)}, ${sqlString(c.birth_date ?? null)}, ${sqlString(c.birth_place ?? null)}, ${sqlString(c.current_role ?? null)}, ${sqlString(c.current_role_detail ?? null)}, ${sqlString(c.official_website)}, ${uuid("election", electionSlug)}, ${sqlBool(c.is_demo)}, ${c.order_index}) on conflict (id) do nothing;`
   );
 }
 

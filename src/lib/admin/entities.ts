@@ -86,6 +86,11 @@ export const ENTITIES: Record<EntityKey, EntityConfig> = {
       { name: "slug", label: "Slug (URL)", type: "text", required: true },
       { name: "party_id", label: "Parti", type: "select", relation: "parties" },
       { name: "biography", label: "Biographie", type: "textarea" },
+      // Date en texte libre : certaines sources ne donnent que l'année.
+      { name: "birth_date", label: "Naissance (AAAA-MM-JJ ou AAAA)", type: "text" },
+      { name: "birth_place", label: "Lieu de naissance", type: "text" },
+      { name: "current_role", label: "Fonction actuelle", type: "text" },
+      { name: "current_role_detail", label: "Précision de la fonction", type: "text" },
       { name: "official_website", label: "Site officiel", type: "url" },
       { name: "photo_url", label: "Photo (URL)", type: "url" },
       { name: "order_index", label: "Ordre d'affichage", type: "number" },
