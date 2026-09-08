@@ -60,3 +60,20 @@ passage-au-reel-header.png   Aquarelle décorative posée sur le bandeau de
 
 Comme celle de la page Candidats : fond CSS, donc pas requise au build, mais
 pas optimisée non plus — compresse-la avant de la déposer (moins de 150 Ko).
+
+--- Logo du site --- 
+
+public/logo.png   Logo affiché dans l'en-tête et le pied de page.
+                  Affiché en 32 px de haut, la largeur suit le rapport
+                  du fichier.
+
+Fond TRANSPARENT indispensable : sur la page d'accueil, l'en-tête est
+transparent et laisse passer l'aquarelle — un fond blanc y ferait un
+rectangle visible.
+
+Prévoir au moins 2x la taille d'affichage pour les écrans Retina, soit
+environ 64 px de haut. Un fichier plus grand ne coûte rien : il passe
+par l'optimiseur de Next et sort en WebP.
+
+Tant que le fichier n'est pas déposé, l'en-tête affiche le nom du site
+composé en sérif, comme avant — rien ne casse.
