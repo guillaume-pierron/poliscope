@@ -35,7 +35,7 @@ import {
 import { measureAnalysisBundles as localMeasureAnalysisBundles } from "./local/measure-analyses";
 
 /**
- * Data access layer. Poliscope ships with a fully-featured local demo
+ * Data access layer. Polysia ships with a fully-featured local demo
  * dataset (src/lib/data/local) so the app works with zero configuration.
  * When Supabase credentials are present (see .env.example), every read
  * transparently switches to Postgres instead — same shapes, same callers.

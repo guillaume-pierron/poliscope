@@ -4,7 +4,7 @@ import type { MeasureAnalysisBundle } from "@/lib/types";
 
 /**
  * Abstraction over "what can compute a personal impact number for this
- * measure". The point of this interface is that Poliscope works completely
+ * measure". The point of this interface is that Polysia works completely
  * without OpenFisca (or any other external engine) today, and gains one
  * later by registering an adapter here — never by faking a result in the
  * meantime. See /methodologie.
@@ -51,7 +51,7 @@ function fromSimulatorOutcome(engineId: string, outcome: MeasureOutcome): Impact
  */
 export const DirectCalculationEngine: ImpactEngine = {
   id: "direct-calculation",
-  label: "Calcul direct (Simulateur d'impact Poliscope)",
+  label: "Calcul direct (Simulateur d'impact Polysia)",
   canEvaluate(bundle) {
     return (
       !!bundle.analysis.simulator_measure_id &&
@@ -114,7 +114,7 @@ export const OpenFiscaImpactEngine: ImpactEngine = {
     return false;
   },
   evaluate() {
-    return { available: false, reason: "OpenFisca n'est pas connecté à Poliscope pour le moment.", engineId: this.id };
+    return { available: false, reason: "OpenFisca n'est pas connecté à Polysia pour le moment.", engineId: this.id };
   },
 };
 

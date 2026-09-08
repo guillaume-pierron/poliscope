@@ -13,7 +13,7 @@ import type { Candidate, UserAnswer } from "@/lib/types";
  * The hero's right-hand panel always opens on "Mon Match" — either the
  * visitor's own results if they've taken it on this device, or an
  * explained example if they haven't. Polls stay one click away: they're
- * useful, but they're the least distinctive thing Poliscope does, and
+ * useful, but they're the least distinctive thing Polysia does, and
  * leading with them made the site read as yet another poll aggregator.
  * Reads localStorage only — never touches the server with a visitor's
  * answers. Renders a neutral skeleton until that check resolves, so the

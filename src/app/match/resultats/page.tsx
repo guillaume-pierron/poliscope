@@ -116,7 +116,7 @@ export default function ResultatsPage() {
             <div className="mt-6 flex max-w-sm items-start gap-3 rounded-2xl border border-border bg-surface p-4 text-sm text-muted">
               <Info size={16} className="mt-0.5 shrink-0" />
               <p>
-                Poliscope compare vos réponses avec les positions publiques et sourcées des
+                Polysia compare vos réponses avec les positions publiques et sourcées des
                 candidats. Ce score informe, il ne recommande jamais un vote.{" "}
                 <Link href="/methodologie" className="underline underline-offset-2">
                   Comment c&apos;est calculé&nbsp;?

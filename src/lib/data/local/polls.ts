@@ -11,7 +11,7 @@ import { candidates } from "./candidates";
  * Le Parisien poll of September 2026 — never invented. The full report
  * tested 6 first-round hypotheses; only the one actually requested
  * ("R. Glucksmann et E. Philippe") is entered here, and only for the
- * candidates Poliscope already tracks (Arthaud, Roussel, Dupont-Aignan and
+ * candidates Polysia already tracks (Arthaud, Roussel, Dupont-Aignan and
  * Zemmour scored in this hypothesis too, per the source, but have no
  * candidate profile on this site and are deliberately left out rather than
  * added as thin, unsourced profiles just to hold one number).

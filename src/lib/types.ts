@@ -485,7 +485,7 @@ export const IMPACT_CATEGORY_LABELS: Record<ImpactCategory, string> = {
   autre: "Autre",
 };
 
-/** D'où vient une hypothèse — une hypothèse posée par Poliscope faute de source doit toujours être étiquetée "manual_assumption" et affichée comme telle. */
+/** D'où vient une hypothèse — une hypothèse posée par Polysia faute de source doit toujours être étiquetée "manual_assumption" et affichée comme telle. */
 export type AssumptionType = "official" | "candidate" | "model" | "external_study" | "manual_assumption";
 
 export const ASSUMPTION_TYPE_LABELS: Record<AssumptionType, string> = {
@@ -493,7 +493,7 @@ export const ASSUMPTION_TYPE_LABELS: Record<AssumptionType, string> = {
   candidate: "Chiffrage du candidat",
   model: "Résultat de modèle",
   external_study: "Étude externe",
-  manual_assumption: "Hypothèse Poliscope",
+  manual_assumption: "Hypothèse Polysia",
 };
 
 /** D'où vient un chiffrage budgétaire — jamais présenté comme "neutre" quand c'est le candidat lui-même qui l'annonce. */

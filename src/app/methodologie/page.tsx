@@ -12,7 +12,7 @@ export default function MethodologiePage() {
     <div className="container-app max-w-2xl py-10 md:py-16">
       <h1 className="font-serif text-[2rem] font-semibold tracking-tight sm:text-[2.4rem]">Méthodologie</h1>
       <p className="mt-3 text-muted">
-        Comment Poliscope calcule votre proximité avec chaque candidat — et ce que ce score ne
+        Comment Polysia calcule votre proximité avec chaque candidat — et ce que ce score ne
         signifie pas.
       </p>
 
@@ -20,7 +20,7 @@ export default function MethodologiePage() {
         <section className="rounded-2xl border border-primary/20 bg-primary-soft/40 p-5">
           <h2 className="text-lg font-semibold">Quels candidats sont couverts&nbsp;?</h2>
           <p className="mt-3 leading-relaxed text-foreground/85">
-            Un candidat est ajouté à Poliscope dès lors que sa candidature est{" "}
+            Un candidat est ajouté à Polysia dès lors que sa candidature est{" "}
             <strong>officiellement déclarée</strong> et qu&apos;il a été{" "}
             <strong>testé par au moins un institut de sondage national reconnu</strong> dans les
             trois derniers mois. C&apos;est un critère vérifiable, le même pour tout le monde —
@@ -29,7 +29,7 @@ export default function MethodologiePage() {
           <p className="mt-3 leading-relaxed text-foreground/85">
             Le champ des candidatures pour 2027 est large (une trentaine de personnes déclarées ou
             pressenties, dont beaucoup n&apos;obtiendront jamais les 500 parrainages d&apos;élus
-            nécessaires). Poliscope n&apos;essaie pas de couvrir tout le monde dès le premier jour
+            nécessaires). Polysia n&apos;essaie pas de couvrir tout le monde dès le premier jour
             avec la même profondeur : chaque fiche candidat suppose une biographie sourcée, des
             propositions sourcées et des positions sourcées sur les questions du Match — un travail
             qui prend du temps par candidat. La liste s&apos;élargit progressivement, dans l&apos;ordre
@@ -162,7 +162,7 @@ export default function MethodologiePage() {
             dans votre score global, et celui de votre second choix une fois et demie — une règle
             fixe, appliquée de la même façon à tout le monde. Si vous les passez, chaque thème
             garde le même poids : il n&apos;y a jamais de mise en avant éditoriale cachée d&apos;un
-            sujet par Poliscope.
+            sujet par Polysia.
           </p>
         </section>
 
@@ -232,7 +232,7 @@ export default function MethodologiePage() {
           <div className="mt-3 flex items-start gap-3 rounded-xl border border-border bg-surface p-4 text-sm">
             <Info size={16} className="mt-0.5 shrink-0 text-primary" />
             <p>
-              Poliscope n&apos;affiche jamais « Vous devriez voter pour X », et ne présente jamais
+              Polysia n&apos;affiche jamais « Vous devriez voter pour X », et ne présente jamais
               ce résultat comme une probabilité de vote ou une mesure scientifique absolue de
               compatibilité politique. Le score indique uniquement une proximité entre vos réponses
               et les positions actuellement renseignées pour ce candidat, sur les questions
@@ -260,7 +260,7 @@ export default function MethodologiePage() {
         <section id="passage-au-reel" className="scroll-mt-24">
           <h2 className="text-xl font-semibold">12. « Faisabilité & impact » : ce que l&apos;on peut réellement savoir sur une mesure</h2>
           <p className="mt-3 leading-relaxed text-foreground/85">
-            Pour un petit nombre de mesures, Poliscope va plus loin que la position sourcée : est-elle
+            Pour un petit nombre de mesures, Polysia va plus loin que la position sourcée : est-elle
             juridiquement applicable ? Budgétairement documentée ? Réalisable ? Quels effets peut-on
             raisonnablement attendre ? Le principe absolu de cette section :{" "}
             <strong>mieux vaut afficher « on ne sait pas encore » qu&apos;un chiffre impossible à
@@ -283,7 +283,7 @@ export default function MethodologiePage() {
               <p className="mt-1.5 text-sm text-muted">
                 Chaque chiffre affiché est étiqueté selon son origine : donnée officielle, chiffrage du
                 candidat lui-même (jamais présenté comme neutre), résultat de modèle, étude externe, ou
-                hypothèse posée par Poliscope faute de source — toujours signalée comme telle.
+                hypothèse posée par Polysia faute de source — toujours signalée comme telle.
               </p>
             </div>
           </div>

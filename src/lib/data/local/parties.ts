@@ -1,7 +1,7 @@
 import type { Party } from "@/lib/types";
 
 /**
- * Real parties/movements for the declared 2027 candidates Poliscope covers.
+ * Real parties/movements for the declared 2027 candidates Polysia covers.
  * Orientation labels follow the broad groupings commonly used by French
  * media and the Interior Ministry's own "nuance politique" classification —
  * they are simplifications used only for UI filtering, not a claim about

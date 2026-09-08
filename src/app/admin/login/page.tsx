@@ -11,7 +11,7 @@ export default async function AdminLoginPage({
     <div className="container-app flex min-h-[70vh] max-w-sm flex-col justify-center py-16">
       <h1 className="text-2xl font-semibold">Administration</h1>
       <p className="mt-2 text-sm text-muted">
-        Accès réservé à l&apos;équipe éditoriale de Poliscope.
+        Accès réservé à l&apos;équipe éditoriale de Polysia.
       </p>
       <LoginForm next={next} />
     </div>

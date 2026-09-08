@@ -9,9 +9,9 @@ import type { CandidateMatchResult } from "@/lib/types";
 export function buildShareText(results: CandidateMatchResult[]): string {
   const top = results.slice(0, 3).filter((r) => r.score !== null);
   return [
-    "Mon Match 2027 — Poliscope",
+    "Mon Match 2027 — Polysia",
     ...top.map((r) => `${r.candidate.name} : ${r.score} %`),
-    "Faites le vôtre sur Poliscope.",
+    "Faites le vôtre sur Polysia.",
   ].join("\n");
 }
 

@@ -1,4 +1,4 @@
-export const SITE_NAME = "Poliscope";
+export const SITE_NAME = "Polysia";
 export const SITE_DESCRIPTION =
   "Comprenez les programmes. Comparez les candidats. Faites-vous votre propre opinion.";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";

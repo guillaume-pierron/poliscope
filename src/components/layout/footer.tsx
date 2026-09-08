@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./logo";
 import { NewsletterForm } from "@/components/home/newsletter-form";
+import { SITE_NAME } from "@/lib/constants";
 
 const columns = [
   {
@@ -74,7 +75,7 @@ export function Footer() {
         </div>
 
         <div className="mt-6 flex flex-col gap-2 border-t border-border pt-4 text-xs text-muted-2 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Poliscope</p>
+          <p>© {new Date().getFullYear()} {SITE_NAME}</p>
           <p>
             Plateforme indépendante, non affiliée à un candidat ou un parti. Chaque proposition
             est sourcée — voir la méthodologie.

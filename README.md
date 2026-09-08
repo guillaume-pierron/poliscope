@@ -1,8 +1,8 @@
-# Poliscope
+# Polysia
 
 Comprenez les programmes. Comparez les candidats. Faites-vous votre propre opinion.
 
-Poliscope est une plateforme indépendante et non partisane pour comprendre les
+Polysia est une plateforme indépendante et non partisane pour comprendre les
 programmes de l'élection présidentielle française de 2027 (premier tour le
 18 avril, second tour le 2 mai), comparer les candidats et découvrir quels
 programmes correspondent le plus à ses propres positions politiques. Le nom
@@ -44,7 +44,7 @@ Framer Motion.
 
 ## Comment ça marche sans base de données
 
-Poliscope fonctionne **immédiatement**, sans aucune configuration : toutes les
+Polysia fonctionne **immédiatement**, sans aucune configuration : toutes les
 lectures passent par `src/lib/data/queries.ts`, qui interroge Supabase si les
 variables d'environnement sont présentes, et retombe sinon sur le jeu de
 données typé dans `src/lib/data/local/` — qui contient les vraies données
@@ -150,7 +150,7 @@ Voir `/confidentialite` pour la version destinée aux visiteurs.
 
 ## Candidats et sources
 
-Poliscope couvre neuf des principales figures déclarées à la présidentielle
+Polysia couvre neuf des principales figures déclarées à la présidentielle
 2027 (sur un total de 25+ candidatures annoncées au 3 septembre 2026, un
 champ qui continue d'évoluer) : Jean-Luc Mélenchon, François Ruffin, Marine
 Tondelier, Raphaël Glucksmann, Gabriel Attal, Édouard Philippe, Xavier

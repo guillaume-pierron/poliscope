@@ -83,7 +83,7 @@ const PILOTS: PilotDefinition[] = [
       beneficiaries_source_url: null,
       simulator_measure_id: "lepen-tva-energie",
       reviewed_at: "2026-09-04",
-      reviewed_by: "Équipe éditoriale Poliscope",
+      reviewed_by: "Équipe éditoriale Polysia",
       published_at: "2026-09-05",
     },
     budgetEstimates: [
@@ -134,7 +134,7 @@ const PILOTS: PilotDefinition[] = [
         unit: "€/mois",
         confidence_level: "moyenne",
         method:
-          "Calcul direct : application du nouveau taux de TVA à la dépense d'énergie et de carburant déclarée (voir Simulateur d'impact de Poliscope). Fourchette illustrative entre un profil faiblement et fortement consommateur ; ne prend pas en compte un éventuel effet sur les prix hors taxe.",
+          "Calcul direct : application du nouveau taux de TVA à la dépense d'énergie et de carburant déclarée (voir Simulateur d'impact de Polysia). Fourchette illustrative entre un profil faiblement et fortement consommateur ; ne prend pas en compte un éventuel effet sur les prix hors taxe.",
         source_name: null,
         source_url: null,
         scenario_assumptions: null,
@@ -158,7 +158,7 @@ const PILOTS: PilotDefinition[] = [
         unit: "L/100 km",
         assumption_type: "manual_assumption",
         justification:
-          "Hypothèse technique déjà utilisée par le Simulateur d'impact de Poliscope pour convertir un kilométrage annuel en dépense de carburant.",
+          "Hypothèse technique déjà utilisée par le Simulateur d'impact de Polysia pour convertir un kilométrage annuel en dépense de carburant.",
         source_name: null,
         source_url: null,
       },
@@ -168,7 +168,7 @@ const PILOTS: PilotDefinition[] = [
         unit: "mois",
         assumption_type: "manual_assumption",
         justification:
-          "Estimation Poliscope fondée sur le calendrier budgétaire français : une mesure de ce type peut être intégrée à une loi de finances rectificative en cours d'année, ou attendre la loi de finances initiale suivante.",
+          "Estimation Polysia fondée sur le calendrier budgétaire français : une mesure de ce type peut être intégrée à une loi de finances rectificative en cours d'année, ou attendre la loi de finances initiale suivante.",
         source_name: null,
         source_url: null,
       },
@@ -188,7 +188,7 @@ const PILOTS: PilotDefinition[] = [
     analysis: {
       status: "published",
       summary:
-        "Le volet « hausse du SMIC » est un mécanisme clair (revalorisation à un montant net cible), déjà modélisé par le Simulateur d'impact de Poliscope. Le volet « blocage des prix » n'est pas suffisamment défini par la source (produits concernés, durée, mécanisme de contrôle) pour être analysé séparément : cette fiche ne porte donc que sur la revalorisation du SMIC. Aucune source indépendante ne chiffre le coût budgétaire de cette mesure.",
+        "Le volet « hausse du SMIC » est un mécanisme clair (revalorisation à un montant net cible), déjà modélisé par le Simulateur d'impact de Polysia. Le volet « blocage des prix » n'est pas suffisamment défini par la source (produits concernés, durée, mécanisme de contrôle) pour être analysé séparément : cette fiche ne porte donc que sur la revalorisation du SMIC. Aucune source indépendante ne chiffre le coût budgétaire de cette mesure.",
       feasibility_status: "faisable_parametres_connus",
       precision_level: "partiellement_precis",
       confidence_level: "moyenne",
@@ -213,7 +213,7 @@ const PILOTS: PilotDefinition[] = [
       beneficiaries_source_url: "https://dares.travail-emploi.gouv.fr/publication/combien-de-salaries-sont-remuneres-au-smic",
       simulator_measure_id: "melenchon-smic-1600",
       reviewed_at: "2026-09-04",
-      reviewed_by: "Équipe éditoriale Poliscope",
+      reviewed_by: "Équipe éditoriale Polysia",
       published_at: "2026-09-05",
     },
     budgetEstimates: [],
@@ -229,7 +229,7 @@ const PILOTS: PilotDefinition[] = [
         unit: "€/mois",
         confidence_level: "moyenne",
         method:
-          "Calcul direct : 1 600 € − salaire net actuel déclaré, pour les salariés rémunérés en dessous de ce seuil (voir Simulateur d'impact de Poliscope). Pas de scénario central pertinent : le gain dépend entièrement du salaire de départ.",
+          "Calcul direct : 1 600 € − salaire net actuel déclaré, pour les salariés rémunérés en dessous de ce seuil (voir Simulateur d'impact de Polysia). Pas de scénario central pertinent : le gain dépend entièrement du salaire de départ.",
         source_name: null,
         source_url: null,
         scenario_assumptions: null,
@@ -262,7 +262,7 @@ const PILOTS: PilotDefinition[] = [
         unit: "mois",
         assumption_type: "manual_assumption",
         justification:
-          "Estimation Poliscope : un décret de revalorisation du SMIC peut être pris rapidement une fois la décision actée, sur le modèle des revalorisations anticipées déjà pratiquées.",
+          "Estimation Polysia : un décret de revalorisation du SMIC peut être pris rapidement une fois la décision actée, sur le modèle des revalorisations anticipées déjà pratiquées.",
         source_name: null,
         source_url: null,
       },
@@ -305,7 +305,7 @@ const PILOTS: PilotDefinition[] = [
       beneficiaries_source_url: null,
       simulator_measure_id: null,
       reviewed_at: "2026-09-04",
-      reviewed_by: "Équipe éditoriale Poliscope",
+      reviewed_by: "Équipe éditoriale Polysia",
       published_at: "2026-09-05",
     },
     budgetEstimates: [],
@@ -363,7 +363,7 @@ const PILOTS: PilotDefinition[] = [
       beneficiaries_source_url: null,
       simulator_measure_id: "melenchon-retraite-60",
       reviewed_at: "2026-09-08",
-      reviewed_by: "Équipe éditoriale Poliscope",
+      reviewed_by: "Équipe éditoriale Polysia",
       published_at: "2026-09-08",
     },
     budgetEstimates: [
@@ -428,7 +428,7 @@ const PILOTS: PilotDefinition[] = [
         unit: "mois",
         assumption_type: "manual_assumption",
         justification:
-          "Estimation Poliscope : une réforme paramétrique des retraites suppose un vote puis une adaptation des systèmes de liquidation des caisses, sans que la source ne fixe de calendrier.",
+          "Estimation Polysia : une réforme paramétrique des retraites suppose un vote puis une adaptation des systèmes de liquidation des caisses, sans que la source ne fixe de calendrier.",
         source_name: null,
         source_url: null,
       },
@@ -474,7 +474,7 @@ const PILOTS: PilotDefinition[] = [
         "https://www.institutmontaigne.org/legislatives-2024/rassemblement-national/abroger-la-reforme-des-retraites-et-pour-ceux-ayant-commence-a-travailler-avant-20-ans-partir-a-40-annuites-de-cotisations/",
       simulator_measure_id: "lepen-retraite-62",
       reviewed_at: "2026-09-08",
-      reviewed_by: "Équipe éditoriale Poliscope",
+      reviewed_by: "Équipe éditoriale Polysia",
       published_at: "2026-09-08",
     },
     budgetEstimates: [
@@ -562,7 +562,7 @@ const PILOTS: PilotDefinition[] = [
         "https://www.education.gouv.fr/sites/default/files/2025-08/l-ducation-nationale-en-chiffres-dition-2025-441804.pdf",
       simulator_measure_id: "philippe-enseignants",
       reviewed_at: "2026-09-08",
-      reviewed_by: "Équipe éditoriale Poliscope",
+      reviewed_by: "Équipe éditoriale Polysia",
       published_at: "2026-09-08",
     },
     budgetEstimates: [],

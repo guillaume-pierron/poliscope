@@ -100,7 +100,7 @@ export default async function MesurePage({ params }: { params: Promise<{ id: str
             <p className="font-medium">Faisabilité & impact — analyse non disponible</p>
             <p className="mt-2 text-sm text-muted">
               Cette mesure n&apos;a pas encore fait l&apos;objet d&apos;une analyse de faisabilité publiée par
-              Poliscope. Voir{" "}
+              Polysia. Voir{" "}
               <Link href="/passage-au-reel" className="underline underline-offset-2">
                 les mesures déjà analysées
               </Link>

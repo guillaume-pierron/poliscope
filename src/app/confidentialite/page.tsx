@@ -3,7 +3,7 @@ import { ShieldCheck, Lock, Mail, EyeOff } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Confidentialité",
-  description: "Comment Poliscope protège vos données, en particulier vos réponses au Match politique.",
+  description: "Comment Polysia protège vos données, en particulier vos réponses au Match politique.",
 };
 
 const principles = [
@@ -20,7 +20,7 @@ const principles = [
   {
     icon: EyeOff,
     title: "Aucun profil politique nominatif",
-    body: "Poliscope ne construit aucun profil associant une identité (email, compte, cookie publicitaire) à des opinions politiques. Le partage de résultats ne transmet que des scores de proximité, jamais le détail de vos réponses, et seulement si vous cliquez explicitement sur « Partager ».",
+    body: "Polysia ne construit aucun profil associant une identité (email, compte, cookie publicitaire) à des opinions politiques. Le partage de résultats ne transmet que des scores de proximité, jamais le détail de vos réponses, et seulement si vous cliquez explicitement sur « Partager ».",
   },
   {
     icon: Mail,
@@ -34,7 +34,7 @@ export default function ConfidentialitePage() {
     <div className="container-app max-w-2xl py-10 md:py-16">
       <h1 className="font-serif text-[2rem] font-semibold tracking-tight sm:text-[2.4rem]">Confidentialité</h1>
       <p className="mt-3 text-muted">
-        Le Match peut révéler indirectement des opinions politiques. Nous avons conçu Poliscope
+        Le Match peut révéler indirectement des opinions politiques. Nous avons conçu Polysia
         selon une logique « privacy by design ».
       </p>
 
@@ -55,7 +55,7 @@ export default function ConfidentialitePage() {
       <section className="mt-12">
         <h2 className="text-xl font-semibold">Cookies et mesure d&apos;audience</h2>
         <p className="mt-3 leading-relaxed text-foreground/85">
-          Poliscope n&apos;utilise pas de cookies publicitaires ni de traceurs tiers. Si une mesure
+          Polysia n&apos;utilise pas de cookies publicitaires ni de traceurs tiers. Si une mesure
           d&apos;audience est mise en place, elle reposera sur une solution respectueuse de la vie
           privée (données agrégées, sans identifiant individuel), conformément aux recommandations
           de la CNIL sur les outils exemptés de consentement.
@@ -65,7 +65,7 @@ export default function ConfidentialitePage() {
       <section className="mt-8">
         <h2 className="text-xl font-semibold">Vos droits (RGPD)</h2>
         <p className="mt-3 leading-relaxed text-foreground/85">
-          Les seules données personnelles que Poliscope peut recevoir sont une adresse e-mail
+          Les seules données personnelles que Polysia peut recevoir sont une adresse e-mail
           (newsletter, sur base volontaire) et, pour l&apos;administration du site, des identifiants
           d&apos;accès. Vous pouvez à tout moment demander l&apos;accès, la rectification ou la
           suppression de ces données en nous contactant. Aucune réponse au Match politique n&apos;est
@@ -77,7 +77,7 @@ export default function ConfidentialitePage() {
       <section className="mt-8">
         <h2 className="text-xl font-semibold">Contact</h2>
         <p className="mt-3 leading-relaxed text-foreground/85">
-          Pour toute question relative à la confidentialité, contactez l&apos;équipe de Poliscope via
+          Pour toute question relative à la confidentialité, contactez l&apos;équipe de Polysia via
           le formulaire de contact du site.
         </p>
       </section>

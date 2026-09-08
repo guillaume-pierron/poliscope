@@ -290,7 +290,7 @@ export const MEASURES: SimulatorMeasure[] = [
         monthlyEuro: null,
         direction: "perte",
         detail:
-          "Le gel des prestations sociales en 2028 (hors petites retraites) toucherait les foyers qui perçoivent des allocations — allocations familiales, aides au logement… Poliscope ne vous demande pas le montant de vos prestations, et la source ne fixe pas de perte type : aucun chiffrage n'est possible ici.",
+          "Le gel des prestations sociales en 2028 (hors petites retraites) toucherait les foyers qui perçoivent des allocations — allocations familiales, aides au logement… Polysia ne vous demande pas le montant de vos prestations, et la source ne fixe pas de perte type : aucun chiffrage n'est possible ici.",
       };
     },
   },
@@ -401,7 +401,7 @@ export const MEASURES: SimulatorMeasure[] = [
         monthlyEuro: null,
         direction: "gain",
         detail:
-          "L'exonération de cotisations porte sur les heures travaillées au-delà de 1 623 heures par an. Poliscope ne vous demande pas votre volume d'heures annuel : sans lui, le gain ne peut pas être calculé.",
+          "L'exonération de cotisations porte sur les heures travaillées au-delà de 1 623 heures par an. Polysia ne vous demande pas votre volume d'heures annuel : sans lui, le gain ne peut pas être calculé.",
       };
     },
   },
@@ -420,7 +420,7 @@ export const MEASURES: SimulatorMeasure[] = [
         monthlyEuro: null,
         direction: "perte",
         detail:
-          "Le cumul des aides sociales serait plafonné à 70 % du SMIC, et le RSA remplacé par un revenu conditionné à 15 h d'activité hebdomadaire. L'effet dépend du montant de vos prestations, que Poliscope ne collecte pas.",
+          "Le cumul des aides sociales serait plafonné à 70 % du SMIC, et le RSA remplacé par un revenu conditionné à 15 h d'activité hebdomadaire. L'effet dépend du montant de vos prestations, que Polysia ne collecte pas.",
       };
     },
   },

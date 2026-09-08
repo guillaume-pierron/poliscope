@@ -18,7 +18,7 @@ export default async function SimulateurPage() {
           Quel impact sur votre situation&nbsp;?
         </h1>
         <p className="mt-3 text-muted">
-          Décrivez votre foyer : Poliscope croise votre profil avec les propositions réellement
+          Décrivez votre foyer : Polysia croise votre profil avec les propositions réellement
           sourcées de chaque candidat, et estime un montant chaque fois que la mesure donne
           elle-même le chiffre.
         </p>

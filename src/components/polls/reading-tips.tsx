@@ -8,7 +8,7 @@ const TIPS = [
   },
   {
     icon: ShieldCheck,
-    title: "Poliscope ne mélange jamais les scénarios",
+    title: "Polysia ne mélange jamais les scénarios",
     description: "Les résultats sont présentés séparément, pour une lecture claire et fidèle.",
   },
   {
