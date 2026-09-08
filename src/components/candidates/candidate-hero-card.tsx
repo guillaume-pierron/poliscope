@@ -73,20 +73,36 @@ export function CandidateHeroCard({ candidate }: { candidate: Candidate }) {
             )}
           </div>
 
-          {candidate.party && (
-            <div
-              className="mt-5 rounded-xl border-l-[3px] px-3.5 py-2.5"
-              style={{
-                borderLeftColor: color,
-                background: `color-mix(in srgb, ${color} 8%, transparent)`,
-              }}
-            >
-              <p className="text-sm font-semibold leading-snug">{candidate.party.name}</p>
-              <p className="mt-0.5 text-xs text-muted">
-                {ORIENTATION_LABELS[candidate.party.orientation]}
-              </p>
-            </div>
-          )}
+          <div className="mt-5 space-y-3">
+            {candidate.party && (
+              <div
+                className="rounded-xl border-l-[3px] px-3.5 py-2.5"
+                style={{
+                  borderLeftColor: color,
+                  background: `color-mix(in srgb, ${color} 8%, transparent)`,
+                }}
+              >
+                <p className="text-sm font-semibold leading-snug">{candidate.party.name}</p>
+                <p className="mt-0.5 text-xs text-muted">
+                  {ORIENTATION_LABELS[candidate.party.orientation]}
+                </p>
+              </div>
+            )}
+
+            {/* Sous l'encart du parti plutôt qu'en bout de la rangée de
+                boutons, où il passait seul à la ligne. */}
+            {candidate.official_website && (
+              <a
+                href={candidate.official_website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="focus-ring flex items-center justify-center gap-2 rounded-xl border border-border-strong px-3.5 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-surface hover:text-foreground"
+              >
+                <Globe size={15} className="shrink-0" />
+                Site officiel
+              </a>
+            )}
+          </div>
         </div>
 
         <div className="min-w-0 flex-1">
@@ -128,18 +144,6 @@ export function CandidateHeroCard({ candidate }: { candidate: Candidate }) {
               <SplitSquareHorizontal size={16} />
               Comparer ce candidat
             </ButtonLink>
-            {candidate.official_website && (
-              <a
-                href={candidate.official_website}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Site officiel du candidat"
-                aria-label="Site officiel du candidat"
-                className="focus-ring flex h-11 w-11 items-center justify-center rounded-full border border-border-strong text-muted transition-colors hover:bg-surface hover:text-foreground"
-              >
-                <Globe size={17} />
-              </a>
-            )}
           </div>
         </div>
       </div>
