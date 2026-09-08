@@ -131,7 +131,7 @@ export default async function CandidatePage({
         {/* Right column: personal Match summary, always in this order.
             La carte a gauche, les cartes de synthèse à droite : c'est la
             structure de la page, elle ne bouge pas au fil des refontes. */}
-        <div className="space-y-6 lg:sticky lg:top-24">
+        <div className="min-w-0 space-y-6 lg:sticky lg:top-24">
           <CandidateProximityCard candidate={candidate} />
           <CandidateAtAGlanceCard
             proposalCount={proposals.length}

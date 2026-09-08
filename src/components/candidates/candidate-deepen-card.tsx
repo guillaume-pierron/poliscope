@@ -12,13 +12,27 @@ export function CandidateDeepenCard({ slug }: { slug: string }) {
         Comparez ce candidat avec un autre, ou découvrez son impact sur votre situation
         personnelle.
       </p>
+      {/* `whitespace-normal` + `h-auto` : ces deux libellés sont trop longs
+          pour tenir d'un bloc dans la colonne latérale sur un écran de 320 px,
+          et un bouton qui ne peut pas se replier impose sa largeur à toute la
+          page. */}
       <div className="mt-4 flex flex-col gap-2">
-        <ButtonLink href={`/comparer?a=${slug}`} variant="accent" size="sm" className="justify-center">
-          <Scale size={15} />
+        <ButtonLink
+          href={`/comparer?a=${slug}`}
+          variant="accent"
+          size="sm"
+          className="h-auto min-h-9 justify-center whitespace-normal py-2 text-center"
+        >
+          <Scale size={15} className="shrink-0" />
           Comparer avec un autre candidat
         </ButtonLink>
-        <ButtonLink href="/simulateur" variant="outline" size="sm" className="justify-center">
-          <Sparkles size={15} />
+        <ButtonLink
+          href="/simulateur"
+          variant="outline"
+          size="sm"
+          className="h-auto min-h-9 justify-center whitespace-normal py-2 text-center"
+        >
+          <Sparkles size={15} className="shrink-0" />
           Voir son impact sur ma situation
         </ButtonLink>
       </div>

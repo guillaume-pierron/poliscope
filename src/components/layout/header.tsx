@@ -34,7 +34,11 @@ export function Header() {
       <div className="container-app flex h-[72px] items-center justify-between gap-6">
         <Logo />
 
-        <nav className="hidden items-center gap-8 md:flex">
+        {/* Sept entrées, dont « Faisabilité & impact » : la barre ne tient
+            qu'à partir de 1024 px. Sous ce seuil elle débordait de la fenêtre
+            et provoquait un défilement horizontal sur toute la page — d'où
+            `lg` et non `md`, en miroir du `lg:hidden` de MobileNav. */}
+        <nav className="hidden items-center gap-8 lg:flex">
           {NAV_LINKS.map((link) => {
             const active = pathname === link.href;
             return (

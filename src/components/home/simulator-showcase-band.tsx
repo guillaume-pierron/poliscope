@@ -48,7 +48,7 @@ export function SimulatorShowcaseBand({
         <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-center">
           {/* Le profil d'exemple est le profil par défaut du simulateur : les
               chiffres du résultat en découlent réellement. */}
-          <div className="flex flex-1 items-center gap-4 rounded-2xl border border-border bg-card p-5">
+          <div className="flex min-w-0 flex-1 items-center gap-4 rounded-2xl border border-border bg-card p-5">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
               <UserRound size={20} strokeWidth={1.75} />
             </span>
@@ -64,7 +64,7 @@ export function SimulatorShowcaseBand({
 
           <ArrowRight size={18} className="mx-auto shrink-0 text-muted-2 max-sm:rotate-90" />
 
-          <div className="flex flex-1 items-center gap-4 rounded-2xl border border-success/25 bg-success-soft/60 p-5">
+          <div className="flex min-w-0 flex-1 items-center gap-4 rounded-2xl border border-success/25 bg-success-soft/60 p-5">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-card text-success">
               <BarChart3 size={20} strokeWidth={1.75} />
             </span>
