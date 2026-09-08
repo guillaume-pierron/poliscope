@@ -50,13 +50,18 @@ export function TopMatchCard({
 
   return (
     <div className="relative rounded-[26px] border border-border bg-card px-6 pb-6 pt-9 shadow-[0_24px_70px_-42px_rgba(15,23,41,0.35)] sm:px-8 sm:pb-8">
-      <div className="absolute -top-4 left-6 flex flex-wrap items-center gap-2 sm:left-8">
-        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium shadow-[0_10px_24px_-16px_rgba(15,23,41,0.4)]">
-          <BadgeCheck size={17} className="text-primary" />
-          Votre meilleur match
-        </span>
-        {coverageLevel === "faible" && <ProvisionalResultBadge className="border border-border shadow-[0_10px_24px_-16px_rgba(15,23,41,0.4)]" />}
-      </div>
+      {/* Une seule pastille sur le bord de la carte. À deux, elles passaient
+          à la ligne dès que la largeur manquait — et cette seconde ligne,
+          posée en absolu, retombait à l'intérieur de la carte, sous le
+          portrait qui la recouvrait. */}
+      <span className="absolute -top-4 left-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium shadow-[0_10px_24px_-16px_rgba(15,23,41,0.4)] sm:left-8">
+        <BadgeCheck size={17} className="text-primary" />
+        Votre meilleur match
+      </span>
+
+      {/* L'avertissement reste au-dessus du score, mais dans le flux : il ne
+          peut plus chevaucher quoi que ce soit. */}
+      {coverageLevel === "faible" && <ProvisionalResultBadge className="mb-4" />}
 
       <div className="flex flex-wrap items-center justify-between gap-6">
         <div className="flex min-w-0 items-center gap-4">
