@@ -63,9 +63,10 @@ pas optimisée non plus — compresse-la avant de la déposer (moins de 150 Ko).
 
 --- Logo du site --- 
 
-public/logo.png   Logo affiché dans l'en-tête et le pied de page.
+logo.png          Logo affiché dans l'en-tête et le pied de page.
                   Affiché en 32 px de haut, la largeur suit le rapport
-                  du fichier.
+                  du fichier. (Comme tous les chemins de ce fichier,
+                  relatif à public/illustrations/.)
 
 Fond TRANSPARENT indispensable : sur la page d'accueil, l'en-tête est
 transparent et laisse passer l'aquarelle — un fond blanc y ferait un
