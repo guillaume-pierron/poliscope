@@ -1,19 +1,12 @@
 import Link from "next/link";
 import { ArrowLeft, CalendarDays, Globe, Landmark, MapPin, SplitSquareHorizontal } from "lucide-react";
 import { CandidateHeroPhoto } from "./candidate-hero-photo";
-import { CandidateSectionTabs, type CandidateTab } from "./candidate-section-tabs";
 import { ButtonLink } from "@/components/ui/button";
 import { formatBirth } from "@/lib/candidates/birth";
 import { ORIENTATION_LABELS } from "@/lib/types";
 import type { Candidate } from "@/lib/types";
 
-export function CandidateHeroCard({
-  candidate,
-  tabs,
-}: {
-  candidate: Candidate;
-  tabs: CandidateTab[];
-}) {
+export function CandidateHeroCard({ candidate }: { candidate: Candidate }) {
   const color = candidate.party?.color ?? "var(--primary)";
   const birth = candidate.birth_date ? formatBirth(candidate.birth_date) : null;
 
@@ -150,8 +143,6 @@ export function CandidateHeroCard({
           </div>
         </div>
       </div>
-
-      <CandidateSectionTabs tabs={tabs} />
     </div>
   );
 }

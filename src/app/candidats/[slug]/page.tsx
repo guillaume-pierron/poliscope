@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CandidateHeroCard } from "@/components/candidates/candidate-hero-card";
-import type { CandidateTab } from "@/components/candidates/candidate-section-tabs";
 import { CandidateProximityCard, CandidatePointsCards } from "@/components/candidates/candidate-match-sidebar";
 import { CandidateAtAGlanceCard } from "@/components/candidates/candidate-at-a-glance-card";
 import { CandidateDeepenCard } from "@/components/candidates/candidate-deepen-card";
@@ -64,18 +63,6 @@ export default async function CandidatePage({
   const candidateAnalysisBundles = allAnalysisBundles.filter((b) => proposalIds.has(b.analysis.proposal_id));
   const analyzedProposalIds = new Set(candidateAnalysisBundles.map((b) => b.analysis.proposal_id));
 
-  /**
-   * Les onglets de la carte pointent vers des sections réellement présentes
-   * plus bas, et leurs effectifs sont ceux de ce candidat — pas des totaux du
-   * site. Une section vide garde son onglet : « 0 » est une information.
-   */
-  const tabs: CandidateTab[] = [
-    { id: "propositions", label: "Propositions", count: proposals.length },
-    { id: "faisabilite", label: "Faisabilité & impact", count: candidateAnalysisBundles.length },
-    { id: "positions", label: "Positions du Match", count: positions.length },
-    { id: "sources", label: "Sources", count: sourceCount },
-  ];
-
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -98,9 +85,9 @@ export default async function CandidatePage({
             largeur repousserait les cartes de synthèse sous la ligne de
             flottaison. */}
         <div className="min-w-0 space-y-10">
-          <CandidateHeroCard candidate={candidate} tabs={tabs} />
+          <CandidateHeroCard candidate={candidate} />
 
-          <div id="propositions" className="scroll-mt-24">
+          <div>
             <CandidateProposalsSection
               proposals={proposals}
               themes={themes}
@@ -151,13 +138,7 @@ export default async function CandidatePage({
             quantifiedCount={quantifiedCount}
             sourceCount={sourceCount}
           />
-          {/* Cible de l'onglet « Faisabilité & impact » de la carte du haut :
-              sur mobile, où cette colonne passe sous le contenu principal,
-              l'onglet y amène vraiment ; sur desktop la colonne est déjà
-              visible, l'ancre ne fait alors que confirmer l'onglet actif. */}
-          <div id="faisabilite" className="scroll-mt-24">
-            <PassageAuReelCandidateSummary bundles={candidateAnalysisBundles} />
-          </div>
+          <PassageAuReelCandidateSummary bundles={candidateAnalysisBundles} />
           <CandidatePointsCards candidate={candidate} />
           <CandidateDeepenCard slug={candidate.slug} />
         </div>
