@@ -30,6 +30,11 @@
   --radius-md: 0.75rem;
   --radius-lg: 1.25rem;
   --radius-xl: 1.75rem;
+
+  /* Hauteur de la barre de navigation. Déclarée ici parce que le hero doit
+     remonter d'exactement cette valeur pour passer derrière l'en-tête
+     transparent : deux littéraux séparés finiraient par diverger. */
+  --header-height: 72px;
 }
 
 @theme inline {

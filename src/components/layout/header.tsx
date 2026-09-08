@@ -17,7 +17,7 @@ export function Header() {
   if (pathname === "/match") {
     return (
       <header className="border-b border-border bg-background">
-        <div className="container-app flex h-[72px] items-center justify-between">
+        <div className="container-app flex h-[var(--header-height)] items-center justify-between">
           <Logo />
           <Link
             href="/"
@@ -44,7 +44,7 @@ export function Header() {
           : "border-transparent bg-transparent"
       )}
     >
-      <div className="container-app flex h-[72px] items-center justify-between gap-6">
+      <div className="container-app flex h-[var(--header-height)] items-center justify-between gap-6">
         <Logo />
 
         {/* Sept entrées, dont « Faisabilité & impact » : la barre ne tient

@@ -23,7 +23,12 @@ export function Hero({
   questionCount: number;
 }) {
   return (
-    <section className="mesh-bg relative overflow-hidden border-b border-border">
+    // Le hero remonte derrière l'en-tête transparent — sinon on ne verrait
+    // à sa place que le fond crème de la page, et le menu ressemblerait à un
+    // bandeau plein. Le padding rend au contenu la hauteur reprise par la
+    // marge négative, donc rien ne passe sous le menu. Le +1px reprend le
+    // filet inférieur de l'en-tête.
+    <section className="mesh-bg relative -mt-[calc(var(--header-height)_+_1px)] overflow-hidden border-b border-border pt-[calc(var(--header-height)_+_1px)]">
       {/* Mobile seulement : l'aquarelle sert de fond au premier écran. Sa
           moitié gauche est volontairement vide pour laisser passer le texte,
           et le bas est rogné puis fondu pour éviter une coupure nette. */}
