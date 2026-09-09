@@ -14,6 +14,7 @@ export function Header() {
   const pathname = usePathname();
   const scrolled = useScrolled();
   const [menuOpen, setMenuOpen] = useState(false);
+  const isHome = pathname === "/";
 
   if (pathname === "/match") {
     return (
@@ -40,12 +41,20 @@ export function Header() {
     // qui passait entre les deux. La bordure reste toujours présente,
     // seulement transparente : la retirer décalerait la page d'un pixel à
     // chaque apparition.
+    //
+    // Sur mobile, cette transparence n'a de sens que sur l'accueil, seule
+    // page dont le hero remonte derrière l'en-tête (voir hero.tsx) — les
+    // autres n'ont rien à laisser paraître en dessous. `lg:` rétablit la
+    // transparence habituelle sur desktop, où elle s'applique à toutes les
+    // pages comme avant : seul le comportement mobile change ici.
     <header
       className={cn(
         "sticky top-0 z-50 border-b transition-colors duration-300",
         scrolled || menuOpen
           ? "border-border bg-background/90 backdrop-blur-md"
-          : "border-transparent bg-transparent"
+          : isHome
+            ? "border-transparent bg-transparent"
+            : "border-border bg-background/90 backdrop-blur-md lg:border-transparent lg:bg-transparent"
       )}
     >
       <div className="container-app flex h-[var(--header-height)] items-center justify-between gap-6">
