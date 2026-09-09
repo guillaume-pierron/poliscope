@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   BookMarked,
+  CircleAlert,
+  CircleCheck,
   FileCheck2,
+  FileText,
   LayoutGrid,
   ScanSearch,
   ShieldCheck,
@@ -202,6 +205,7 @@ export function ThemePageClient({
           {hasComparison && (
             <aside className="hidden lg:block">
               <ComparisonSidebar
+                theme={theme}
                 sharedTags={sharedTags.slice(0, 3)}
                 onSeeAll={() => setViewMode("comparaison")}
               />
@@ -322,8 +326,13 @@ function ViewToggleButton({
   );
 }
 
+/**
+ * Tout sauf le premier mot : parmi les candidats couverts, aucun n'a de
+ * prénom composé, mais un nom de famille en deux mots existe ("Marine Le
+ * Pen") — ne garder que le dernier mot le réduisait à « Pen ».
+ */
 function lastName(name: string) {
-  return name.split(" ").slice(-1)[0];
+  return name.split(" ").slice(1).join(" ");
 }
 
 function ComparisonTable({ sharedTags }: { sharedTags: SharedTag[] }) {
@@ -383,69 +392,170 @@ function ComparisonTable({ sharedTags }: { sharedTags: SharedTag[] }) {
   );
 }
 
+/**
+ * « Accords » / « Différences marquantes » ne jugent jamais si deux
+ * candidats défendent la même chose — rien dans les propositions (texte
+ * libre, sans montant structuré ni polarité) ne permet de trancher ça sans
+ * l'inventer. Le partage se fait donc sur un fait vérifiable : est-ce que
+ * TOUS les candidats affichés ont une proposition documentée sur ce sujet,
+ * ou seulement une partie d'entre eux.
+ */
+function splitSharedTags(sharedTags: SharedTag[], previewCandidates: Candidate[]) {
+  const communs: SharedTag[] = [];
+  const partiels: SharedTag[] = [];
+  for (const shared of sharedTags) {
+    const coverage = shared.entries.filter((e) =>
+      previewCandidates.some((c) => c.id === e.candidate.id)
+    ).length;
+    (coverage >= previewCandidates.length ? communs : partiels).push(shared);
+  }
+  return { communs, partiels };
+}
+
 function ComparisonSidebar({
+  theme,
   sharedTags,
   onSeeAll,
 }: {
+  theme: Theme;
   sharedTags: SharedTag[];
   onSeeAll: () => void;
 }) {
+  // Plafonné à 4 : au-delà, « Sujets communs » — les sujets abordés par
+  // TOUS les candidats affichés — devient quasiment toujours vide, et la
+  // rangée d'avatars déborde. Les candidats les plus présents sur les
+  // enjeux les plus partagés (déjà triés par sharedTags) passent en premier.
   const previewCandidates: Candidate[] = [];
   for (const { entries } of sharedTags) {
     for (const { candidate } of entries) {
-      if (previewCandidates.length < 3 && !previewCandidates.some((c) => c.id === candidate.id)) {
-        previewCandidates.push(candidate);
-      }
+      if (previewCandidates.length >= 4) break;
+      if (!previewCandidates.some((c) => c.id === candidate.id)) previewCandidates.push(candidate);
     }
   }
 
+  const { communs, partiels } = splitSharedTags(sharedTags, previewCandidates);
+
   return (
-    <div className="sticky top-24 rounded-2xl border border-border bg-card p-5">
-      <div className="flex items-center gap-1.5">
-        <h2 className="font-serif text-lg font-semibold">Comparaison rapide</h2>
-      </div>
-      <p className="mt-1 text-xs text-muted-2">
-        Aperçu sur {sharedTags.length} enjeu{sharedTags.length > 1 ? "x" : ""} clé
-        {sharedTags.length > 1 ? "s" : ""}
-      </p>
+    <div className="sticky top-24 space-y-4">
+      <div className="rounded-2xl border border-border bg-card p-5">
+        <h2 className="font-serif text-lg font-semibold tracking-tight">Comparaison rapide</h2>
+        <p className="mt-1 text-xs text-muted-2">
+          Aperçu sur {sharedTags.length} enjeu{sharedTags.length > 1 ? "x" : ""} clé
+          {sharedTags.length > 1 ? "s" : ""}
+        </p>
 
-      <div className="mt-4 flex items-center gap-2">
-        {previewCandidates.map((c) => (
-          <CandidateAvatar key={c.id} name={c.name} color={c.party?.color} photoUrl={c.photo_url} size="sm" />
-        ))}
+        <div className="mt-4 flex items-center gap-2">
+          {previewCandidates.map((c) => (
+            <CandidateAvatar
+              key={c.id}
+              name={c.name}
+              color={c.party?.color}
+              photoUrl={c.photo_url}
+              size="sm"
+              className="ring-2 ring-card"
+            />
+          ))}
+        </div>
+        <p className="mt-2 truncate text-xs text-muted-2">
+          {previewCandidates.map((c) => lastName(c.name)).join(", ")}
+        </p>
       </div>
 
-      <div className="mt-4 space-y-4">
-        {sharedTags.map(({ tag, entries }) => (
-          <div key={tag}>
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-2">{tag}</p>
-            <ul className="mt-1.5 space-y-1">
-              {entries
-                .filter((e) => previewCandidates.some((c) => c.id === e.candidate.id))
-                .map(({ candidate, proposal }) => (
-                  <li key={candidate.id} className="truncate text-sm">
-                    <span className="font-medium">{lastName(candidate.name)}</span>{" "}
-                    <span className="text-muted">— {proposal.title}</span>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        ))}
+      <div className="rounded-2xl border border-border bg-card p-5">
+        <p className="flex items-center gap-2 text-sm font-semibold">
+          <FileText size={15} className="shrink-0 text-primary" />
+          En bref
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          {previewCandidates.length} candidats comparés sur {theme.name.toLowerCase()},{" "}
+          {sharedTags.length} sujet{sharedTags.length > 1 ? "s" : ""} abordé
+          {sharedTags.length > 1 ? "s" : ""} par au moins deux d&apos;entre eux
+          {communs.length > 0 && (
+            <>
+              , dont {communs.length} traité{communs.length > 1 ? "s" : ""} par tous&nbsp;:{" "}
+              {communs.map((s) => s.tag).join(", ")}
+            </>
+          )}
+          .
+        </p>
       </div>
+
+      <TagBucket
+        tone="success"
+        icon={CircleCheck}
+        title="Sujets communs"
+        emptyLabel="Aucun sujet abordé par tous les candidats affichés."
+        tags={communs}
+      />
+      <TagBucket
+        tone="accent"
+        icon={CircleAlert}
+        title="Angles différents"
+        emptyLabel="Tous les sujets identifiés sont abordés par l'ensemble des candidats."
+        tags={partiels}
+      />
 
       <button
         type="button"
         onClick={onSeeAll}
-        className="focus-ring mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+        className="focus-ring flex w-full items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
       >
         Voir la comparaison complète
         <ArrowRight size={14} />
       </button>
 
-      <div className="mt-5 flex items-start gap-2.5 rounded-xl border border-border bg-surface p-3 text-xs text-muted">
+      <div className="flex items-start gap-2.5 rounded-xl border border-border bg-surface p-3 text-xs text-muted">
         <ShieldCheck size={14} className="mt-0.5 shrink-0 text-primary" />
-        <p>Comme toujours, on source : chaque proposition listée est vérifiée et reliée à sa source primaire.</p>
+        <p>Comme toujours, chaque proposition est vérifiée et reliée à sa source primaire.</p>
       </div>
+    </div>
+  );
+}
+
+const BUCKET_TONE = {
+  success: { bg: "border-success/20 bg-success-soft/40", text: "text-success", dot: "bg-success", badge: "bg-success-soft text-success" },
+  accent: { bg: "border-accent/20 bg-accent-soft/40", text: "text-accent", dot: "bg-accent", badge: "bg-accent-soft text-accent" },
+} as const;
+
+function TagBucket({
+  tone,
+  icon: Icon,
+  title,
+  tags,
+  emptyLabel,
+}: {
+  tone: keyof typeof BUCKET_TONE;
+  icon: LucideIcon;
+  title: string;
+  tags: SharedTag[];
+  emptyLabel: string;
+}) {
+  const style = BUCKET_TONE[tone];
+  return (
+    <div className={cn("rounded-2xl border p-5", style.bg)}>
+      <div className="flex items-center justify-between gap-3">
+        <p className={cn("flex items-center gap-2 text-sm font-semibold", style.text)}>
+          <Icon size={16} className="shrink-0" />
+          {title}
+        </p>
+        {tags.length > 0 && (
+          <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold", style.badge)}>
+            {tags.length}
+          </span>
+        )}
+      </div>
+      {tags.length === 0 ? (
+        <p className="mt-2 text-sm leading-relaxed text-muted-2">{emptyLabel}</p>
+      ) : (
+        <ul className="mt-3 space-y-2">
+          {tags.map(({ tag }) => (
+            <li key={tag} className="flex items-start gap-2 text-sm text-foreground/85">
+              <span aria-hidden="true" className={cn("mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full", style.dot)} />
+              {tag}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
