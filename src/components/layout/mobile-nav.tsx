@@ -43,7 +43,15 @@ export function MobileNav() {
 
       <div
         className={cn(
-          "fixed inset-x-0 top-16 z-40 origin-top border-b border-border bg-background transition-all duration-200",
+          // `absolute` + `top-full`, ancré sur le <header> (position: sticky,
+          // donc lui-même un contexte de positionnement) plutôt qu'un `fixed`
+          // à une hauteur fixe depuis le haut de la fenêtre : ce panneau se
+          // cale ainsi toujours juste sous l'en-tête réellement affiché,
+          // ticker compris quand la page n'est pas encore défilée. Un
+          // décalage figé (`top-16`, puis `top-[var(--header-height)]`)
+          // recouvrait le bas du bouton bascule à chaque fois que la hauteur
+          // réelle divergeait — rendant le menu impossible à refermer.
+          "absolute inset-x-0 top-full z-40 origin-top border-b border-border bg-background transition-all duration-200",
           open
             ? "pointer-events-auto translate-y-0 opacity-100"
             : "pointer-events-none -translate-y-2 opacity-0"
