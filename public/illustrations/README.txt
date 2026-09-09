@@ -63,7 +63,7 @@ pas optimisée non plus — compresse-la avant de la déposer (moins de 150 Ko).
 
 --- Logo du site --- 
 
-logo.png          Logo affiché dans l'en-tête et le pied de page.
+logo.svg          Logo affiché dans l'en-tête et le pied de page.
                   Affiché en 32 px de haut, la largeur suit le rapport
                   du fichier. (Comme tous les chemins de ce fichier,
                   relatif à public/illustrations/.)
@@ -72,9 +72,11 @@ Fond TRANSPARENT indispensable : sur la page d'accueil, l'en-tête est
 transparent et laisse passer l'aquarelle — un fond blanc y ferait un
 rectangle visible.
 
-Prévoir au moins 2x la taille d'affichage pour les écrans Retina, soit
-environ 64 px de haut. Un fichier plus grand ne coûte rien : il passe
-par l'optimiseur de Next et sort en WebP.
+Servi tel quel (pas d'optimiseur Next pour les SVG) : nettoie le fichier
+avant de le déposer si ton export contient des métadonnées ou des
+identifiants de provenance (bloc <metadata>, souvent ajouté par les
+outils de génération d'image) — `npx svgo fichier.svg` s'en charge en
+un coup, sans toucher au dessin.
 
 Tant que le fichier n'est pas déposé, l'en-tête affiche le nom du site
 composé en sérif, comme avant — rien ne casse.
