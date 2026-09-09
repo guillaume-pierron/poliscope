@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 // Import statique : l'URL générée porte un hash du contenu, donc remplacer
 // le fichier suffit à invalider le cache de l'optimiseur d'images.
 import heroIllustration from "../../../public/illustrations/hero.png";
@@ -8,7 +7,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { HomeHeroPanel } from "./home-hero-panel";
 import { Swoosh } from "@/components/ui/swoosh";
 import { HandNote } from "@/components/ui/hand-note";
-import { ArrowRight, Clock, Lock, Sun, Target } from "lucide-react";
+import { ArrowRight, Clock, Lock, Sun } from "lucide-react";
 import type { HeadlinePoll } from "@/lib/data/queries";
 import type { Candidate } from "@/lib/types";
 
@@ -136,49 +135,6 @@ export function Hero({
               <Lock size={12} />
               Sans inscription · Réponses conservées sur votre appareil
             </p>
-
-            {/* Mobile seulement : sur petit écran le panneau Match arrive loin
-                sous le pli, cette carte donne un point d'entrée explicite. */}
-            <Link
-              href="/match"
-              className="focus-ring relative mt-6 block overflow-hidden rounded-2xl border border-primary/20 bg-primary-soft/50 p-5 transition-colors hover:bg-primary-soft/70 sm:hidden"
-            >
-              {/* Formes douces dans l'angle, comme sur la maquette. */}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-primary/10"
-              />
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute -bottom-4 left-12 h-16 w-16 rounded-full bg-primary/[0.07]"
-              />
-
-              <HandNote className="pointer-events-none absolute right-4 top-4 w-[7rem] -rotate-6 text-right leading-tight">
-                Ça ne prend que 3 minutes&nbsp;!
-              </HandNote>
-
-              <span className="relative flex items-start gap-4">
-                <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-card text-primary">
-                  <Target size={22} strokeWidth={1.75} />
-                </span>
-                <span className="min-w-0 flex-1 pr-[6.5rem]">
-                  <span className="block text-xs font-semibold uppercase tracking-wide text-primary">
-                    Commencez ici
-                  </span>
-                  <span className="mt-1 block font-serif text-[1.2rem] font-semibold leading-snug">
-                    Trouvez les candidats qui vous ressemblent.
-                  </span>
-                  <span className="mt-2 block text-sm leading-relaxed text-muted">
-                    Répondez à {questionCount} questions pour découvrir les candidats les plus
-                    proches de vos idées.
-                  </span>
-                </span>
-              </span>
-
-              <span className="absolute bottom-5 right-5 flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <ArrowRight size={20} />
-              </span>
-            </Link>
           </div>
         </div>
 
