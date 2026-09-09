@@ -147,16 +147,11 @@ export function MobileNav({
             })}
           </ul>
 
-          <div className="mt-6 border-t border-border pt-6">
-            <span aria-hidden="true" className="block h-px w-8 bg-primary" />
-            <p className="mt-3 text-sm leading-snug text-muted">
-              Des repères fiables pour une démocratie plus éclairée.
-            </p>
-          </div>
+          <hr className="mt-6 border-border" />
 
           <Link
             href="/match"
-            className="focus-ring mt-5 flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="focus-ring mt-6 flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
             <Sun size={16} className="shrink-0" />
             Découvrir mon Match
