@@ -19,6 +19,7 @@ import {
   Users,
 } from "lucide-react";
 import { CandidateAvatar } from "@/components/candidates/candidate-avatar";
+import { CandidateDropdown } from "./candidate-dropdown";
 import { CompareShareButton } from "./compare-share-button";
 import { CompareSubjectRow } from "./compare-subject-row";
 import { ButtonLink } from "@/components/ui/button";
@@ -670,24 +671,13 @@ function OpponentPicker({
       <p className="mt-1.5 text-sm leading-relaxed text-muted">
         Gardez {candidateA.name} et choisissez un autre adversaire.
       </p>
-      <label className="sr-only" htmlFor="opponent-picker">
-        Choisir un autre adversaire
-      </label>
-      <select
-        id="opponent-picker"
-        value=""
-        onChange={(e) => {
-          if (e.target.value) router.push(`/comparer/${candidateA.slug}-vs-${e.target.value}`);
-        }}
-        className="focus-ring mt-3.5 w-full min-w-0 rounded-xl border border-border-strong bg-card px-3.5 py-2.5 text-sm"
-      >
-        <option value="">Choisir un candidat…</option>
-        {others.map((c) => (
-          <option key={c.id} value={c.slug}>
-            {c.name}
-          </option>
-        ))}
-      </select>
+      <div className="mt-3.5">
+        <CandidateDropdown
+          candidates={others}
+          placeholder="Choisir un candidat…"
+          onSelect={(c) => router.push(`/comparer/${candidateA.slug}-vs-${c.slug}`)}
+        />
+      </div>
     </div>
   );
 }
