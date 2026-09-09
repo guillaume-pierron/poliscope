@@ -87,6 +87,22 @@ export function ThemePageClient({
   }, [proposals, candidates]);
   const hasComparison = sharedTags.length > 0;
 
+  // Total de propositions par tag, tous candidats confondus — pas seulement
+  // ceux qui le partagent avec un autre — pour le lien « Voir les N
+  // propositions » de chaque carte de la comparaison rapide.
+  const proposalCountByTag = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const p of proposals) {
+      for (const tag of parseTags(p.tags)) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+    return counts;
+  }, [proposals]);
+
+  function seeAllForTag(tag: string) {
+    setActiveTag(tag);
+    setViewMode("candidat");
+  }
+
   function toggleCompare(candidateId: string) {
     setCompareIds((prev) => {
       if (prev.includes(candidateId)) return prev.filter((id) => id !== candidateId);
@@ -198,7 +214,11 @@ export function ThemePageClient({
                 })}
               </div>
             ) : (
-              <ComparisonTable sharedTags={sharedTags} />
+              <ComparisonList
+                sharedTags={sharedTags}
+                proposalCountByTag={proposalCountByTag}
+                onSeeAll={seeAllForTag}
+              />
             )}
           </div>
 
@@ -335,59 +355,94 @@ function lastName(name: string) {
   return name.split(" ").slice(1).join(" ");
 }
 
-function ComparisonTable({ sharedTags }: { sharedTags: SharedTag[] }) {
-  const allCandidates: Candidate[] = [];
-  for (const { entries } of sharedTags) {
-    for (const { candidate } of entries) {
-      if (!allCandidates.some((c) => c.id === candidate.id)) allCandidates.push(candidate);
-    }
-  }
-
+/**
+ * Une carte par enjeu partagé, jamais un tableau : sur un thème à 5-6
+ * candidats, un tableau critère × candidat déborde inévitablement de la
+ * largeur disponible et n'est lisible qu'au prix d'un défilement
+ * horizontal. Empilée verticalement, chaque ligne candidat tient toujours
+ * sur la largeur de l'écran, quel que soit leur nombre.
+ */
+function ComparisonList({
+  sharedTags,
+  proposalCountByTag,
+  onSeeAll,
+}: {
+  sharedTags: SharedTag[];
+  /** Nombre total de propositions sur ce tag, tous candidats confondus — pas seulement ceux qui le partagent avec un autre. */
+  proposalCountByTag: Map<string, number>;
+  onSeeAll: (tag: string) => void;
+}) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border bg-card">
-      <table className="w-full min-w-[560px] border-collapse text-sm">
-        <thead>
-          <tr className="border-b border-border">
-            <th className="w-36 p-4 text-left text-xs font-medium uppercase tracking-wide text-muted-2">
-              Critère
-            </th>
-            {allCandidates.map((c) => (
-              <th key={c.id} className="p-4 text-left">
-                <div className="flex items-center gap-2">
-                  <CandidateAvatar name={c.name} color={c.party?.color} photoUrl={c.photo_url} size="sm" />
-                  <span className="font-medium">{lastName(c.name)}</span>
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {sharedTags.map(({ tag, entries }) => (
-            <tr key={tag} className="border-b border-border last:border-0">
-              <td className="p-4 align-top text-xs font-medium text-muted-2">{tag}</td>
-              {allCandidates.map((c) => {
-                const entry = entries.find((e) => e.candidate.id === c.id);
-                return (
-                  <td key={c.id} className="p-4 align-top">
-                    {entry ? (
-                      <a
-                        href={entry.proposal.source_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="focus-ring hover:underline"
-                      >
-                        {entry.proposal.title}
-                      </a>
-                    ) : (
-                      <span className="text-muted-2">—</span>
-                    )}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-4">
+      <div className="flex items-start gap-2.5 rounded-2xl border border-primary/20 bg-primary-soft/40 p-4 text-sm">
+        <ScanSearch size={16} className="mt-0.5 shrink-0 text-primary" />
+        <div>
+          <p className="font-medium text-primary">Lecture simplifiée, sans défilement horizontal</p>
+          <p className="mt-0.5 text-muted">
+            Chaque critère est présenté avec les propositions des candidats, pour une comparaison
+            plus claire et plus accessible.
+          </p>
+        </div>
+      </div>
+
+      {sharedTags.map(({ tag, entries }) => {
+        const Icon = tagIcon(tag);
+        const total = proposalCountByTag.get(tag) ?? entries.length;
+        return (
+          <section key={tag} className="overflow-hidden rounded-2xl border border-border bg-card">
+            <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
+                  <Icon size={18} />
+                </span>
+                <h3 className="font-serif text-lg font-semibold tracking-tight">{tag}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => onSeeAll(tag)}
+                className="focus-ring flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+              >
+                Voir les {total} proposition{total > 1 ? "s" : ""}
+                <ArrowRight size={13} />
+              </button>
+            </header>
+
+            <ul className="divide-y divide-border">
+              {entries.map(({ candidate, proposal }) => (
+                <li key={candidate.id} className="flex items-start gap-3 p-4">
+                  <CandidateAvatar
+                    name={candidate.name}
+                    color={candidate.party?.color}
+                    photoUrl={candidate.photo_url}
+                    size="sm"
+                    className="mt-0.5 shrink-0"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold">{lastName(candidate.name)}</p>
+                    <a
+                      href={proposal.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="focus-ring mt-0.5 block text-sm leading-relaxed text-foreground/85 hover:underline"
+                    >
+                      {proposal.title}
+                    </a>
+                  </div>
+                  {/* Chiffrée ou non : un fait vérifiable dans le texte de la
+                      proposition — jamais un jugement (« mesure forte »,
+                      « position proche ») que rien dans les données ne
+                      permet de fonder sans l'inventer. */}
+                  {isQuantifiedProposal(proposal) && (
+                    <span className="mt-0.5 shrink-0 rounded-full bg-success-soft px-2.5 py-1 text-xs font-medium text-success">
+                      Mesure chiffrée
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
     </div>
   );
 }
