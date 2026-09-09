@@ -374,17 +374,6 @@ function ComparisonList({
 }) {
   return (
     <div className="space-y-4">
-      <div className="flex items-start gap-2.5 rounded-2xl border border-primary/20 bg-primary-soft/40 p-4 text-sm">
-        <ScanSearch size={16} className="mt-0.5 shrink-0 text-primary" />
-        <div>
-          <p className="font-medium text-primary">Lecture simplifiée, sans défilement horizontal</p>
-          <p className="mt-0.5 text-muted">
-            Chaque critère est présenté avec les propositions des candidats, pour une comparaison
-            plus claire et plus accessible.
-          </p>
-        </div>
-      </div>
-
       {sharedTags.map(({ tag, entries }) => {
         const Icon = tagIcon(tag);
         const total = proposalCountByTag.get(tag) ?? entries.length;
