@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const pathname = usePathname();
   const scrolled = useScrolled();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   if (pathname === "/match") {
     return (
@@ -33,13 +34,16 @@ export function Header() {
 
   return (
     // Transparent tant que la page est en haut ; le fond et le filet
-    // n'apparaissent qu'une fois du contenu passé dessous. La bordure reste
-    // toujours présente, seulement transparente : la retirer décalerait la
-    // page d'un pixel à chaque apparition.
+    // n'apparaissent qu'une fois du contenu passé dessous, ou dès que le
+    // menu mobile est ouvert — sinon la ligne du logo restait transparente
+    // au-dessus du panneau plein juste en dessous, avec le fond de la page
+    // qui passait entre les deux. La bordure reste toujours présente,
+    // seulement transparente : la retirer décalerait la page d'un pixel à
+    // chaque apparition.
     <header
       className={cn(
         "sticky top-0 z-50 border-b transition-colors duration-300",
-        scrolled
+        scrolled || menuOpen
           ? "border-border bg-background/90 backdrop-blur-md"
           : "border-transparent bg-transparent"
       )}
@@ -77,7 +81,7 @@ export function Header() {
             Découvrir mon Match
             <Sun size={16} />
           </ButtonLink>
-          <MobileNav />
+          <MobileNav open={menuOpen} onOpenChange={setMenuOpen} />
         </div>
       </div>
     </header>

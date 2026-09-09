@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -8,19 +8,27 @@ import { NAV_LINKS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export function MobileNav() {
-  const [open, setOpen] = useState(false);
+export function MobileNav({
+  open,
+  onOpenChange,
+}: {
+  /** Contrôlé par Header, qui doit savoir si le menu est ouvert pour forcer
+   *  son propre fond opaque — sinon la ligne du logo reste transparente
+   *  au-dessus d'un panneau plein, en haut d'une page pas encore défilée. */
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const setOpen = onOpenChange;
   const pathname = usePathname();
-  const [lastPathname, setLastPathname] = useState(pathname);
 
-  // Close the menu on navigation. Adjusted during render (React's
-  // documented pattern for resetting state when a prop changes) rather
-  // than in an effect, since this is derived from `pathname`, not an
-  // external system.
-  if (pathname !== lastPathname) {
-    setLastPathname(pathname);
-    setOpen(false);
-  }
+  // Close the menu on navigation. En effet et non pendant le rendu : `open`
+  // vit maintenant chez Header, et ajuster l'état d'un ancêtre pendant le
+  // rendu d'un descendant sort du cas que React documente pour ce motif
+  // (se limiter à son propre state local).
+  useEffect(() => {
+    onOpenChange(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- ferme sur changement de route, jamais sur un changement de onOpenChange lui-même.
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -36,7 +44,7 @@ export function MobileNav() {
         size="icon"
         aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(!open)}
       >
         {open ? <X size={20} /> : <Menu size={20} />}
       </Button>
