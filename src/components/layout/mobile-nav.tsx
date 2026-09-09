@@ -3,10 +3,40 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import {
+  BarChart3,
+  ChevronRight,
+  Compass,
+  FileText,
+  Home,
+  Menu,
+  Scale,
+  Sun,
+  UserRound,
+  Users,
+  X,
+} from "lucide-react";
 import { NAV_LINKS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+/**
+ * Une icône par entrée — reprise de celle déjà associée à la rubrique
+ * ailleurs sur le site, jamais une nouvelle association inventée pour ce
+ * seul menu : Scale est déjà l'icône de la carte Comparer de l'accueil,
+ * Compass celle de Faisabilité & impact partout où le sujet apparaît,
+ * BarChart3 celle de la carte Sondages, UserRound celle du « Votre profil »
+ * des constellations du Match.
+ */
+const NAV_ICONS: Record<string, typeof Home> = {
+  "/": Home,
+  "/match": UserRound,
+  "/candidats": Users,
+  "/comparer": Scale,
+  "/passage-au-reel": Compass,
+  "/sondages": BarChart3,
+  "/methodologie": FileText,
+};
 
 export function MobileNav({
   open,
@@ -59,8 +89,7 @@ export function MobileNav({
           // décalage figé (`top-16`, puis `top-[var(--header-height)]`)
           // recouvrait le bas du bouton bascule à chaque fois que la hauteur
           // réelle divergeait — rendant le menu impossible à refermer.
-          //
-          "absolute inset-x-0 top-full z-40 origin-top border-b border-border bg-background transition-all duration-200",
+          "absolute inset-x-0 top-full z-40 origin-top overflow-y-auto border-b border-border bg-background transition-all duration-200",
           open
             ? // min-h-dvh seulement ici : ouvert, le panneau ne doit jamais
               // s'arrêter avant le bas de l'écran, quel que soit le nombre de
@@ -75,25 +104,70 @@ export function MobileNav({
             : "pointer-events-none -translate-y-2 opacity-0"
         )}
       >
-        <nav className="container-app flex flex-col gap-1 py-4">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "focus-ring rounded-lg px-3 py-3 text-base font-medium transition-colors hover:bg-surface",
-                pathname === link.href && "bg-surface text-primary"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="container-app flex flex-col py-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted-2">
+            Navigation
+          </p>
+
+          <ul className="mt-3 space-y-1.5">
+            {NAV_LINKS.map((link) => {
+              const active = pathname === link.href;
+              const Icon = NAV_ICONS[link.href] ?? Home;
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      "focus-ring flex items-center gap-3 rounded-2xl border-l-[3px] py-2.5 pl-3.5 pr-3 transition-colors",
+                      active
+                        ? "border-primary bg-primary-soft text-primary"
+                        : "border-transparent hover:bg-surface"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+                        active ? "bg-card text-primary" : "bg-surface text-muted"
+                      )}
+                    >
+                      <Icon size={18} />
+                    </span>
+                    <span
+                      className={cn(
+                        "flex-1 font-serif text-lg font-semibold tracking-tight",
+                        !active && "text-foreground"
+                      )}
+                    >
+                      {link.label}
+                    </span>
+                    <ChevronRight size={17} className={active ? "text-primary" : "text-muted-2"} />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="mt-6 border-t border-border pt-6">
+            <span aria-hidden="true" className="block h-px w-8 bg-primary" />
+            <p className="mt-3 text-sm leading-snug text-muted">
+              Des repères fiables pour une démocratie plus éclairée.
+            </p>
+          </div>
+
           <Link
             href="/match"
-            className="focus-ring mt-2 inline-flex h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground"
+            className="focus-ring mt-5 flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
+            <Sun size={16} className="shrink-0" />
             Découvrir mon Match
+            <ChevronRight size={16} className="shrink-0" />
           </Link>
+
+          <p className="mt-5 flex items-center justify-center gap-3 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-muted-2">
+            <span aria-hidden="true" className="h-px w-6 bg-border-strong" />
+            Pour des choix plus éclairés
+            <span aria-hidden="true" className="h-px w-6 bg-border-strong" />
+          </p>
         </nav>
       </div>
     </div>

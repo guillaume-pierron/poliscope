@@ -48,8 +48,25 @@ export function Header() {
           : "border-transparent bg-transparent"
       )}
     >
-      <div className="container-app flex h-[var(--header-height)] items-center justify-between gap-6">
-        <Logo />
+      {/* min-h et non h- ici : la ligne de sous-titre ajoutée sous le logo
+          quand le menu est ouvert doit pouvoir agrandir la rangée plutôt que
+          déborder d'une boîte de hauteur figée, ce qui décalerait le panneau
+          du menu (ancré sur la hauteur réelle de l'en-tête) sans agrandir
+          visuellement l'en-tête lui-même. */}
+      <div className="container-app flex min-h-[var(--header-height)] items-center justify-between gap-6 py-2">
+        <div className="min-w-0">
+          <Logo />
+          {/* Seulement mobile et menu ouvert : le reste du temps, l'en-tête
+              garde sa hauteur et sa mise en page habituelles. La croissance
+              d'une ligne ne dérange rien d'autre — le panneau du menu, en
+              dessous, s'ancre sur la hauteur réelle de l'en-tête plutôt que
+              sur une valeur figée (voir MobileNav). */}
+          {menuOpen && (
+            <p className="mt-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-muted-2 lg:hidden">
+              Éclairer le débat public
+            </p>
+          )}
+        </div>
 
         {/* Sept entrées, dont « Faisabilité & impact » : la barre ne tient
             qu'à partir de 1024 px. Sous ce seuil elle débordait de la fenêtre
