@@ -48,21 +48,19 @@ export function Header() {
           : "border-transparent bg-transparent"
       )}
     >
-      {/* min-h et non h- ici : la ligne de sous-titre ajoutée sous le logo
-          quand le menu est ouvert doit pouvoir agrandir la rangée plutôt que
-          déborder d'une boîte de hauteur figée, ce qui décalerait le panneau
-          du menu (ancré sur la hauteur réelle de l'en-tête) sans agrandir
-          visuellement l'en-tête lui-même. */}
-      <div className="container-app flex min-h-[var(--header-height)] items-center justify-between gap-6 py-2">
-        <div className="min-w-0">
+      <div className="container-app flex h-[var(--header-height)] items-center justify-between gap-6">
+        {/* `relative`/`absolute` : le sous-titre sort du flux plutôt que de
+            s'empiler sous le logo dans une colonne que `items-center`
+            recentrerait. Dans le flux, ce bloc de deux lignes aurait été
+            recentré comme un tout à l'ouverture du menu, ce qui poussait le
+            logo vers le haut — visible, indésirable. En position absolue, il
+            n'existe pas pour ce calcul : le logo reste exactement à sa place. */}
+        <div className="relative min-w-0">
           <Logo />
           {/* Seulement mobile et menu ouvert : le reste du temps, l'en-tête
-              garde sa hauteur et sa mise en page habituelles. La croissance
-              d'une ligne ne dérange rien d'autre — le panneau du menu, en
-              dessous, s'ancre sur la hauteur réelle de l'en-tête plutôt que
-              sur une valeur figée (voir MobileNav). */}
+              garde sa hauteur et sa mise en page habituelles. */}
           {menuOpen && (
-            <p className="mt-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-muted-2 lg:hidden">
+            <p className="absolute left-0 top-full mt-0.5 whitespace-nowrap text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-muted-2 lg:hidden">
               Éclairer le débat public
             </p>
           )}
