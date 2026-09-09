@@ -24,11 +24,14 @@ export function CompareShowcaseCard({
   rows: { theme: Theme; verdict: ThemeVerdict }[];
   className?: string;
 }) {
-  const href = candidates ? `/comparer/${candidates.a.slug}-vs-${candidates.b.slug}` : "/comparer";
-
+  // Vers la page de sélection, jamais directement vers un résultat déjà
+  // choisi — comme les autres cartes « Cinq outils », qui mènent toutes à
+  // leur index (/sondages, /passage-au-reel, /simulateur) et non à un
+  // sondage ou une mesure précise. L'aperçu ci-dessous reste une vraie
+  // paire de candidats, à titre d'exemple seulement.
   return (
     <Link
-      href={href}
+      href="/comparer"
       className={cn(
         "focus-ring group relative flex flex-col overflow-hidden rounded-[22px] border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[0_20px_44px_-26px_rgba(15,23,41,0.28)]",
         className
