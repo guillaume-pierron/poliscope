@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -50,6 +50,42 @@ export function MobileNav({
 }) {
   const setOpen = onOpenChange;
   const pathname = usePathname();
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [panelHeight, setPanelHeight] = useState<number | null>(null);
+
+  /**
+   * Hauteur exacte de la place restante sous l'en-tête, mesurée plutôt que
+   * devinée en CSS : `100dvh` a un historique de comportements incohérents
+   * sur les navigateurs mobiles réels (barre d'outils de Safari iOS qui
+   * apparaît/disparaît, notamment), et rien ne garantit qu'il corresponde à
+   * l'espace réellement visible sur tous les appareils. `visualViewport`,
+   * quand il existe, reflète cet espace visible même quand un clavier
+   * virtuel est ouvert — `overflow-y-auto` (déjà sur ce panneau) prend le
+   * relais dès que le contenu dépasse cette hauteur.
+   */
+  useEffect(() => {
+    if (!open) return;
+
+    function updateHeight() {
+      // Le bas du <header>, jamais celui du panneau : à l'ouverture, le
+      // panneau lui-même est encore décalé de -translate-y-2 pendant les
+      // 200ms de la transition, et le mesurer à cet instant capture une
+      // position ~8px trop haute — le panneau retombait alors 8px sous le
+      // bas de l'écran. L'en-tête, lui, n'est jamais animé.
+      const header = panelRef.current?.closest("header");
+      const top = header?.getBoundingClientRect().bottom ?? 0;
+      const viewport = window.visualViewport?.height ?? window.innerHeight;
+      setPanelHeight(Math.max(0, viewport - top));
+    }
+    updateHeight();
+
+    window.addEventListener("resize", updateHeight);
+    window.visualViewport?.addEventListener("resize", updateHeight);
+    return () => {
+      window.removeEventListener("resize", updateHeight);
+      window.visualViewport?.removeEventListener("resize", updateHeight);
+    };
+  }, [open]);
 
   // Close the menu on navigation. En effet et non pendant le rendu : `open`
   // vit maintenant chez Header, et ajuster l'état d'un ancêtre pendant le
@@ -80,6 +116,12 @@ export function MobileNav({
       </Button>
 
       <div
+        ref={panelRef}
+        // `minHeight` inline en plus de `height` : sinon la classe
+        // `min-h-dvh` (repli avant mesure) l'emporterait sur une hauteur
+        // mesurée plus petite qu'elle — `min-height` gagne toujours face à
+        // une `height` plus courte, en CSS comme en style inline.
+        style={open && panelHeight !== null ? { height: panelHeight, minHeight: panelHeight } : undefined}
         className={cn(
           // `absolute` + `top-full`, ancré sur le <header> (position: sticky,
           // donc lui-même un contexte de positionnement) plutôt qu'un `fixed`
@@ -91,15 +133,12 @@ export function MobileNav({
           // réelle divergeait — rendant le menu impossible à refermer.
           "absolute inset-x-0 top-full z-40 origin-top overflow-y-auto border-b border-border bg-background transition-all duration-200",
           open
-            ? // min-h-dvh seulement ici : ouvert, le panneau ne doit jamais
-              // s'arrêter avant le bas de l'écran, quel que soit le nombre de
-              // liens — sur l'accueil, le propre bouton « Découvrir mon
-              // Match » du hero apparaissait sinon juste en dessous, donnant
-              // l'impression d'un bouton en double. Fermé, le panneau garde
-              // sa hauteur naturelle (repliée à quelques pixels) : un
-              // min-h-dvh permanent restait dans le flux de défilement même
-              // invisible et ajoutait un écran plein de vide en bas de
-              // chaque page — vérifié en isolant le contenu réel de la page.
+            ? // La hauteur exacte vient de `panelHeight` (mesurée en JS, voir
+              // plus haut) ; `min-h-dvh` ne reste qu'un repli pour la toute
+              // première image avant que la mesure n'arrive — un panneau qui
+              // ne couvrirait que son contenu laisserait sinon voir la page
+              // en dessous (sur l'accueil, le propre bouton « Découvrir mon
+              // Match » du hero) pendant cette fraction de seconde.
               "pointer-events-auto min-h-dvh translate-y-0 opacity-100"
             : "pointer-events-none -translate-y-2 opacity-0"
         )}
