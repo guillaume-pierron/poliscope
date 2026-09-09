@@ -51,9 +51,19 @@ export function MobileNav() {
           // décalage figé (`top-16`, puis `top-[var(--header-height)]`)
           // recouvrait le bas du bouton bascule à chaque fois que la hauteur
           // réelle divergeait — rendant le menu impossible à refermer.
+          //
           "absolute inset-x-0 top-full z-40 origin-top border-b border-border bg-background transition-all duration-200",
           open
-            ? "pointer-events-auto translate-y-0 opacity-100"
+            ? // min-h-dvh seulement ici : ouvert, le panneau ne doit jamais
+              // s'arrêter avant le bas de l'écran, quel que soit le nombre de
+              // liens — sur l'accueil, le propre bouton « Découvrir mon
+              // Match » du hero apparaissait sinon juste en dessous, donnant
+              // l'impression d'un bouton en double. Fermé, le panneau garde
+              // sa hauteur naturelle (repliée à quelques pixels) : un
+              // min-h-dvh permanent restait dans le flux de défilement même
+              // invisible et ajoutait un écran plein de vide en bas de
+              // chaque page — vérifié en isolant le contenu réel de la page.
+              "pointer-events-auto min-h-dvh translate-y-0 opacity-100"
             : "pointer-events-none -translate-y-2 opacity-0"
         )}
       >
