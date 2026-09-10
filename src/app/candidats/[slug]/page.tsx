@@ -3,15 +3,19 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CandidateHeroCard } from "@/components/candidates/candidate-hero-card";
 import { CandidateProximityCard, CandidatePointsCards } from "@/components/candidates/candidate-match-sidebar";
-import { CandidateAtAGlanceCard } from "@/components/candidates/candidate-at-a-glance-card";
 import { CandidateDeepenCard } from "@/components/candidates/candidate-deepen-card";
 import { CandidateProposalsSection } from "@/components/candidates/candidate-proposals-section";
 import { CandidatePositionList } from "@/components/candidates/candidate-position-list";
 import { CandidateSourcesSection } from "@/components/candidates/candidate-sources-section";
-import { PassageAuReelCandidateSummary } from "@/components/passage-au-reel/passage-au-reel-candidate-summary";
-import { isQuantifiedProposal } from "@/lib/utils";
+import { CandidateSectionNav } from "@/components/candidates/candidate-section-nav";
+import { CandidateParcoursSection } from "@/components/candidates/candidate-parcours-section";
+import { CandidateVotesSection } from "@/components/candidates/candidate-votes-section";
+import { CandidatePositionEvolutionSection } from "@/components/candidates/candidate-position-evolution-section";
+import { CandidateLegalControversiesSection } from "@/components/candidates/candidate-legal-controversies-section";
+import { CandidateTransparencySection } from "@/components/candidates/candidate-transparency-section";
 import {
   getCandidateBySlug,
+  getCandidateRecordBundle,
   getCandidates,
   getPositionsForCandidate,
   getProposalsForCandidate,
@@ -50,15 +54,14 @@ export default async function CandidatePage({
   const [candidate, themes] = await Promise.all([getCandidateBySlug(slug), getThemes()]);
   if (!candidate) notFound();
 
-  const [proposals, positions, questions, allAnalysisBundles] = await Promise.all([
+  const [proposals, positions, questions, allAnalysisBundles, recordBundle] = await Promise.all([
     getProposalsForCandidate(candidate.id),
     getPositionsForCandidate(candidate.id),
     getQuestions(),
     getPublishedMeasureAnalysisBundles(),
+    getCandidateRecordBundle(candidate.id),
   ]);
 
-  const sourceCount = new Set(proposals.map((p) => p.source_url)).size;
-  const quantifiedCount = proposals.filter(isQuantifiedProposal).length;
   const proposalIds = new Set(proposals.map((p) => p.id));
   const candidateAnalysisBundles = allAnalysisBundles.filter((b) => proposalIds.has(b.analysis.proposal_id));
   const analyzedProposalIds = new Set(candidateAnalysisBundles.map((b) => b.analysis.proposal_id));
@@ -87,7 +90,9 @@ export default async function CandidatePage({
         <div className="min-w-0 space-y-10">
           <CandidateHeroCard candidate={candidate} />
 
-          <div>
+          <CandidateSectionNav />
+
+          <div id="programme" className="scroll-mt-24 space-y-10">
             <CandidateProposalsSection
               proposals={proposals}
               themes={themes}
@@ -99,28 +104,46 @@ export default async function CandidatePage({
                 Aucune proposition documentée pour ce candidat à ce stade.
               </p>
             )}
-          </div>
 
-          <div>
-            <h2 id="positions" className="scroll-mt-24 text-2xl font-semibold tracking-tight">
-              Ses positions sur les questions du Match
-            </h2>
-            <p className="mt-2 text-sm text-muted">
-              Chaque position provient d&apos;une proposition sourcée — voir{" "}
-              <Link href="/methodologie" className="underline underline-offset-2">
-                comment c&apos;est calculé
-              </Link>
-              .
-            </p>
-            <div className="mt-6">
-              <CandidatePositionList positions={positions} questions={questions} />
+            <div>
+              <h3 id="positions" className="scroll-mt-24 text-2xl font-semibold tracking-tight">
+                Ses positions sur les questions du Match
+              </h3>
+              <p className="mt-2 text-sm text-muted">
+                Chaque position provient d&apos;une proposition sourcée — voir{" "}
+                <Link href="/methodologie" className="underline underline-offset-2">
+                  comment c&apos;est calculé
+                </Link>
+                .
+              </p>
+              <div className="mt-6">
+                <CandidatePositionList positions={positions} questions={questions} />
+              </div>
             </div>
           </div>
+
+          <CandidateParcoursSection careers={recordBundle.careers} mandates={recordBundle.mandates} />
+
+          <CandidateVotesSection votes={recordBundle.votes} themes={themes} />
+
+          <CandidatePositionEvolutionSection
+            evolutions={recordBundle.positionEvolutions}
+            positionHistory={recordBundle.positionHistory}
+            themes={themes}
+          />
+
+          <CandidateLegalControversiesSection
+            candidateId={candidate.id}
+            legalCases={recordBundle.legalCases}
+            controversies={recordBundle.controversies}
+          />
+
+          <CandidateTransparencySection records={recordBundle.transparencyRecords} />
 
           <CandidateSourcesSection proposals={proposals} />
 
           <div className="rounded-xl border border-border bg-surface p-5 text-sm text-muted">
-            Retrouvez le détail du calcul de proximité sur la page{" "}
+            Retrouvez le détail du calcul de proximité et de la méthodologie « Parcours & actes » sur la page{" "}
             <Link href="/methodologie" className="underline underline-offset-2">
               méthodologie
             </Link>
@@ -136,15 +159,14 @@ export default async function CandidatePage({
             épinglé plus haut que la fenêtre garde son bas hors champ tant
             que la colonne de gauche, bien plus longue, n'est pas arrivée à
             sa fin — l'utilisateur devait alors tout dérouler pour voir la
-            fin de la colonne de droite. */}
+            fin de la colonne de droite.
+            Les anciennes cartes de synthèse (En bref, Faisabilité & impact,
+            Parcours & actes) ont été retirées : la nav de section juste
+            au-dessus annonce déjà ces mêmes rubriques, les répéter ici en
+            chiffres faisait double emploi et surchargeait la colonne sans
+            rien apporter que le clic n'apporte déjà. */}
         <div className="min-w-0 space-y-6">
           <CandidateProximityCard candidate={candidate} />
-          <CandidateAtAGlanceCard
-            proposalCount={proposals.length}
-            quantifiedCount={quantifiedCount}
-            sourceCount={sourceCount}
-          />
-          <PassageAuReelCandidateSummary bundles={candidateAnalysisBundles} />
           <CandidatePointsCards candidate={candidate} />
           <CandidateDeepenCard slug={candidate.slug} />
         </div>

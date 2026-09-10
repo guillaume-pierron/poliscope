@@ -3,7 +3,16 @@ import { statSync } from "node:fs";
 import { join } from "node:path";
 import type {
   Candidate,
+  CandidateCareer,
+  CandidateControversy,
+  CandidateLegalCase,
+  CandidateMandate,
   CandidatePosition,
+  CandidatePositionEvolution,
+  CandidatePositionHistoryEntry,
+  CandidateRecordBundle,
+  CandidateTransparencyRecord,
+  CandidateVote,
   MeasureAnalysis,
   MeasureAnalysisBundle,
   MeasureAssumption,
@@ -33,6 +42,16 @@ import {
   pollResults as localPollResults,
 } from "./local/polls";
 import { measureAnalysisBundles as localMeasureAnalysisBundles } from "./local/measure-analyses";
+import {
+  candidateCareers as localCareers,
+  candidateControversies as localControversies,
+  candidateLegalCases as localLegalCases,
+  candidateMandates as localMandates,
+  candidatePositionEvolutions as localPositionEvolutions,
+  candidatePositionHistory as localPositionHistory,
+  candidateTransparencyRecords as localTransparencyRecords,
+  candidateVotes as localVotes,
+} from "./local/candidate-records";
 
 /**
  * Data access layer. Polysia ships with a fully-featured local demo
@@ -376,4 +395,86 @@ export async function getPublishedMeasureAnalysisBundleForProposal(
 export async function getProposalById(id: string): Promise<Proposal | undefined> {
   const all = await getProposals();
   return all.find((p) => p.id === id);
+}
+
+// =============================================================================
+// "Parcours & actes" — lecture publique. Même règle que
+// getPublishedMeasureAnalysisBundles : jamais un brouillon, la RLS Supabase
+// restreint déjà chaque table à status = 'published' pour la clé anonyme
+// (voir 0019_candidate_records.sql), et le fallback local applique le même
+// filtre pour rester cohérent en démo. Le back-office voit tous les statuts
+// via le client service_role (lib/admin/data.ts).
+// =============================================================================
+
+async function getPublished<T extends { status: string }>(table: string, local: T[]): Promise<T[]> {
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = await createSupabaseServerClient();
+      const { data, error } = await supabase.from(table).select("*").eq("status", "published");
+      if (error) throw error;
+      if (data) return data as T[];
+    } catch {
+      // fall through to local demo data
+    }
+  }
+  return local.filter((row) => row.status === "published");
+}
+
+export async function getCandidateCareers(): Promise<CandidateCareer[]> {
+  return getPublished("candidate_careers", localCareers);
+}
+
+export async function getCandidateMandates(): Promise<CandidateMandate[]> {
+  return getPublished("candidate_mandates", localMandates);
+}
+
+export async function getCandidateVotes(): Promise<CandidateVote[]> {
+  const votes = await getPublished("candidate_votes", localVotes);
+  return [...votes].sort((a, b) => (a.vote_date < b.vote_date ? 1 : -1));
+}
+
+export async function getCandidatePositionHistory(): Promise<CandidatePositionHistoryEntry[]> {
+  return getPublished("candidate_position_history", localPositionHistory);
+}
+
+export async function getCandidatePositionEvolutions(): Promise<CandidatePositionEvolution[]> {
+  return getPublished("candidate_position_evolutions", localPositionEvolutions);
+}
+
+export async function getCandidateLegalCases(): Promise<CandidateLegalCase[]> {
+  return getPublished("candidate_legal_cases", localLegalCases);
+}
+
+export async function getCandidateControversies(): Promise<CandidateControversy[]> {
+  return getPublished("candidate_controversies", localControversies);
+}
+
+export async function getCandidateTransparencyRecords(): Promise<CandidateTransparencyRecord[]> {
+  return getPublished("candidate_transparency_records", localTransparencyRecords);
+}
+
+/** Le paquet "Parcours & actes" complet d'un candidat — un aller-retour par table, jamais assemblé partiellement. */
+export async function getCandidateRecordBundle(candidateId: string): Promise<CandidateRecordBundle> {
+  const [careers, mandates, votes, positionHistory, positionEvolutions, legalCases, controversies, transparencyRecords] =
+    await Promise.all([
+      getCandidateCareers(),
+      getCandidateMandates(),
+      getCandidateVotes(),
+      getCandidatePositionHistory(),
+      getCandidatePositionEvolutions(),
+      getCandidateLegalCases(),
+      getCandidateControversies(),
+      getCandidateTransparencyRecords(),
+    ]);
+
+  return {
+    careers: careers.filter((r) => r.candidate_id === candidateId),
+    mandates: mandates.filter((r) => r.candidate_id === candidateId),
+    votes: votes.filter((r) => r.candidate_id === candidateId),
+    positionHistory: positionHistory.filter((r) => r.candidate_id === candidateId),
+    positionEvolutions: positionEvolutions.filter((r) => r.candidate_id === candidateId),
+    legalCases: legalCases.filter((r) => r.candidate_id === candidateId),
+    controversies: controversies.filter((r) => r.candidate_id === candidateId),
+    transparencyRecords: transparencyRecords.filter((r) => r.candidate_id === candidateId),
+  };
 }

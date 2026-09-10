@@ -630,6 +630,349 @@ export interface MeasureAnalysisBundle {
   assumptions: MeasureAssumption[];
 }
 
+// =============================================================================
+// "Parcours & actes" — le parcours réel des candidats : métiers exercés,
+// mandats, votes parlementaires, évolution des positions, affaires
+// judiciaires, controverses documentées et transparence.
+//
+// Même règle absolue que "Passage au réel" ci-dessus : aucune information
+// inventée, aucun jugement ("ment", "corrompu", "a retourné sa veste")
+// généré automatiquement. Polysia montre les faits sourcés et laisse
+// l'utilisateur juger. Un statut `not_documented` n'est jamais stocké : une
+// rubrique vide se lit "aucun·e [x] documenté·e dans Polysia", jamais
+// "aucun·e [x]" — voir /methodologie.
+// =============================================================================
+
+/** Chaîne de publication commune à toutes les tables "Parcours & actes" — identique à AnalysisStatus. */
+export type RecordStatus = "draft" | "review_required" | "published" | "outdated";
+
+export const RECORD_STATUS_LABELS: Record<RecordStatus, string> = {
+  draft: "Brouillon",
+  review_required: "À valider",
+  published: "Publié",
+  outdated: "À actualiser",
+};
+
+/** D'où vient une information — priorité de fiabilité décroissante, voir /methodologie. */
+export type RecordSourceType = "official" | "court" | "parliament" | "candidate" | "media" | "institution" | "other";
+
+export const RECORD_SOURCE_TYPE_LABELS: Record<RecordSourceType, string> = {
+  official: "Source officielle",
+  court: "Décision de justice",
+  parliament: "Assemblée / Sénat / Parlement européen",
+  candidate: "Déclaration du candidat",
+  media: "Média",
+  institution: "Institution publique",
+  other: "Autre source",
+};
+
+/**
+ * Une expérience professionnelle (avant ou en parallèle de la politique).
+ * `start_date`/`end_date` sont du texte libre (année seule acceptée, comme
+ * `Candidate.birth_date`) : jamais un jour inventé faute de source précise.
+ * `is_ongoing` distingue explicitement "poste toujours occupé" de "date de
+ * fin inconnue" — les deux ne doivent jamais être confondus.
+ */
+export interface CandidateCareer {
+  id: string;
+  candidate_id: string;
+  title: string;
+  organization: string;
+  sector: string | null;
+  description: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  is_ongoing: boolean;
+  source_name: string | null;
+  source_url: string | null;
+  source_type: RecordSourceType | null;
+  status: RecordStatus;
+  verified_at: string | null;
+}
+
+/** Un mandat ou une fonction politique. Mêmes conventions de date que CandidateCareer. */
+export interface CandidateMandate {
+  id: string;
+  candidate_id: string;
+  title: string;
+  institution: string;
+  territory: string | null;
+  appointment_type: "elu" | "nomme";
+  party_at_time: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  is_ongoing: boolean;
+  source_name: string | null;
+  source_url: string | null;
+  source_type: RecordSourceType | null;
+  status: RecordStatus;
+  verified_at: string | null;
+}
+
+export const APPOINTMENT_TYPE_LABELS: Record<CandidateMandate["appointment_type"], string> = {
+  elu: "Élu",
+  nomme: "Nommé",
+};
+
+export type VoteInstitution = "assemblee_nationale" | "senat" | "parlement_europeen";
+
+export const VOTE_INSTITUTION_LABELS: Record<VoteInstitution, string> = {
+  assemblee_nationale: "Assemblée nationale",
+  senat: "Sénat",
+  parlement_europeen: "Parlement européen",
+};
+
+/**
+ * "absent" et "did_not_vote" ne doivent jamais être affichés comme une
+ * abstention politique — voir CANDIDATE_VOTE_LABELS et le composant de vote.
+ */
+export type CandidateVoteValue = "for" | "against" | "abstention" | "did_not_vote" | "absent" | "not_available";
+
+export const CANDIDATE_VOTE_LABELS: Record<CandidateVoteValue, string> = {
+  for: "Pour",
+  against: "Contre",
+  abstention: "Abstention",
+  did_not_vote: "N'a pas pris part au vote",
+  absent: "Absent",
+  not_available: "Non disponible",
+};
+
+export type VoteImportance = "secondary" | "important" | "major";
+
+export const VOTE_IMPORTANCE_LABELS: Record<VoteImportance, string> = {
+  secondary: "Secondaire",
+  important: "Important",
+  major: "Structurant",
+};
+
+/** Un vote individuel documenté sur un scrutin public. */
+export interface CandidateVote {
+  id: string;
+  candidate_id: string;
+  institution: VoteInstitution;
+  legislature: string | null;
+  official_vote_id: string | null;
+  title: string;
+  /** Description factuelle du texte soumis au vote — jamais une interprétation politique du vote lui-même. */
+  description: string | null;
+  theme_id: string | null;
+  theme?: Theme;
+  vote_date: string;
+  candidate_vote: CandidateVoteValue;
+  importance_level: VoteImportance;
+  /** Sélection manuelle par l'admin, selon une méthodologie publique — jamais un choix automatique des votes les plus polémiques. */
+  featured: boolean;
+  source_name: string | null;
+  source_url: string;
+  source_type: RecordSourceType | null;
+  status: RecordStatus;
+  verified_at: string | null;
+}
+
+/** Une déclaration/position datée et sourcée sur un sujet — brique de base d'une timeline avant/après. */
+export interface CandidatePositionHistoryEntry {
+  id: string;
+  candidate_id: string;
+  theme_id: string | null;
+  theme?: Theme;
+  subject: string;
+  position_summary: string;
+  quote: string | null;
+  date: string | null;
+  source_name: string | null;
+  source_url: string | null;
+  source_type: RecordSourceType | null;
+  status: RecordStatus;
+  verified_at: string | null;
+}
+
+/**
+ * Statut éditorial neutre d'un changement documenté — jamais
+ * "retournement de veste". Voir POSITION_EVOLUTION_TYPE_LABELS.
+ */
+export type PositionEvolutionType =
+  | "position_maintained"
+  | "position_evolved"
+  | "position_clarified"
+  | "position_reversed"
+  | "insufficient_context";
+
+export const POSITION_EVOLUTION_TYPE_LABELS: Record<PositionEvolutionType, string> = {
+  position_maintained: "Position maintenue",
+  position_evolved: "Position évoluée",
+  position_clarified: "Position précisée",
+  position_reversed: "Changement de position",
+  insufficient_context: "Contexte insuffisant",
+};
+
+/**
+ * Nuance interne, distincte de `evolution_type` — jamais affichée seule comme
+ * un verdict. Une "confirmed_contradiction" exige une validation humaine
+ * avant publication (voir migration : status par défaut 'review_required').
+ */
+export type PositionConfidence =
+  | "compatible"
+  | "nuanced"
+  | "evolved"
+  | "apparently_contradictory"
+  | "confirmed_contradiction"
+  | "insufficient_context";
+
+export const POSITION_CONFIDENCE_LABELS: Record<PositionConfidence, string> = {
+  compatible: "Positions compatibles",
+  nuanced: "Position nuancée",
+  evolved: "Évolution documentée",
+  apparently_contradictory: "Contradiction apparente",
+  confirmed_contradiction: "Contradiction confirmée",
+  insufficient_context: "Contexte insuffisant",
+};
+
+/** La lecture éditoriale d'un changement documenté sur un thème donné. */
+export interface CandidatePositionEvolution {
+  id: string;
+  candidate_id: string;
+  theme_id: string | null;
+  theme?: Theme;
+  subject: string;
+  evolution_type: PositionEvolutionType;
+  confidence: PositionConfidence;
+  summary: string;
+  /** Explication donnée par le candidat lui-même, si sourcée — jamais une raison inventée par Polysia. */
+  candidate_explanation: string | null;
+  candidate_explanation_source_url: string | null;
+  status: RecordStatus;
+  verified_at: string | null;
+}
+
+/**
+ * Vocabulaire procédural français strict — ne jamais afficher "condamné"
+ * hors convicted_first_instance/convicted_final, ne jamais présenter une
+ * mise en examen (indicted) comme une culpabilité établie.
+ */
+export type LegalCaseStatus =
+  | "investigation"
+  | "questioned"
+  | "indicted"
+  | "charged"
+  | "trial_pending"
+  | "convicted_first_instance"
+  | "appeal_pending"
+  | "convicted_on_appeal"
+  | "convicted_final"
+  | "acquitted"
+  | "dismissed"
+  | "closed_without_action";
+
+export const LEGAL_CASE_STATUS_LABELS: Record<LegalCaseStatus, string> = {
+  investigation: "Enquête préliminaire",
+  questioned: "Auditionné(e)",
+  indicted: "Mis(e) en examen",
+  charged: "Poursuites engagées",
+  trial_pending: "Procès à venir",
+  convicted_first_instance: "Condamné(e) en première instance",
+  appeal_pending: "Appel en cours",
+  // La cour d'appel a statué et confirmé une condamnation, mais un pourvoi en
+  // cassation reste possible/en cours : distinct de "appeal_pending" (pas
+  // encore jugé) et de "convicted_final" (plus aucun recours possible).
+  convicted_on_appeal: "Condamné(e) en appel (pourvoi en cassation possible)",
+  convicted_final: "Condamné(e) définitivement",
+  acquitted: "Relaxé(e) / Acquitté(e)",
+  dismissed: "Non-lieu",
+  closed_without_action: "Classé(e) sans suite",
+};
+
+/** Une affaire judiciaire documentée. */
+export interface CandidateLegalCase {
+  id: string;
+  candidate_id: string;
+  title: string;
+  case_type: string;
+  summary: string;
+  legal_status: LegalCaseStatus;
+  jurisdiction: string | null;
+  start_date: string | null;
+  decision_date: string | null;
+  last_updated: string;
+  next_review_at: string | null;
+  source_name: string | null;
+  source_url: string | null;
+  source_type: RecordSourceType | null;
+  status: RecordStatus;
+}
+
+export type ControversyStatus = "documented" | "disputed" | "resolved" | "context_needed";
+
+export const CONTROVERSY_STATUS_LABELS: Record<ControversyStatus, string> = {
+  documented: "Documentée",
+  disputed: "Contestée",
+  resolved: "Résolue",
+  context_needed: "Contexte nécessaire",
+};
+
+/** Une polémique publique documentée — distincte d'une affaire judiciaire par construction (table séparée). */
+export interface CandidateControversy {
+  id: string;
+  candidate_id: string;
+  title: string;
+  summary: string;
+  event_date: string | null;
+  context: string | null;
+  candidate_response: string | null;
+  candidate_response_source_url: string | null;
+  controversy_status: ControversyStatus;
+  last_updated: string;
+  next_review_at: string | null;
+  source_name: string | null;
+  source_url: string | null;
+  source_type: RecordSourceType | null;
+  status: RecordStatus;
+}
+
+export type TransparencyRecordType =
+  | "declaration_interets"
+  | "declaration_patrimoine"
+  | "fonctions_declarees"
+  | "activites_professionnelles"
+  | "mandats_declares"
+  | "participations"
+  | "autre";
+
+export const TRANSPARENCY_RECORD_TYPE_LABELS: Record<TransparencyRecordType, string> = {
+  declaration_interets: "Déclaration d'intérêts",
+  declaration_patrimoine: "Déclaration de patrimoine",
+  fonctions_declarees: "Fonctions déclarées",
+  activites_professionnelles: "Activités professionnelles",
+  mandats_declares: "Mandats déclarés",
+  participations: "Participations",
+  autre: "Autre document",
+};
+
+/** Un document de transparence référencé (HATVP et assimilés). L'absence de ligne se lit "non documenté", jamais "n'existe pas". */
+export interface CandidateTransparencyRecord {
+  id: string;
+  candidate_id: string;
+  record_type: TransparencyRecordType;
+  title: string;
+  publication_date: string | null;
+  source_name: string | null;
+  source_url: string | null;
+  source_type: RecordSourceType | null;
+  status: RecordStatus;
+  verified_at: string | null;
+}
+
+/** Le paquet "Parcours & actes" complet d'un candidat, pour la fiche et le bloc de synthèse. */
+export interface CandidateRecordBundle {
+  careers: CandidateCareer[];
+  mandates: CandidateMandate[];
+  votes: CandidateVote[];
+  positionHistory: CandidatePositionHistoryEntry[];
+  positionEvolutions: CandidatePositionEvolution[];
+  legalCases: CandidateLegalCase[];
+  controversies: CandidateControversy[];
+  transparencyRecords: CandidateTransparencyRecord[];
+}
+
 export const ORIENTATION_LABELS: Record<Orientation, string> = {
   gauche: "Gauche",
   "centre-gauche": "Centre gauche",

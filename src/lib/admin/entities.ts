@@ -8,7 +8,15 @@ export type EntityKey =
   | "analyses"
   | "budgets"
   | "impacts"
-  | "hypotheses";
+  | "hypotheses"
+  | "carrieres"
+  | "mandats"
+  | "votes"
+  | "declarations"
+  | "evolutions"
+  | "affaires"
+  | "controverses"
+  | "transparence";
 
 export type FieldType = "text" | "textarea" | "number" | "url" | "date" | "select" | "boolean" | "json";
 
@@ -32,6 +40,30 @@ export interface EntityConfig {
   titleField: string;
   fields: EntityField[];
 }
+
+const RECORD_STATUS_OPTIONS = [
+  { value: "draft", label: "Brouillon" },
+  { value: "review_required", label: "À valider" },
+  { value: "published", label: "Publié" },
+  { value: "outdated", label: "À actualiser" },
+];
+
+const REVIEW_FIRST_STATUS_OPTIONS = [
+  { value: "review_required", label: "À valider" },
+  { value: "draft", label: "Brouillon" },
+  { value: "published", label: "Publié" },
+  { value: "outdated", label: "À actualiser" },
+];
+
+const SOURCE_TYPE_OPTIONS = [
+  { value: "official", label: "Source officielle" },
+  { value: "court", label: "Décision de justice" },
+  { value: "parliament", label: "Assemblée / Sénat / Parlement européen" },
+  { value: "candidate", label: "Déclaration du candidat" },
+  { value: "media", label: "Média" },
+  { value: "institution", label: "Institution publique" },
+  { value: "other", label: "Autre source" },
+];
 
 export const ENTITIES: Record<EntityKey, EntityConfig> = {
   themes: {
@@ -487,6 +519,299 @@ export const ENTITIES: Record<EntityKey, EntityConfig> = {
       { name: "justification", label: "Justification", type: "textarea" },
       { name: "source_name", label: "Nom de la source", type: "text" },
       { name: "source_url", label: "URL de la source", type: "url" },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────
+  // "Parcours & actes" — le parcours réel des candidats. Même principe que
+  // "Passage au réel" ci-dessus : `status` est la seule action de
+  // publication, une ligne en brouillon n'est jamais visible publiquement
+  // (voir la RLS de 0019_candidate_records.sql). Affaires judiciaires et
+  // controverses démarrent à « À valider » par défaut : une validation
+  // humaine explicite avant publication n'est pas négociable pour ces deux
+  // catégories.
+  // ─────────────────────────────────────────────────────────────────────
+  carrieres: {
+    key: "carrieres",
+    table: "candidate_careers",
+    label: "Expérience",
+    labelPlural: "Parcours & actes — Parcours professionnel",
+    titleField: "title",
+    fields: [
+      { name: "candidate_id", label: "Candidat", type: "select", relation: "candidats", required: true },
+      { name: "title", label: "Intitulé", type: "text", required: true },
+      { name: "organization", label: "Organisation", type: "text", required: true },
+      { name: "sector", label: "Secteur", type: "text" },
+      { name: "description", label: "Description courte", type: "textarea" },
+      { name: "start_date", label: "Date de début (AAAA-MM-JJ ou AAAA)", type: "text", help: "Année seule acceptée si la source ne donne pas le jour — jamais une date inventée." },
+      { name: "end_date", label: "Date de fin", type: "text", help: "Laisser vide si inconnue ou si le poste est toujours occupé (voir « En cours » ci-dessous)." },
+      { name: "is_ongoing", label: "Poste toujours occupé", type: "boolean", help: "À cocher uniquement si la source le confirme — sinon laisser la date de fin vide plutôt que de deviner." },
+      { name: "source_name", label: "Nom de la source", type: "text" },
+      { name: "source_url", label: "URL de la source", type: "url" },
+      { name: "source_type", label: "Type de source", type: "select", options: SOURCE_TYPE_OPTIONS },
+      { name: "status", label: "Statut", type: "select", options: RECORD_STATUS_OPTIONS, help: "Seul « Publié » est visible sur le site public." },
+      { name: "verified_at", label: "Dernière vérification", type: "date" },
+    ],
+  },
+  mandats: {
+    key: "mandats",
+    table: "candidate_mandates",
+    label: "Mandat",
+    labelPlural: "Parcours & actes — Mandats & fonctions",
+    titleField: "title",
+    fields: [
+      { name: "candidate_id", label: "Candidat", type: "select", relation: "candidats", required: true },
+      { name: "title", label: "Fonction", type: "text", required: true, help: "Ex. « Député », « Ministre de l'Intérieur »." },
+      { name: "institution", label: "Institution", type: "text", required: true },
+      { name: "territory", label: "Territoire", type: "text" },
+      {
+        name: "appointment_type",
+        label: "Élu / nommé",
+        type: "select",
+        options: [
+          { value: "elu", label: "Élu" },
+          { value: "nomme", label: "Nommé" },
+        ],
+      },
+      { name: "party_at_time", label: "Parti à cette période (si connu)", type: "text" },
+      { name: "start_date", label: "Date de début (AAAA-MM-JJ ou AAAA)", type: "text" },
+      { name: "end_date", label: "Date de fin", type: "text" },
+      { name: "is_ongoing", label: "Mandat toujours en cours", type: "boolean" },
+      { name: "source_name", label: "Nom de la source officielle", type: "text" },
+      { name: "source_url", label: "URL de la source officielle", type: "url" },
+      { name: "source_type", label: "Type de source", type: "select", options: SOURCE_TYPE_OPTIONS },
+      { name: "status", label: "Statut", type: "select", options: RECORD_STATUS_OPTIONS, help: "Seul « Publié » est visible sur le site public." },
+      { name: "verified_at", label: "Dernière vérification", type: "date" },
+    ],
+  },
+  votes: {
+    key: "votes",
+    table: "candidate_votes",
+    label: "Vote",
+    labelPlural: "Parcours & actes — Votes parlementaires",
+    titleField: "title",
+    fields: [
+      { name: "candidate_id", label: "Candidat", type: "select", relation: "candidats", required: true },
+      {
+        name: "institution",
+        label: "Institution",
+        type: "select",
+        required: true,
+        options: [
+          { value: "assemblee_nationale", label: "Assemblée nationale" },
+          { value: "senat", label: "Sénat" },
+          { value: "parlement_europeen", label: "Parlement européen" },
+        ],
+      },
+      { name: "legislature", label: "Législature", type: "text" },
+      { name: "official_vote_id", label: "Identifiant du scrutin officiel", type: "text" },
+      { name: "title", label: "Titre du scrutin", type: "text", required: true },
+      { name: "description", label: "Description factuelle du texte soumis au vote", type: "textarea", help: "Jamais une interprétation politique du vote — ce qui était réellement voté." },
+      { name: "theme_id", label: "Thème", type: "select", relation: "themes" },
+      { name: "vote_date", label: "Date du scrutin", type: "date", required: true },
+      {
+        name: "candidate_vote",
+        label: "Position du candidat",
+        type: "select",
+        required: true,
+        options: [
+          { value: "for", label: "Pour" },
+          { value: "against", label: "Contre" },
+          { value: "abstention", label: "Abstention" },
+          { value: "did_not_vote", label: "N'a pas pris part au vote" },
+          { value: "absent", label: "Absent" },
+          { value: "not_available", label: "Non disponible" },
+        ],
+        help: "« Absent » et « N'a pas pris part au vote » ne sont jamais une abstention politique — ne pas les confondre.",
+      },
+      {
+        name: "importance_level",
+        label: "Niveau d'importance",
+        type: "select",
+        options: [
+          { value: "secondary", label: "Secondaire" },
+          { value: "important", label: "Important" },
+          { value: "major", label: "Structurant" },
+        ],
+        help: "Suit la méthodologie publique — jamais choisi seulement parce qu'un vote est polémique.",
+      },
+      { name: "featured", label: "Mettre en avant sur la fiche", type: "boolean" },
+      { name: "source_name", label: "Nom de la source", type: "text" },
+      { name: "source_url", label: "URL du scrutin officiel", type: "url", required: true },
+      { name: "source_type", label: "Type de source", type: "select", options: SOURCE_TYPE_OPTIONS },
+      { name: "status", label: "Statut", type: "select", options: RECORD_STATUS_OPTIONS, help: "Seul « Publié » est visible sur le site public." },
+      { name: "verified_at", label: "Dernière vérification", type: "date" },
+    ],
+  },
+  declarations: {
+    key: "declarations",
+    table: "candidate_position_history",
+    label: "Déclaration",
+    labelPlural: "Parcours & actes — Historique des positions",
+    titleField: "subject",
+    fields: [
+      { name: "candidate_id", label: "Candidat", type: "select", relation: "candidats", required: true },
+      { name: "theme_id", label: "Thème", type: "select", relation: "themes" },
+      { name: "subject", label: "Sujet", type: "text", required: true, help: "Ex. « Immigration — regroupement familial »." },
+      { name: "position_summary", label: "Résumé de la position", type: "textarea", required: true },
+      { name: "quote", label: "Citation (optionnelle)", type: "textarea" },
+      { name: "date", label: "Date de la déclaration", type: "date" },
+      { name: "source_name", label: "Nom de la source", type: "text" },
+      { name: "source_url", label: "URL de la source", type: "url" },
+      { name: "source_type", label: "Type de source", type: "select", options: SOURCE_TYPE_OPTIONS },
+      { name: "status", label: "Statut", type: "select", options: RECORD_STATUS_OPTIONS, help: "Seul « Publié » est visible sur le site public." },
+      { name: "verified_at", label: "Dernière vérification", type: "date" },
+    ],
+  },
+  evolutions: {
+    key: "evolutions",
+    table: "candidate_position_evolutions",
+    label: "Évolution",
+    labelPlural: "Parcours & actes — Évolutions de positions",
+    titleField: "subject",
+    fields: [
+      { name: "candidate_id", label: "Candidat", type: "select", relation: "candidats", required: true },
+      { name: "theme_id", label: "Thème", type: "select", relation: "themes" },
+      { name: "subject", label: "Sujet", type: "text", required: true },
+      {
+        name: "evolution_type",
+        label: "Statut affiché",
+        type: "select",
+        required: true,
+        options: [
+          { value: "position_maintained", label: "Position maintenue" },
+          { value: "position_evolved", label: "Position évoluée" },
+          { value: "position_clarified", label: "Position précisée" },
+          { value: "position_reversed", label: "Changement de position" },
+          { value: "insufficient_context", label: "Contexte insuffisant" },
+        ],
+        help: "Jamais « retournement de veste » — vocabulaire neutre uniquement.",
+      },
+      {
+        name: "confidence",
+        label: "Nuance interne (jamais affichée seule comme un verdict)",
+        type: "select",
+        options: [
+          { value: "compatible", label: "Positions compatibles" },
+          { value: "nuanced", label: "Position nuancée" },
+          { value: "evolved", label: "Évolution documentée" },
+          { value: "apparently_contradictory", label: "Contradiction apparente" },
+          { value: "confirmed_contradiction", label: "Contradiction confirmée" },
+          { value: "insufficient_context", label: "Contexte insuffisant" },
+        ],
+        help: "« Contradiction confirmée » exige une validation humaine avant publication — garder le statut à « À valider » jusqu'à vérification complète.",
+      },
+      { name: "summary", label: "Résumé factuel de l'évolution", type: "textarea", required: true },
+      { name: "candidate_explanation", label: "Explication donnée par le candidat (si sourcée)", type: "textarea", help: "Ne jamais inventer une raison au changement — laisser vide si le candidat ne s'est pas exprimé." },
+      { name: "candidate_explanation_source_url", label: "URL de l'explication du candidat", type: "url" },
+      { name: "status", label: "Statut", type: "select", options: REVIEW_FIRST_STATUS_OPTIONS, help: "Démarre à « À valider » par défaut — seul « Publié » est visible sur le site public." },
+      { name: "verified_at", label: "Dernière vérification", type: "date" },
+    ],
+  },
+  affaires: {
+    key: "affaires",
+    table: "candidate_legal_cases",
+    label: "Affaire judiciaire",
+    labelPlural: "Parcours & actes — Affaires judiciaires",
+    titleField: "title",
+    fields: [
+      { name: "candidate_id", label: "Candidat", type: "select", relation: "candidats", required: true },
+      { name: "title", label: "Nom court", type: "text", required: true },
+      { name: "case_type", label: "Nature de l'affaire", type: "text", required: true },
+      { name: "summary", label: "Résumé factuel", type: "textarea", required: true, help: "Faits uniquement — jamais « corrompu », jamais « a menti »." },
+      {
+        name: "legal_status",
+        label: "Statut procédural",
+        type: "select",
+        required: true,
+        options: [
+          { value: "investigation", label: "Enquête préliminaire" },
+          { value: "questioned", label: "Auditionné(e)" },
+          { value: "indicted", label: "Mis(e) en examen" },
+          { value: "charged", label: "Poursuites engagées" },
+          { value: "trial_pending", label: "Procès à venir" },
+          { value: "convicted_first_instance", label: "Condamné(e) en première instance" },
+          { value: "appeal_pending", label: "Appel en cours" },
+          { value: "convicted_on_appeal", label: "Condamné(e) en appel (pourvoi en cassation possible)" },
+          { value: "convicted_final", label: "Condamné(e) définitivement" },
+          { value: "acquitted", label: "Relaxé(e) / Acquitté(e)" },
+          { value: "dismissed", label: "Non-lieu" },
+          { value: "closed_without_action", label: "Classé(e) sans suite" },
+        ],
+        help: "Ne jamais utiliser « condamné » hors des deux statuts de condamnation. Une mise en examen n'est jamais une culpabilité établie.",
+      },
+      { name: "jurisdiction", label: "Juridiction", type: "text" },
+      { name: "start_date", label: "Date d'ouverture", type: "date" },
+      { name: "decision_date", label: "Date de la dernière décision", type: "date" },
+      { name: "next_review_at", label: "Prochaine vérification prévue", type: "date" },
+      { name: "source_name", label: "Nom de la source", type: "text" },
+      { name: "source_url", label: "URL de la source", type: "url" },
+      { name: "source_type", label: "Type de source", type: "select", options: SOURCE_TYPE_OPTIONS },
+      { name: "status", label: "Statut de publication", type: "select", options: REVIEW_FIRST_STATUS_OPTIONS, help: "Démarre à « À valider » par défaut — une validation humaine est requise avant « Publié »." },
+    ],
+  },
+  controverses: {
+    key: "controverses",
+    table: "candidate_controversies",
+    label: "Controverse",
+    labelPlural: "Parcours & actes — Controverses",
+    titleField: "title",
+    fields: [
+      { name: "candidate_id", label: "Candidat", type: "select", relation: "candidats", required: true },
+      { name: "title", label: "Titre neutre", type: "text", required: true, help: "Jamais « Casseroles » ni « Scandale » — un intitulé factuel." },
+      { name: "summary", label: "Description factuelle", type: "textarea", required: true },
+      { name: "event_date", label: "Date des faits", type: "date" },
+      { name: "context", label: "Contexte", type: "textarea" },
+      { name: "candidate_response", label: "Réponse du candidat (si sourcée)", type: "textarea" },
+      { name: "candidate_response_source_url", label: "URL de la réponse du candidat", type: "url" },
+      {
+        name: "controversy_status",
+        label: "Statut de la controverse",
+        type: "select",
+        options: [
+          { value: "documented", label: "Documentée" },
+          { value: "disputed", label: "Contestée" },
+          { value: "resolved", label: "Résolue" },
+          { value: "context_needed", label: "Contexte nécessaire" },
+        ],
+      },
+      { name: "next_review_at", label: "Prochaine vérification prévue", type: "date" },
+      { name: "source_name", label: "Nom de la source", type: "text" },
+      { name: "source_url", label: "URL de la source", type: "url" },
+      { name: "source_type", label: "Type de source", type: "select", options: SOURCE_TYPE_OPTIONS },
+      { name: "status", label: "Statut de publication", type: "select", options: REVIEW_FIRST_STATUS_OPTIONS, help: "Démarre à « À valider » par défaut — une validation humaine est requise avant « Publié »." },
+    ],
+  },
+  transparence: {
+    key: "transparence",
+    table: "candidate_transparency_records",
+    label: "Document",
+    labelPlural: "Parcours & actes — Transparence",
+    titleField: "title",
+    fields: [
+      { name: "candidate_id", label: "Candidat", type: "select", relation: "candidats", required: true },
+      {
+        name: "record_type",
+        label: "Type de document",
+        type: "select",
+        required: true,
+        options: [
+          { value: "declaration_interets", label: "Déclaration d'intérêts" },
+          { value: "declaration_patrimoine", label: "Déclaration de patrimoine" },
+          { value: "fonctions_declarees", label: "Fonctions déclarées" },
+          { value: "activites_professionnelles", label: "Activités professionnelles" },
+          { value: "mandats_declares", label: "Mandats déclarés" },
+          { value: "participations", label: "Participations" },
+          { value: "autre", label: "Autre document" },
+        ],
+      },
+      { name: "title", label: "Intitulé", type: "text", required: true },
+      { name: "publication_date", label: "Date de publication", type: "date" },
+      { name: "source_name", label: "Nom de la source", type: "text", help: "Ex. « HATVP »." },
+      { name: "source_url", label: "URL du document officiel", type: "url" },
+      { name: "source_type", label: "Type de source", type: "select", options: SOURCE_TYPE_OPTIONS },
+      { name: "status", label: "Statut", type: "select", options: RECORD_STATUS_OPTIONS, help: "Seul « Publié » est visible sur le site public." },
+      { name: "verified_at", label: "Dernière vérification", type: "date" },
     ],
   },
 };

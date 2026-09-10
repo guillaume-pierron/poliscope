@@ -154,7 +154,13 @@ export const candidates: Candidate[] = [
     photo_url: "/candidates/marine-le-pen.jpg",
     party_id: "party-rn",
     biography:
-      "Née le 5 août 1968 à Neuilly-sur-Seine, Marine Le Pen est avocate de formation. Présidente du Front National puis du Rassemblement National de 2011 à 2021, elle est députée du Pas-de-Calais et préside le groupe RN à l'Assemblée nationale depuis 2022. Elle a été candidate à la présidentielle en 2012, 2017 et 2022. En juillet 2026, la cour d'appel de Paris l'a condamnée dans l'affaire des assistants parlementaires du RN à une peine d'inéligibilité déjà exécutée et à une peine de prison aménagée, sans l'empêcher de se présenter en 2027 ; elle s'est pourvue en cassation.",
+      // Les affaires judiciaires ne sont jamais mentionnées dans une
+      // biographie : elles ont leur rubrique dédiée (« Affaires &
+      // controverses »), avec le vocabulaire procédural exact, le statut à
+      // jour et les sources. Les redoubler ici reviendrait à pondérer deux
+      // fois la même information pour certains candidats seulement — donc à
+      // rompre l'égalité de traitement que la méthodologie garantit.
+      "Née le 5 août 1968 à Neuilly-sur-Seine, Marine Le Pen est avocate de formation. Présidente du Front National puis du Rassemblement National de 2011 à 2021, elle est députée du Pas-de-Calais et préside le groupe RN à l'Assemblée nationale depuis 2022. Elle a été candidate à la présidentielle en 2012, 2017 et 2022.",
     official_website: "https://rassemblementnational.fr/membre/marine-le-pen",
     election_id: activeElection.id,
     is_demo: false,

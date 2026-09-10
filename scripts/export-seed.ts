@@ -24,6 +24,16 @@ import {
   measureBudgetEstimates,
   measureImpacts,
 } from "../src/lib/data/local/measure-analyses";
+import {
+  candidateCareers,
+  candidateControversies,
+  candidateLegalCases,
+  candidateMandates,
+  candidatePositionEvolutions,
+  candidatePositionHistory,
+  candidateTransparencyRecords,
+  candidateVotes,
+} from "../src/lib/data/local/candidate-records";
 
 function uuid(kind: string, key: string) {
   return `uuid_generate_v5(uuid_ns_url(), 'poliscope:${kind}:${key}')`;
@@ -156,6 +166,73 @@ lines.push("", "-- measure_assumptions");
 for (const a of measureAssumptions) {
   lines.push(
     `insert into measure_assumptions (id, measure_analysis_id, name, value, unit, assumption_type, justification, source_name, source_url) values (${uuid("measure_assumption", a.id)}, ${uuid("measure_analysis", a.measure_analysis_id)}, ${sqlString(a.name)}, ${sqlString(a.value)}, ${sqlString(a.unit)}, ${sqlString(a.assumption_type)}, ${sqlString(a.justification)}, ${sqlString(a.source_name)}, ${sqlString(a.source_url)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- candidate_careers (Parcours & actes)");
+for (const c of candidateCareers) {
+  const candidate = candidates.find((cand) => cand.id === c.candidate_id)!;
+  lines.push(
+    `insert into candidate_careers (id, candidate_id, title, organization, sector, description, start_date, end_date, is_ongoing, source_name, source_url, source_type, status, verified_at) values (${uuid("candidate_career", c.id)}, ${uuid("candidate", candidate.slug)}, ${sqlString(c.title)}, ${sqlString(c.organization)}, ${sqlString(c.sector)}, ${sqlString(c.description)}, ${sqlString(c.start_date)}, ${sqlString(c.end_date)}, ${sqlBool(c.is_ongoing)}, ${sqlString(c.source_name)}, ${sqlString(c.source_url)}, ${sqlString(c.source_type)}, ${sqlString(c.status)}, ${sqlString(c.verified_at)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- candidate_mandates");
+for (const m of candidateMandates) {
+  const candidate = candidates.find((cand) => cand.id === m.candidate_id)!;
+  lines.push(
+    `insert into candidate_mandates (id, candidate_id, title, institution, territory, appointment_type, party_at_time, start_date, end_date, is_ongoing, source_name, source_url, source_type, status, verified_at) values (${uuid("candidate_mandate", m.id)}, ${uuid("candidate", candidate.slug)}, ${sqlString(m.title)}, ${sqlString(m.institution)}, ${sqlString(m.territory)}, ${sqlString(m.appointment_type)}, ${sqlString(m.party_at_time)}, ${sqlString(m.start_date)}, ${sqlString(m.end_date)}, ${sqlBool(m.is_ongoing)}, ${sqlString(m.source_name)}, ${sqlString(m.source_url)}, ${sqlString(m.source_type)}, ${sqlString(m.status)}, ${sqlString(m.verified_at)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- candidate_votes");
+for (const v of candidateVotes) {
+  const candidate = candidates.find((cand) => cand.id === v.candidate_id)!;
+  const themeSlug = v.theme_id ? themes.find((t) => t.id === v.theme_id)?.slug : null;
+  lines.push(
+    `insert into candidate_votes (id, candidate_id, institution, legislature, official_vote_id, title, description, theme_id, vote_date, candidate_vote, importance_level, featured, source_name, source_url, source_type, status, verified_at) values (${uuid("candidate_vote", v.id)}, ${uuid("candidate", candidate.slug)}, ${sqlString(v.institution)}, ${sqlString(v.legislature)}, ${sqlString(v.official_vote_id)}, ${sqlString(v.title)}, ${sqlString(v.description)}, ${themeSlug ? uuid("theme", themeSlug) : "null"}, ${sqlString(v.vote_date)}, ${sqlString(v.candidate_vote)}, ${sqlString(v.importance_level)}, ${sqlBool(v.featured)}, ${sqlString(v.source_name)}, ${sqlString(v.source_url)}, ${sqlString(v.source_type)}, ${sqlString(v.status)}, ${sqlString(v.verified_at)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- candidate_position_history");
+for (const h of candidatePositionHistory) {
+  const candidate = candidates.find((cand) => cand.id === h.candidate_id)!;
+  const themeSlug = h.theme_id ? themes.find((t) => t.id === h.theme_id)?.slug : null;
+  lines.push(
+    `insert into candidate_position_history (id, candidate_id, theme_id, subject, position_summary, quote, date, source_name, source_url, source_type, status, verified_at) values (${uuid("candidate_position_history", h.id)}, ${uuid("candidate", candidate.slug)}, ${themeSlug ? uuid("theme", themeSlug) : "null"}, ${sqlString(h.subject)}, ${sqlString(h.position_summary)}, ${sqlString(h.quote)}, ${sqlString(h.date)}, ${sqlString(h.source_name)}, ${sqlString(h.source_url)}, ${sqlString(h.source_type)}, ${sqlString(h.status)}, ${sqlString(h.verified_at)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- candidate_position_evolutions");
+for (const e of candidatePositionEvolutions) {
+  const candidate = candidates.find((cand) => cand.id === e.candidate_id)!;
+  const themeSlug = e.theme_id ? themes.find((t) => t.id === e.theme_id)?.slug : null;
+  lines.push(
+    `insert into candidate_position_evolutions (id, candidate_id, theme_id, subject, evolution_type, confidence, summary, candidate_explanation, candidate_explanation_source_url, status, verified_at) values (${uuid("candidate_position_evolution", e.id)}, ${uuid("candidate", candidate.slug)}, ${themeSlug ? uuid("theme", themeSlug) : "null"}, ${sqlString(e.subject)}, ${sqlString(e.evolution_type)}, ${sqlString(e.confidence)}, ${sqlString(e.summary)}, ${sqlString(e.candidate_explanation)}, ${sqlString(e.candidate_explanation_source_url)}, ${sqlString(e.status)}, ${sqlString(e.verified_at)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- candidate_legal_cases");
+for (const l of candidateLegalCases) {
+  const candidate = candidates.find((cand) => cand.id === l.candidate_id)!;
+  lines.push(
+    `insert into candidate_legal_cases (id, candidate_id, title, case_type, summary, legal_status, jurisdiction, start_date, decision_date, last_updated, next_review_at, source_name, source_url, source_type, status) values (${uuid("candidate_legal_case", l.id)}, ${uuid("candidate", candidate.slug)}, ${sqlString(l.title)}, ${sqlString(l.case_type)}, ${sqlString(l.summary)}, ${sqlString(l.legal_status)}, ${sqlString(l.jurisdiction)}, ${sqlString(l.start_date)}, ${sqlString(l.decision_date)}, ${sqlString(l.last_updated)}, ${sqlString(l.next_review_at)}, ${sqlString(l.source_name)}, ${sqlString(l.source_url)}, ${sqlString(l.source_type)}, ${sqlString(l.status)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- candidate_controversies");
+for (const c of candidateControversies) {
+  const candidate = candidates.find((cand) => cand.id === c.candidate_id)!;
+  lines.push(
+    `insert into candidate_controversies (id, candidate_id, title, summary, event_date, context, candidate_response, candidate_response_source_url, controversy_status, last_updated, next_review_at, source_name, source_url, source_type, status) values (${uuid("candidate_controversy", c.id)}, ${uuid("candidate", candidate.slug)}, ${sqlString(c.title)}, ${sqlString(c.summary)}, ${sqlString(c.event_date)}, ${sqlString(c.context)}, ${sqlString(c.candidate_response)}, ${sqlString(c.candidate_response_source_url)}, ${sqlString(c.controversy_status)}, ${sqlString(c.last_updated)}, ${sqlString(c.next_review_at)}, ${sqlString(c.source_name)}, ${sqlString(c.source_url)}, ${sqlString(c.source_type)}, ${sqlString(c.status)}) on conflict (id) do nothing;`
+  );
+}
+
+lines.push("", "-- candidate_transparency_records");
+for (const t of candidateTransparencyRecords) {
+  const candidate = candidates.find((cand) => cand.id === t.candidate_id)!;
+  lines.push(
+    `insert into candidate_transparency_records (id, candidate_id, record_type, title, publication_date, source_name, source_url, source_type, status, verified_at) values (${uuid("candidate_transparency_record", t.id)}, ${uuid("candidate", candidate.slug)}, ${sqlString(t.record_type)}, ${sqlString(t.title)}, ${sqlString(t.publication_date)}, ${sqlString(t.source_name)}, ${sqlString(t.source_url)}, ${sqlString(t.source_type)}, ${sqlString(t.status)}, ${sqlString(t.verified_at)}) on conflict (id) do nothing;`
   );
 }
 

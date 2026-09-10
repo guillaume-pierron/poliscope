@@ -320,6 +320,90 @@ export default function MethodologiePage() {
             .
           </p>
         </section>
+
+        <section id="parcours-et-actes" className="scroll-mt-24">
+          <h2 className="text-xl font-semibold">13. « Parcours & actes » : ce que les candidats ont réellement fait</h2>
+          <p className="mt-3 leading-relaxed text-foreground/85">
+            Le reste de ce site montre ce que les candidats proposent. Cette rubrique montre, quand
+            c&apos;est documenté, ce qu&apos;ils ont exercé comme métier, quels mandats ils ont occupés,
+            comment ils ont voté, comment leurs positions ont évolué, et les éventuelles affaires
+            judiciaires ou controverses publiques les concernant. Le principe absolu reste le même
+            partout ailleurs sur Polysia :{" "}
+            <strong>mieux vaut une rubrique vide (« Non documenté ») qu&apos;une affirmation impossible à
+            défendre.</strong> Aucune information sensible n&apos;est inventée, reformulée de façon
+            sensationnaliste, ou présentée comme un jugement — Polysia montre les faits sourcés et laisse
+            le lecteur juger.
+          </p>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-border bg-surface p-4">
+              <p className="font-semibold text-foreground">Comment sont choisis les votes affichés ?</p>
+              <p className="mt-1.5 text-sm text-muted">
+                Un vote est référencé lorsqu&apos;un scrutin public individuel existe (Assemblée nationale,
+                Sénat, Parlement européen) et que son texte peut être décrit factuellement. Un niveau
+                d&apos;importance (secondaire / important / structurant) suit une méthodologie publique et
+                identique pour tous les candidats — jamais une sélection qui privilégierait les votes les
+                plus polémiques pour certains candidats plus que d&apos;autres.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-surface p-4">
+              <p className="font-semibold text-foreground">« Absent » n&apos;est jamais une abstention</p>
+              <p className="mt-1.5 text-sm text-muted">
+                Un scrutin distingue « Pour », « Contre », « Abstention », « N&apos;a pas pris part au
+                vote » et « Absent ». Ces cinq états sont sourcés et affichés tels quels : ne pas avoir
+                participé à un vote n&apos;est jamais présenté comme une position politique.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-surface p-4">
+              <p className="font-semibold text-foreground">Évolution ou contradiction ?</p>
+              <p className="mt-1.5 text-sm text-muted">
+                Deux citations différentes d&apos;un même candidat ne sont jamais qualifiées automatiquement
+                de contradiction. Polysia documente d&apos;abord une chronologie sourcée (déclaration →
+                date → source), puis, seulement quand c&apos;est pertinent, une lecture éditoriale neutre
+                parmi cinq statuts : position maintenue, évoluée, précisée, changement de position, ou
+                contexte insuffisant. Une « contradiction confirmée » exige une validation humaine explicite
+                avant publication — jamais une décision automatique. L&apos;expression « retournement de
+                veste » n&apos;est jamais utilisée par Polysia.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border bg-surface p-4">
+              <p className="font-semibold text-foreground">Affaires judiciaires : un vocabulaire précis</p>
+              <p className="mt-1.5 text-sm text-muted">
+                Polysia utilise le vocabulaire procédural français exact — enquête préliminaire, mis(e) en
+                examen, poursuites, procès à venir, condamné(e) en première instance, appel en cours,
+                condamné(e) en appel (pourvoi en cassation possible), condamné(e) définitivement, relaxe,
+                non-lieu, classement sans suite. Le terme « condamné » n&apos;est jamais utilisé hors
+                d&apos;une condamnation effective, et une mise en examen n&apos;est jamais présentée comme
+                une culpabilité établie. Une procédure d&apos;appel ou un pourvoi en cassation en cours est
+                toujours signalé comme tel — une condamnation en appel n&apos;est pas encore définitive tant
+                que la Cour de cassation n&apos;a pas statué.
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-4 leading-relaxed text-foreground/85">
+            Une affaire judiciaire et une controverse médiatique sont deux choses distinctes, affichées
+            dans deux rubriques séparées : une polémique n&apos;est jamais présentée comme une affaire
+            judiciaire, et inversement. Les deux exigent une validation humaine explicite avant
+            publication — une IA peut aider à repérer une source, structurer un vote ou signaler une
+            évolution potentielle, mais ne publie jamais elle-même une accusation, une affaire, une
+            controverse ou une contradiction (voir le principe déjà énoncé au point 12).
+          </p>
+          <p className="mt-3 leading-relaxed text-foreground/85">
+            La rubrique « Transparence » référence des documents publics (déclarations d&apos;intérêts, de
+            patrimoine, mandats déclarés...) sans jamais les analyser : Polysia indique qu&apos;un document
+            est disponible et pointe vers l&apos;original, elle n&apos;en tire jamais de conclusion.
+          </p>
+          <p className="mt-3 leading-relaxed text-foreground/85">
+            Enfin, une information peut être absente pour une raison simple : elle n&apos;a pas encore été
+            vérifiée et sourcée par l&apos;équipe Polysia, pas parce qu&apos;elle n&apos;existe pas. Un
+            compteur à 0 (mandats, votes, affaires...) se lit toujours « aucun·e élément documenté dans
+            Polysia à ce stade », jamais « aucun·e ». Les mêmes rubriques et les mêmes critères
+            s&apos;appliquent à tous les candidats, sans exception. Si une information vous semble
+            incorrecte ou incomplète, chaque section sensible propose un lien « Signaler une erreur ou
+            apporter un contexte ».
+          </p>
+        </section>
       </div>
     </div>
   );

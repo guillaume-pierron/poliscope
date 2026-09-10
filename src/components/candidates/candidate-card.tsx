@@ -98,6 +98,17 @@ export function CandidateCard({
             Comparer
           </Link>
         </div>
+
+        {/* Discret à dessein : les affaires/controverses ne s'affichent
+            jamais sur une carte générale, uniquement sur la fiche détaillée
+            — voir la note de design "Parcours & actes". */}
+        <Link
+          href={`/candidats/${candidate.slug}#parcours`}
+          className="focus-ring mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted hover:text-primary hover:underline"
+        >
+          Voir son parcours & ses votes
+          <ArrowRight size={11} />
+        </Link>
       </div>
     </article>
   );

@@ -11,13 +11,13 @@
 
 alter table candidates add column if not exists birth_date text;
 alter table candidates add column if not exists birth_place text;
-alter table candidates add column if not exists current_role text;
+alter table candidates add column if not exists "current_role" text;
 alter table candidates add column if not exists current_role_detail text;
 
 update candidates set
   birth_date = v.birth_date,
   birth_place = v.birth_place,
-  current_role = v.current_role,
+  "current_role" = v."current_role",
   current_role_detail = v.current_role_detail
 from (values
   ('jean-luc-melenchon',     '1951-08-19', 'Tanger (Maroc)',       'Fondateur de La France insoumise',     'depuis 2016'),
@@ -37,5 +37,5 @@ from (values
   -- Aucun mandat électif : la fonction retenue est celle que la source décrit.
   ('nathalie-arthaud',       '1970-02-23', 'Peyrins (Drôme)',      'Porte-parole de Lutte Ouvrière',       'depuis décembre 2008'),
   ('nicolas-dupont-aignan',  '1961-03-07', 'Paris',                'Maire de Yerres',                      'depuis 2020')
-) as v(slug, birth_date, birth_place, current_role, current_role_detail)
+) as v(slug, birth_date, birth_place, "current_role", current_role_detail)
 where candidates.slug = v.slug;
