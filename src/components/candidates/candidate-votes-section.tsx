@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Gavel } from "lucide-react";
+import { Vote } from "lucide-react";
 import { ThemeIcon } from "@/lib/theme-icons";
 import { cn } from "@/lib/utils";
 import type { CandidateVote, Theme } from "@/lib/types";
 import { CandidateVoteCard } from "./candidate-vote-card";
+import { CandidateSectionHeader } from "./candidate-section-header";
 
 /**
  * "Ses votes" — liste filtrable par thème plutôt qu'un tableau : voir la
@@ -13,7 +14,15 @@ import { CandidateVoteCard } from "./candidate-vote-card";
  * en avant (`featured`, sélectionnés par l'admin selon une méthodologie
  * publique — voir /methodologie) sont affichés en premier.
  */
-export function CandidateVotesSection({ votes, themes }: { votes: CandidateVote[]; themes: Theme[] }) {
+export function CandidateVotesSection({
+  candidateName,
+  votes,
+  themes,
+}: {
+  candidateName: string;
+  votes: CandidateVote[];
+  themes: Theme[];
+}) {
   const [activeThemeId, setActiveThemeId] = useState<string | null>(null);
 
   const usedThemes = useMemo(
@@ -29,23 +38,15 @@ export function CandidateVotesSection({ votes, themes }: { votes: CandidateVote[
 
   return (
     <div>
-      <h2 id="votes" className="scroll-mt-24 flex items-center gap-2 text-2xl font-semibold tracking-tight">
-        <Gavel size={20} className="text-primary" />
-        Ses votes
-      </h2>
-      <p className="mt-2 text-sm text-muted">
-        Des votes publics individuels, quand ils sont disponibles — Assemblée nationale, Sénat, Parlement
-        européen. « Absent » et « N&apos;a pas pris part au vote » ne sont jamais affichés comme une abstention
-        politique.
-      </p>
-
-      {votes.length === 0 ? (
-        <p className="mt-6 rounded-xl border border-dashed border-border p-5 text-sm text-muted-2">
-          Aucun vote référencé dans Polysia pour ce candidat à ce stade.
-        </p>
-      ) : (
-        <>
-          <div className="mt-5 flex flex-wrap gap-1.5">
+      <CandidateSectionHeader
+        icon={Vote}
+        title="Votes"
+        count={votes.length || undefined}
+        countLabel={`vote${votes.length > 1 ? "s" : ""} référencé${votes.length > 1 ? "s" : ""}`}
+        description={`Des votes publics individuels de ${candidateName}, quand ils sont disponibles — Assemblée nationale, Sénat, Parlement européen. « Absent » et « N'a pas pris part au vote » ne sont jamais affichés comme une abstention politique.`}
+      >
+        {votes.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
             <button
               type="button"
               onClick={() => setActiveThemeId(null)}
@@ -75,13 +76,19 @@ export function CandidateVotesSection({ votes, themes }: { votes: CandidateVote[
               </button>
             ))}
           </div>
+        )}
+      </CandidateSectionHeader>
 
-          <div className="mt-5 space-y-3">
-            {sorted.map((vote) => (
-              <CandidateVoteCard key={vote.id} vote={vote} theme={themes.find((t) => t.id === vote.theme_id)} />
-            ))}
-          </div>
-        </>
+      {votes.length === 0 ? (
+        <p className="mt-4 rounded-xl border border-dashed border-border p-5 text-sm text-muted-2">
+          Aucun vote référencé dans Polysia pour ce candidat à ce stade.
+        </p>
+      ) : (
+        <div className="mt-4 space-y-3">
+          {sorted.map((vote) => (
+            <CandidateVoteCard key={vote.id} vote={vote} theme={themes.find((t) => t.id === vote.theme_id)} />
+          ))}
+        </div>
       )}
     </div>
   );

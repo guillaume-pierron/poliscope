@@ -2,6 +2,7 @@ import { ExternalLink, History } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import type { CandidatePositionEvolution, CandidatePositionHistoryEntry, Theme } from "@/lib/types";
 import { EvolutionTypeBadge } from "./record-badges";
+import { CandidateSectionHeader } from "./candidate-section-header";
 
 interface EvolutionGroup {
   evolution: CandidatePositionEvolution;
@@ -16,10 +17,12 @@ interface EvolutionGroup {
  * fondue dans le résumé Polysia.
  */
 export function CandidatePositionEvolutionSection({
+  candidateName,
   evolutions,
   positionHistory,
   themes,
 }: {
+  candidateName: string;
   evolutions: CandidatePositionEvolution[];
   positionHistory: CandidatePositionHistoryEntry[];
   themes: Theme[];
@@ -35,18 +38,16 @@ export function CandidatePositionEvolutionSection({
 
   return (
     <div>
-      <h2 id="evolution-positions" className="scroll-mt-24 flex items-center gap-2 text-2xl font-semibold tracking-tight">
-        <History size={20} className="text-primary" />
-        Évolution des positions
-      </h2>
-      <p className="mt-2 text-sm text-muted">
-        Comment ses positions sur un sujet ont été exprimées dans le temps, avec leurs sources — Polysia
-        distingue une évolution documentée d&apos;une contradiction confirmée, et ne qualifie jamais
-        automatiquement deux citations différentes de contradiction.
-      </p>
+      <CandidateSectionHeader
+        icon={History}
+        title="Évolution des positions"
+        count={groups.length || undefined}
+        countLabel={`évolution${groups.length > 1 ? "s" : ""} documentée${groups.length > 1 ? "s" : ""}`}
+        description={`Comment les positions de ${candidateName} sur un sujet ont été exprimées dans le temps, avec leurs sources — Polysia distingue une évolution documentée d'une contradiction confirmée, et ne qualifie jamais automatiquement deux citations différentes de contradiction.`}
+      />
 
       {groups.length === 0 ? (
-        <p className="mt-6 rounded-xl border border-dashed border-border p-5 text-sm text-muted-2">
+        <p className="mt-4 rounded-xl border border-dashed border-border p-5 text-sm text-muted-2">
           Aucune évolution de position documentée dans Polysia pour ce candidat à ce stade.
         </p>
       ) : (

@@ -1,4 +1,6 @@
+import { Landmark } from "lucide-react";
 import { APPOINTMENT_TYPE_LABELS, type CandidateCareer, type CandidateMandate } from "@/lib/types";
+import { CandidateSectionHeader } from "./candidate-section-header";
 import { RecordTimeline, sortTimelineEntries, type TimelineEntry } from "./record-timeline";
 
 function careerToEntry(c: CandidateCareer): TimelineEntry {
@@ -41,24 +43,27 @@ function mandateToEntry(m: CandidateMandate): TimelineEntry {
  * contre un territoire électoral).
  */
 export function CandidateParcoursSection({
+  candidateName,
   careers,
   mandates,
 }: {
+  candidateName: string;
   careers: CandidateCareer[];
   mandates: CandidateMandate[];
 }) {
   const mandateEntries = sortTimelineEntries(mandates.map(mandateToEntry));
   const careerEntries = sortTimelineEntries(careers.map(careerToEntry));
+  const total = mandateEntries.length + careerEntries.length;
 
   return (
     <div>
-      <h2 id="parcours" className="scroll-mt-24 text-2xl font-semibold tracking-tight">
-        Son parcours
-      </h2>
-      <p className="mt-2 text-sm text-muted">
-        Les mandats politiques et l&apos;expérience professionnelle réellement exercés, avec leurs sources —
-        jamais une période devinée faute de date précise.
-      </p>
+      <CandidateSectionHeader
+        icon={Landmark}
+        title="Parcours"
+        count={total || undefined}
+        countLabel={`repère${total > 1 ? "s" : ""} documenté${total > 1 ? "s" : ""}`}
+        description={`Les mandats politiques et l'expérience professionnelle réellement exercés par ${candidateName}, avec leurs sources — jamais une période devinée faute de date précise.`}
+      />
 
       <div className="mt-6">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-2">Mandats & fonctions</h3>

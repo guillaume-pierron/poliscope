@@ -1,6 +1,7 @@
 import { ExternalLink, ShieldCheck } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { TRANSPARENCY_RECORD_TYPE_LABELS, type CandidateTransparencyRecord, type TransparencyRecordType } from "@/lib/types";
+import { CandidateSectionHeader } from "./candidate-section-header";
 
 /** Les deux documents les plus attendus s'affichent toujours, même absents — le reste n'apparaît que si documenté. */
 const ALWAYS_SHOWN: TransparencyRecordType[] = ["declaration_interets", "declaration_patrimoine"];
@@ -11,7 +12,13 @@ const ALWAYS_SHOWN: TransparencyRecordType[] = ["declaration_interets", "declara
  * lit "non documenté dans Polysia", jamais "n'existe pas" : Polysia ne peut
  * garantir l'exhaustivité de ce qu'elle référence.
  */
-export function CandidateTransparencySection({ records }: { records: CandidateTransparencyRecord[] }) {
+export function CandidateTransparencySection({
+  candidateName,
+  records,
+}: {
+  candidateName: string;
+  records: CandidateTransparencyRecord[];
+}) {
   const byType = new Map<TransparencyRecordType, CandidateTransparencyRecord[]>();
   for (const record of records) {
     const list = byType.get(record.record_type) ?? [];
@@ -23,14 +30,13 @@ export function CandidateTransparencySection({ records }: { records: CandidateTr
 
   return (
     <div>
-      <h2 id="transparence" className="scroll-mt-24 flex items-center gap-2 text-2xl font-semibold tracking-tight">
-        <ShieldCheck size={20} className="text-primary" />
-        Transparence
-      </h2>
-      <p className="mt-2 text-sm text-muted">
-        Les déclarations publiques référencées pour ce candidat — jamais une analyse du patrimoine ou des
-        intérêts déclarés, seulement un accès aux documents officiels.
-      </p>
+      <CandidateSectionHeader
+        icon={ShieldCheck}
+        title="Transparence"
+        count={records.length || undefined}
+        countLabel={`document${records.length > 1 ? "s" : ""} référencé${records.length > 1 ? "s" : ""}`}
+        description={`Les déclarations publiques référencées pour ${candidateName} — jamais une analyse du patrimoine ou des intérêts déclarés, seulement un accès aux documents officiels.`}
+      />
 
       <ul className="mt-6 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
         {types.map((type) => {

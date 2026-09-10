@@ -7,7 +7,7 @@ import { CandidateDeepenCard } from "@/components/candidates/candidate-deepen-ca
 import { CandidateProposalsSection } from "@/components/candidates/candidate-proposals-section";
 import { CandidatePositionList } from "@/components/candidates/candidate-position-list";
 import { CandidateSourcesSection } from "@/components/candidates/candidate-sources-section";
-import { CandidateSectionNav } from "@/components/candidates/candidate-section-nav";
+import { CandidateSectionTabs, SectionPanel } from "@/components/candidates/candidate-section-tabs";
 import { CandidateParcoursSection } from "@/components/candidates/candidate-parcours-section";
 import { CandidateVotesSection } from "@/components/candidates/candidate-votes-section";
 import { CandidatePositionEvolutionSection } from "@/components/candidates/candidate-position-evolution-section";
@@ -90,55 +90,78 @@ export default async function CandidatePage({
         <div className="min-w-0 space-y-10">
           <CandidateHeroCard candidate={candidate} />
 
-          <CandidateSectionNav />
+          <CandidateSectionTabs
+            counts={{
+              programme: proposals.length,
+              parcours: recordBundle.careers.length + recordBundle.mandates.length,
+              votes: recordBundle.votes.length,
+              "evolution-positions": recordBundle.positionEvolutions.length,
+              affaires: recordBundle.legalCases.length + recordBundle.controversies.length,
+              transparence: recordBundle.transparencyRecords.length,
+            }}
+          >
+            <SectionPanel id="programme">
+              <div className="space-y-10">
+                <CandidateProposalsSection
+                  candidateName={candidate.name}
+                  proposals={proposals}
+                  themes={themes}
+                  candidateSlug={candidate.slug}
+                  analyzedProposalIds={analyzedProposalIds}
+                />
 
-          <div id="programme" className="scroll-mt-24 space-y-10">
-            <CandidateProposalsSection
-              proposals={proposals}
-              themes={themes}
-              candidateSlug={candidate.slug}
-              analyzedProposalIds={analyzedProposalIds}
-            />
-            {proposals.length === 0 && (
-              <p className="mt-6 rounded-xl border border-dashed border-border p-5 text-sm text-muted-2">
-                Aucune proposition documentée pour ce candidat à ce stade.
-              </p>
-            )}
-
-            <div>
-              <h3 id="positions" className="scroll-mt-24 text-2xl font-semibold tracking-tight">
-                Ses positions sur les questions du Match
-              </h3>
-              <p className="mt-2 text-sm text-muted">
-                Chaque position provient d&apos;une proposition sourcée — voir{" "}
-                <Link href="/methodologie" className="underline underline-offset-2">
-                  comment c&apos;est calculé
-                </Link>
-                .
-              </p>
-              <div className="mt-6">
-                <CandidatePositionList positions={positions} questions={questions} />
+                <div>
+                  <h3 id="positions" className="scroll-mt-24 text-xl font-semibold tracking-tight">
+                    Ses positions sur les questions du Match
+                  </h3>
+                  <p className="mt-2 text-sm text-muted">
+                    Chaque position provient d&apos;une proposition sourcée — voir{" "}
+                    <Link href="/methodologie" className="underline underline-offset-2">
+                      comment c&apos;est calculé
+                    </Link>
+                    .
+                  </p>
+                  <div className="mt-6">
+                    <CandidatePositionList positions={positions} questions={questions} />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </SectionPanel>
 
-          <CandidateParcoursSection careers={recordBundle.careers} mandates={recordBundle.mandates} />
+            <SectionPanel id="parcours">
+              <CandidateParcoursSection
+                candidateName={candidate.name}
+                careers={recordBundle.careers}
+                mandates={recordBundle.mandates}
+              />
+            </SectionPanel>
 
-          <CandidateVotesSection votes={recordBundle.votes} themes={themes} />
+            <SectionPanel id="votes">
+              <CandidateVotesSection candidateName={candidate.name} votes={recordBundle.votes} themes={themes} />
+            </SectionPanel>
 
-          <CandidatePositionEvolutionSection
-            evolutions={recordBundle.positionEvolutions}
-            positionHistory={recordBundle.positionHistory}
-            themes={themes}
-          />
+            <SectionPanel id="evolution-positions">
+              <CandidatePositionEvolutionSection
+                candidateName={candidate.name}
+                evolutions={recordBundle.positionEvolutions}
+                positionHistory={recordBundle.positionHistory}
+                themes={themes}
+              />
+            </SectionPanel>
 
-          <CandidateLegalControversiesSection
-            candidateId={candidate.id}
-            legalCases={recordBundle.legalCases}
-            controversies={recordBundle.controversies}
-          />
+            <SectionPanel id="affaires">
+              <CandidateLegalControversiesSection
+                candidateName={candidate.name}
+                candidateId={candidate.id}
+                legalCases={recordBundle.legalCases}
+                controversies={recordBundle.controversies}
+              />
+            </SectionPanel>
 
-          <CandidateTransparencySection records={recordBundle.transparencyRecords} />
+            <SectionPanel id="transparence">
+              <CandidateTransparencySection candidateName={candidate.name} records={recordBundle.transparencyRecords} />
+            </SectionPanel>
+          </CandidateSectionTabs>
 
           <CandidateSourcesSection proposals={proposals} />
 

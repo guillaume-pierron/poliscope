@@ -4,6 +4,7 @@ import type { CandidateControversy, CandidateLegalCase } from "@/lib/types";
 import { Figures } from "@/components/ui/figures";
 import { ControversyStatusBadge, LegalStatusBadge, SourceTypeLabel } from "./record-badges";
 import { ReportIssueButton } from "./report-issue-button";
+import { CandidateSectionHeader } from "./candidate-section-header";
 
 function LegalCaseCard({ candidateId, legalCase }: { candidateId: string; legalCase: CandidateLegalCase }) {
   const nonFinalNotice =
@@ -120,24 +121,27 @@ function ControversyCard({ candidateId, controversy }: { candidateId: string; co
  * présenté comme suspect : l'absence se lit "non documenté dans Polysia".
  */
 export function CandidateLegalControversiesSection({
+  candidateName,
   candidateId,
   legalCases,
   controversies,
 }: {
+  candidateName: string;
   candidateId: string;
   legalCases: CandidateLegalCase[];
   controversies: CandidateControversy[];
 }) {
+  const total = legalCases.length + controversies.length;
+
   return (
     <div>
-      <h2 id="affaires" className="scroll-mt-24 flex items-center gap-2 text-2xl font-semibold tracking-tight">
-        <ScaleIcon size={20} className="text-primary" />
-        Affaires & controverses
-      </h2>
-      <p className="mt-2 text-sm text-muted">
-        Des faits sourcés, jamais un jugement. Une mise en examen n&apos;est jamais présentée comme une
-        culpabilité établie ; le terme « condamné » n&apos;est utilisé que pour une condamnation effective.
-      </p>
+      <CandidateSectionHeader
+        icon={ScaleIcon}
+        title="Affaires & controverses"
+        count={total || undefined}
+        countLabel={`élément${total > 1 ? "s" : ""} documenté${total > 1 ? "s" : ""}`}
+        description={`Des faits sourcés sur ${candidateName}, jamais un jugement. Une mise en examen n'est jamais présentée comme une culpabilité établie ; le terme « condamné » n'est utilisé que pour une condamnation effective.`}
+      />
 
       <div className="mt-6">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-2">Affaires judiciaires</h3>
