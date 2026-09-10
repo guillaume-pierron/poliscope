@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Figures } from "@/components/ui/figures";
 import { formatDate } from "@/lib/utils";
 import { PROPOSAL_STATUS_LABELS, type Proposal } from "@/lib/types";
 
@@ -24,8 +25,14 @@ export function ProposalItem({ proposal }: { proposal: Proposal }) {
         )}
       </div>
       <h3 className="mt-2.5 text-base font-semibold">{proposal.title}</h3>
-      <p className="mt-1.5 text-sm text-muted">{proposal.summary}</p>
-      <p className="mt-2 text-sm leading-relaxed text-foreground/80">{proposal.description}</p>
+      {/* Résumé en tête de hiérarchie, détail en retrait — voir la note dans
+          CandidateProposalCard. */}
+      <p className="mt-1.5 text-[0.9375rem] font-medium leading-snug text-foreground">
+        <Figures text={proposal.summary} />
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-muted">
+        <Figures text={proposal.description} />
+      </p>
       <a
         href={proposal.source_url}
         target="_blank"

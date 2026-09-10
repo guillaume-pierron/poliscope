@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeftRight, CheckCircle2, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Figures } from "@/components/ui/figures";
 import { PassageAuReelLink } from "@/components/passage-au-reel/passage-au-reel-link";
 import { ThemeIcon } from "@/lib/theme-icons";
 import { formatDate, isQuantifiedProposal } from "@/lib/utils";
@@ -51,10 +52,17 @@ export function CandidateProposalCard({
                 </span>
               )}
             </div>
-            <p className="mt-2.5 text-sm text-muted">{proposal.summary}</p>
+            {/* Le résumé est la ligne à lire en premier : il porte donc le
+                contraste le plus fort, et la description — le détail sourcé —
+                passe en retrait. L'inverse (résumé en `text-muted` sous une
+                description plus sombre) attirait l'œil vers le pavé plutôt
+                que vers l'essentiel. */}
+            <p className="mt-2.5 text-[0.9375rem] font-medium leading-snug text-foreground">
+              <Figures text={proposal.summary} />
+            </p>
             {proposal.description && (
-              <p className="mt-3 text-sm leading-relaxed text-foreground/80">
-                {proposal.description}
+              <p className="mt-2 text-sm leading-relaxed text-muted">
+                <Figures text={proposal.description} />
               </p>
             )}
           </div>

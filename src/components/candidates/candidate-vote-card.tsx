@@ -1,6 +1,7 @@
 import { ExternalLink } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { VOTE_INSTITUTION_LABELS, type CandidateVote, type Theme } from "@/lib/types";
+import { Figures } from "@/components/ui/figures";
 import { VoteBadge } from "./record-badges";
 
 export function CandidateVoteCard({ vote, theme }: { vote: CandidateVote; theme?: Theme }) {
@@ -18,7 +19,11 @@ export function CandidateVoteCard({ vote, theme }: { vote: CandidateVote; theme?
         )}
       </div>
       <h3 className="mt-1.5 font-medium">{vote.title}</h3>
-      {vote.description && <p className="mt-2 text-sm leading-relaxed text-foreground/85">{vote.description}</p>}
+      {vote.description && (
+        <p className="mt-2 text-sm leading-relaxed text-foreground/85">
+          <Figures text={vote.description} />
+        </p>
+      )}
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <VoteBadge value={vote.candidate_vote} />

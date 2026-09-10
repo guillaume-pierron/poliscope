@@ -1,6 +1,7 @@
 import { AlertTriangle, ExternalLink, Scale as ScaleIcon } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import type { CandidateControversy, CandidateLegalCase } from "@/lib/types";
+import { Figures } from "@/components/ui/figures";
 import { ControversyStatusBadge, LegalStatusBadge, SourceTypeLabel } from "./record-badges";
 import { ReportIssueButton } from "./report-issue-button";
 
@@ -26,7 +27,9 @@ function LegalCaseCard({ candidateId, legalCase }: { candidateId: string; legalC
           {nonFinalNotice}
         </p>
       )}
-      <p className="mt-2.5 text-sm leading-relaxed text-foreground/85">{legalCase.summary}</p>
+      <p className="mt-2.5 text-sm leading-relaxed text-foreground/85">
+        <Figures text={legalCase.summary} />
+      </p>
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-2">
         {legalCase.jurisdiction && <span>{legalCase.jurisdiction}</span>}
         {legalCase.decision_date && <span>Dernière décision : {formatDate(legalCase.decision_date)}</span>}
@@ -65,7 +68,9 @@ function ControversyCard({ candidateId, controversy }: { candidateId: string; co
         </div>
         <ControversyStatusBadge status={controversy.controversy_status} className="shrink-0" />
       </div>
-      <p className="mt-2.5 text-sm leading-relaxed text-foreground/85">{controversy.summary}</p>
+      <p className="mt-2.5 text-sm leading-relaxed text-foreground/85">
+        <Figures text={controversy.summary} />
+      </p>
       {controversy.context && <p className="mt-2 text-sm leading-relaxed text-muted">{controversy.context}</p>}
       {controversy.candidate_response && (
         <div className="mt-3 rounded-lg border border-border bg-surface p-3">

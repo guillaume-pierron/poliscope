@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Figures } from "@/components/ui/figures";
 import { formatDate, isQuantifiedProposal, parseTags } from "@/lib/utils";
 import { tagIcon } from "@/lib/tag-icons";
 import { PROPOSAL_STATUS_LABELS, type Proposal } from "@/lib/types";
@@ -54,7 +55,9 @@ export function ThemeProposalCard({
       <div className="mt-3 flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <h3 className="text-base font-semibold">{proposal.title}</h3>
-          <p className="mt-1.5 text-sm text-muted">{proposal.summary}</p>
+          <p className="mt-1.5 text-sm leading-snug text-foreground/85">
+            <Figures text={proposal.summary} />
+          </p>
         </div>
         <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
           {/* eslint-disable-next-line react-hooks/static-components -- tagIcon always resolves to one of a fixed set of stable, module-level lucide icons */}
