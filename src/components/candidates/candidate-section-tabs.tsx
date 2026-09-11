@@ -5,12 +5,12 @@ import { Landmark, Scale, ShieldCheck, FileText, History, Vote } from "lucide-re
 import { cn } from "@/lib/utils";
 
 export const SECTIONS = [
-  { id: "programme", label: "Programme", icon: FileText },
-  { id: "parcours", label: "Parcours", icon: Landmark },
-  { id: "votes", label: "Votes", icon: Vote },
-  { id: "evolution-positions", label: "Évolution", icon: History },
-  { id: "affaires", label: "Affaires", icon: Scale },
-  { id: "transparence", label: "Transparence", icon: ShieldCheck },
+  { id: "programme", label: "Programme", subtitle: "Propositions", icon: FileText },
+  { id: "parcours", label: "Parcours", subtitle: "Biographie", icon: Landmark },
+  { id: "votes", label: "Votes", subtitle: "Positions", icon: Vote },
+  { id: "evolution-positions", label: "Évolution", subtitle: "Dans le temps", icon: History },
+  { id: "affaires", label: "Affaires", subtitle: "Contrôlés", icon: Scale },
+  { id: "transparence", label: "Transparence", subtitle: "Patrimoine", icon: ShieldCheck },
 ] as const;
 
 export type SectionId = (typeof SECTIONS)[number]["id"];
@@ -57,7 +57,7 @@ export function CandidateSectionTabs({
       >
         {SECTIONS.map((section) => {
           const isActive = section.id === active;
-          const count = counts[section.id];
+          const count = counts[section.id] ?? 0;
           return (
             <button
               key={section.id}
@@ -71,7 +71,7 @@ export function CandidateSectionTabs({
                 history.replaceState(null, "", `#${section.id}`);
               }}
               className={cn(
-                "focus-ring flex min-w-[92px] flex-1 flex-col items-center gap-2 rounded-xl border px-3 py-3 text-center transition-colors",
+                "focus-ring flex min-w-[92px] flex-1 flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-center transition-colors",
                 isActive
                   ? "border-primary bg-primary-soft"
                   : "border-transparent bg-card hover:border-border-strong"
@@ -86,23 +86,39 @@ export function CandidateSectionTabs({
                 >
                   <section.icon size={19} />
                 </span>
-                {!!count && (
-                  <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[0.6875rem] font-semibold text-primary-foreground">
-                    {count}
-                  </span>
-                )}
+                {/* Le compteur s'affiche même à 0 — un chiffre absent laisserait
+                    croire à un onglet non chargé plutôt qu'à une rubrique
+                    simplement vide ; un 0 en gris atténué dit l'inverse d'un
+                    coup d'œil : « vérifié, rien à ce stade ». */}
+                <span
+                  className={cn(
+                    "absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[0.6875rem] font-semibold",
+                    count > 0 ? "bg-primary text-primary-foreground" : "bg-border-strong text-muted-2"
+                  )}
+                >
+                  {count}
+                </span>
               </span>
-              <span
-                className={cn(
-                  "whitespace-nowrap text-sm font-medium",
-                  isActive ? "text-primary" : "text-muted"
-                )}
-              >
-                {section.label}
+              <span className="leading-tight">
+                <span
+                  className={cn(
+                    "block whitespace-nowrap text-sm font-semibold",
+                    isActive ? "text-primary" : "text-foreground"
+                  )}
+                >
+                  {section.label}
+                </span>
+                <span className="block whitespace-nowrap text-xs text-muted-2">{section.subtitle}</span>
               </span>
             </button>
           );
         })}
+      </div>
+
+      <div className="my-5 flex items-center gap-3 text-xs text-muted-2">
+        <span className="h-px flex-1 bg-border" aria-hidden />
+        Choisissez un angle de lecture pour explorer ce candidat
+        <span className="h-px flex-1 bg-border" aria-hidden />
       </div>
 
       {children}
