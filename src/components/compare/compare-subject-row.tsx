@@ -7,36 +7,46 @@ import type { Candidate, CandidatePosition, Question } from "@/lib/types";
 
 const VERDICT_STYLE: Record<
   ThemeVerdict,
-  { icon: typeof CircleCheck; text: string; bubble: string; panel: string }
+  { icon: typeof CircleCheck; text: string; bubble: string; panel: string; card: string; badge: string }
 > = {
   accord: {
     icon: CircleCheck,
     text: "text-success",
     bubble: "bg-card text-success",
     panel: "bg-success-soft/70",
+    card: "border-success/25 bg-success-soft/35",
+    badge: "bg-success-soft text-success",
   },
   nuance: {
     icon: CircleMinus,
     text: "text-accent",
     bubble: "bg-card text-accent",
     panel: "bg-accent-soft/70",
+    card: "border-accent/25 bg-accent-soft/35",
+    badge: "bg-accent-soft text-accent",
   },
   desaccord: {
     icon: CircleX,
     text: "text-danger",
     bubble: "bg-card text-danger",
     panel: "bg-danger-soft/70",
+    card: "border-danger/25 bg-danger-soft/35",
+    badge: "bg-danger-soft text-danger",
   },
   // « Sujet incomplet » vient toujours d'une donnée manquante, jamais d'un
   // désaccord — mais un simple gris se lisait comme « rien à voir ici »
   // plutôt que comme une invitation à lire pourquoi. Le même accent chaud
   // que « nuance » (une icône différente les distingue) attire l'œil sans
-  // pour autant lui donner la charge négative du rouge.
+  // pour autant lui donner la charge négative du rouge. La carte du côté
+  // documenté reste neutre en revanche : on ne sait justement pas s'il y a
+  // accord ou désaccord, la colorer trancherait à la place du lecteur.
   inconnu: {
     icon: Minus,
     text: "text-accent",
     bubble: "bg-card text-accent",
     panel: "bg-accent-soft/40",
+    card: "border-border-strong bg-card",
+    badge: "bg-surface-strong text-muted",
   },
 };
 
@@ -84,8 +94,8 @@ export function CompareSubjectRow({
         )}
       </div>
 
-      <PositionCell candidate={candidateA} question={question} position={positionA} />
-      <PositionCell candidate={candidateB} question={question} position={positionB} />
+      <PositionCell candidate={candidateA} question={question} position={positionA} verdict={verdict} />
+      <PositionCell candidate={candidateB} question={question} position={positionB} verdict={verdict} />
 
       <div className={cn("flex flex-col items-center justify-center gap-1.5 rounded-xl p-4 text-center", style.panel)}>
         <span className={cn("flex h-9 w-9 items-center justify-center rounded-full", style.bubble)}>
@@ -110,10 +120,12 @@ function PositionCell({
   candidate,
   question,
   position,
+  verdict,
 }: {
   candidate: Candidate;
   question: Question;
   position: CandidatePosition | null;
+  verdict: ThemeVerdict;
 }) {
   if (!position) {
     return (
@@ -131,19 +143,19 @@ function PositionCell({
   }
 
   const label = describePositionValue(question, position);
+  const style = VERDICT_STYLE[verdict];
 
-  // Volontairement sans rouge/vert : sur cette page, ces couleurs codaient
-  // où la position se situe sur l'échelle (« réduire » = rouge, « augmenter »
-  // = vert), pas si les deux candidats sont d'accord — ce qui entrait en
-  // contradiction avec le verdict juste à côté (deux cartes rouges à côté
-  // d'un « Positions proches » vert) et imposait en creux un jugement de
-  // valeur (plus = bien) que ce site s'interdit ailleurs. Le seul endroit où
-  // la couleur porte un sens ici est la colonne « Notre analyse » : c'est
-  // elle qui compare, la carte se contente de rapporter.
+  // La couleur suit l'accord entre les deux candidats sur CE sujet (le
+  // verdict), jamais où leur position se situe sur l'échelle : « réduire »
+  // n'est ni rouge ni vert en soi, mais les deux cartes passent au vert
+  // quand elles disent la même chose et au rouge quand elles s'opposent —
+  // exactement ce que dit déjà le badge « Notre analyse » juste à côté,
+  // simplement redit sur la carte elle-même plutôt qu'en contradiction avec
+  // elle.
   return (
-    <div className="min-w-0 rounded-xl border border-border-strong bg-card p-3.5">
+    <div className={cn("min-w-0 rounded-xl border p-3.5", style.card)}>
       <CandidateLabel candidate={candidate} />
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-strong px-2.5 py-1 text-xs font-medium leading-none text-muted">
+      <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium leading-none", style.badge)}>
         <CircleMinus size={12} className="shrink-0" />
         {label ?? "Position documentée"}
       </span>
