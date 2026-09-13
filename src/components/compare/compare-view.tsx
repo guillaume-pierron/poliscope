@@ -14,6 +14,7 @@ import {
   Compass,
   ExternalLink,
   FileCheck2,
+  FileText,
   Home,
   Sparkles,
   Users,
@@ -325,7 +326,7 @@ function ThemeBlock({
           <button
             type="button"
             onClick={() => setShowContext((v) => !v)}
-            className="focus-ring flex shrink-0 items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            className="focus-ring flex shrink-0 items-center gap-1.5 rounded-full border border-primary/25 bg-primary-soft/50 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary-soft"
           >
             {showContext ? "Masquer le contexte" : "Voir le contexte de ce thème"}
             <ArrowRight size={14} className="shrink-0" />
@@ -366,9 +367,10 @@ function ThemeBlock({
           )}
         </div>
       ) : (
-        shown.map((subject) => (
+        shown.map((subject, index) => (
           <CompareSubjectRow
             key={subject.question.id}
+            index={index}
             subject={subject}
             candidateA={candidateA}
             candidateB={candidateB}
@@ -440,19 +442,24 @@ function ProposalColumn({ candidate, proposals }: { candidate: Candidate; propos
           {proposals.map((p) => (
             <li
               key={p.id}
-              className="rounded-xl border border-border-strong bg-card p-4"
+              className="flex items-start gap-3 rounded-xl border border-border-strong bg-card p-4"
             >
-              <p className="text-sm font-medium leading-snug">{p.title}</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">{p.summary}</p>
-              <a
-                href={p.source_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="focus-ring mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
-              >
-                {p.source_name}
-                <ExternalLink size={11} className="shrink-0" />
-              </a>
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
+                <FileText size={16} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-medium leading-snug">{p.title}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{p.summary}</p>
+                <a
+                  href={p.source_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="focus-ring mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline"
+                >
+                  {p.source_name}
+                  <ExternalLink size={11} className="shrink-0" />
+                </a>
+              </div>
             </li>
           ))}
         </ul>

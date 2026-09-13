@@ -7,12 +7,37 @@ import type { Candidate, CandidatePosition, Question } from "@/lib/types";
 
 const VERDICT_STYLE: Record<
   ThemeVerdict,
-  { icon: typeof CircleCheck; text: string; bubble: string }
+  { icon: typeof CircleCheck; text: string; bubble: string; panel: string }
 > = {
-  accord: { icon: CircleCheck, text: "text-success", bubble: "bg-success-soft text-success" },
-  nuance: { icon: CircleMinus, text: "text-accent", bubble: "bg-accent-soft text-accent" },
-  desaccord: { icon: CircleX, text: "text-danger", bubble: "bg-danger-soft text-danger" },
-  inconnu: { icon: Minus, text: "text-muted-2", bubble: "bg-surface-strong text-muted-2" },
+  accord: {
+    icon: CircleCheck,
+    text: "text-success",
+    bubble: "bg-card text-success",
+    panel: "bg-success-soft/70",
+  },
+  nuance: {
+    icon: CircleMinus,
+    text: "text-accent",
+    bubble: "bg-card text-accent",
+    panel: "bg-accent-soft/70",
+  },
+  desaccord: {
+    icon: CircleX,
+    text: "text-danger",
+    bubble: "bg-card text-danger",
+    panel: "bg-danger-soft/70",
+  },
+  // « Sujet incomplet » vient toujours d'une donnée manquante, jamais d'un
+  // désaccord — mais un simple gris se lisait comme « rien à voir ici »
+  // plutôt que comme une invitation à lire pourquoi. Le même accent chaud
+  // que « nuance » (une icône différente les distingue) attire l'œil sans
+  // pour autant lui donner la charge négative du rouge.
+  inconnu: {
+    icon: Minus,
+    text: "text-accent",
+    bubble: "bg-card text-accent",
+    panel: "bg-accent-soft/40",
+  },
 };
 
 /**
@@ -24,10 +49,13 @@ const VERDICT_STYLE: Record<
  * redire de qui elle parle.
  */
 export function CompareSubjectRow({
+  index,
   subject,
   candidateA,
   candidateB,
 }: {
+  /** Rang du sujet dans le thème affiché (0-based) — purement un repère de lecture, jamais un ordre de priorité. */
+  index: number;
   subject: SubjectComparison;
   candidateA: Candidate;
   candidateB: Candidate;
@@ -45,9 +73,12 @@ export function CompareSubjectRow({
         : null;
 
   return (
-    <div className="grid gap-4 border-t border-border p-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.15fr)_minmax(0,1.15fr)_minmax(0,0.8fr)] lg:gap-5 lg:px-5 lg:py-5">
+    <div className="grid gap-4 border-t border-border p-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.15fr)_minmax(0,1.15fr)_minmax(0,0.8fr)] lg:items-stretch lg:gap-5 lg:p-5">
       <div className="min-w-0">
-        <h4 className="text-sm font-semibold leading-snug">{question.question}</h4>
+        <span className="mb-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-primary-soft text-sm font-semibold text-primary">
+          {index + 1}
+        </span>
+        <h4 className="text-base font-semibold leading-snug">{question.question}</h4>
         {question.description && (
           <p className="mt-1.5 text-xs leading-relaxed text-muted-2">{question.description}</p>
         )}
@@ -56,9 +87,9 @@ export function CompareSubjectRow({
       <PositionCell candidate={candidateA} question={question} position={positionA} />
       <PositionCell candidate={candidateB} question={question} position={positionB} />
 
-      <div className="flex flex-col items-center justify-center gap-1.5 rounded-xl bg-surface/60 p-3.5 text-center lg:bg-transparent lg:p-0">
-        <span className={cn("flex h-8 w-8 items-center justify-center rounded-full", style.bubble)}>
-          <VerdictIcon size={17} />
+      <div className={cn("flex flex-col items-center justify-center gap-1.5 rounded-xl p-4 text-center", style.panel)}>
+        <span className={cn("flex h-9 w-9 items-center justify-center rounded-full", style.bubble)}>
+          <VerdictIcon size={18} />
         </span>
         <p className={cn("text-sm font-semibold leading-tight", style.text)}>
           {SUBJECT_VERDICT_LABELS[verdict]}
