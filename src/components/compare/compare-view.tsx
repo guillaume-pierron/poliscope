@@ -440,7 +440,7 @@ function ProposalColumn({ candidate, proposals }: { candidate: Candidate; propos
           {proposals.map((p) => (
             <li
               key={p.id}
-              className="rounded-xl border border-border-strong bg-card p-4 shadow-[0_14px_32px_-20px_rgba(15,23,41,0.3)]"
+              className="rounded-xl border border-border-strong bg-card p-4"
             >
               <p className="text-sm font-medium leading-snug">{p.title}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-muted">{p.summary}</p>
