@@ -307,7 +307,7 @@ function ThemeBlock({
     <section className="mt-5 overflow-hidden rounded-2xl border border-border bg-card">
       <header className="flex flex-wrap items-center justify-between gap-3 p-5">
         <div className="flex items-center gap-3.5">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-soft text-primary">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
             <ThemeIcon icon={block.theme.icon} className="h-5 w-5" />
           </span>
           <div className="min-w-0">
@@ -384,7 +384,7 @@ function ThemeBlock({
           <button
             type="button"
             onClick={() => setShowProposals((v) => !v)}
-            className="focus-ring flex w-full items-center justify-center gap-2 rounded-xl bg-surface px-4 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-surface-strong hover:text-foreground"
+            className="focus-ring flex w-full items-center justify-center gap-2 rounded-xl bg-primary-soft px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary-soft/70"
           >
             <ChevronDown
               size={15}
