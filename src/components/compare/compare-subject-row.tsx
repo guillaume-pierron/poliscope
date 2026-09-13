@@ -1,5 +1,5 @@
 import { CircleCheck, CircleMinus, CircleX, ExternalLink, Minus } from "lucide-react";
-import { describePositionValue, positionTone, type PositionTone } from "@/lib/match-format";
+import { describePositionValue } from "@/lib/match-format";
 import { SUBJECT_VERDICT_LABELS, describeGap, type SubjectComparison } from "@/lib/compare";
 import { cn } from "@/lib/utils";
 import type { ThemeVerdict } from "@/lib/compare";
@@ -13,39 +13,6 @@ const VERDICT_STYLE: Record<
   nuance: { icon: CircleMinus, text: "text-accent", bubble: "bg-accent-soft text-accent" },
   desaccord: { icon: CircleX, text: "text-danger", bubble: "bg-danger-soft text-danger" },
   inconnu: { icon: Minus, text: "text-muted-2", bubble: "bg-surface-strong text-muted-2" },
-};
-
-/**
- * Teintes par sens de la réponse. Une question « choice » n'en reçoit
- * aucune : ses options ne s'ordonnent pas, une couleur y suggérerait un
- * pour/contre qui n'existe pas.
- */
-const TONE_STYLE: Record<PositionTone, { card: string; badge: string; icon: typeof CircleCheck }> = {
-  positive: {
-    card: "border-success/20 bg-success-soft/50",
-    badge: "bg-success-soft text-success",
-    icon: CircleCheck,
-  },
-  negative: {
-    card: "border-danger/20 bg-danger-soft/50",
-    badge: "bg-danger-soft text-danger",
-    icon: CircleX,
-  },
-  // Fond blanc plutôt que le lavis beige des autres tons : sans lui, cette
-  // carte se distinguait à peine du fond crème de la page. Le signal (ton
-  // neutre) reste porté par le badge et la bordure, jamais perdu.
-  neutral: {
-    card: "border-accent/25 bg-card",
-    badge: "bg-accent-soft text-accent",
-    icon: CircleMinus,
-  },
-  // Même correction qu'au-dessus : fond blanc plutôt que le lavis crème,
-  // qui se fondait dans le fond de page.
-  choice: {
-    card: "border-border-strong bg-card",
-    badge: "bg-surface-strong text-muted",
-    icon: CircleMinus,
-  },
 };
 
 /**
@@ -132,21 +99,21 @@ function PositionCell({
     );
   }
 
-  const tone = positionTone(question.answer_type, position);
-  const style = TONE_STYLE[tone];
-  const ToneIcon = style.icon;
   const label = describePositionValue(question, position);
 
+  // Volontairement sans rouge/vert : sur cette page, ces couleurs codaient
+  // où la position se situe sur l'échelle (« réduire » = rouge, « augmenter »
+  // = vert), pas si les deux candidats sont d'accord — ce qui entrait en
+  // contradiction avec le verdict juste à côté (deux cartes rouges à côté
+  // d'un « Positions proches » vert) et imposait en creux un jugement de
+  // valeur (plus = bien) que ce site s'interdit ailleurs. Le seul endroit où
+  // la couleur porte un sens ici est la colonne « Notre analyse » : c'est
+  // elle qui compare, la carte se contente de rapporter.
   return (
-    <div className={cn("min-w-0 rounded-xl border p-3.5", style.card)}>
+    <div className="min-w-0 rounded-xl border border-border-strong bg-card p-3.5">
       <CandidateLabel candidate={candidate} />
-      <span
-        className={cn(
-          "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium leading-none",
-          style.badge
-        )}
-      >
-        <ToneIcon size={12} className="shrink-0" />
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-strong px-2.5 py-1 text-xs font-medium leading-none text-muted">
+        <CircleMinus size={12} className="shrink-0" />
         {label ?? "Position documentée"}
       </span>
 
