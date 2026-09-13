@@ -31,13 +31,18 @@ const TONE_STYLE: Record<PositionTone, { card: string; badge: string; icon: type
     badge: "bg-danger-soft text-danger",
     icon: CircleX,
   },
+  // Fond blanc plutôt que le lavis beige des autres tons : sans lui, cette
+  // carte se distinguait à peine du fond crème de la page. Le signal (ton
+  // neutre) reste porté par le badge et la bordure, jamais perdu.
   neutral: {
-    card: "border-accent/20 bg-accent-soft/60",
+    card: "border-accent/25 bg-card",
     badge: "bg-accent-soft text-accent",
     icon: CircleMinus,
   },
+  // Même correction qu'au-dessus : fond blanc plutôt que le lavis crème,
+  // qui se fondait dans le fond de page.
   choice: {
-    card: "border-border bg-surface",
+    card: "border-border-strong bg-card",
     badge: "bg-surface-strong text-muted",
     icon: CircleMinus,
   },
