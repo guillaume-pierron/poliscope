@@ -1,0 +1,53 @@
+{
+  "institute": "OpinionWay",
+  "sponsor": "Les Echos, Radio Classique",
+  "field_start": "2026-09-08",
+  "field_end": "2026-09-09",
+  "sample_size": 1001,
+  "method": "Méthode des quotas, échantillon représentatif de la population française âgée de 18 ans et plus",
+  "published_at": "2026-09-10",
+  "source_name": "OpinionWay",
+  "source_url": "https://www.opinion-way.com/fr/publications/presitrack-vague-2-2-2026-24246/",
+  "scenarios": [
+    {
+      "label": "Hypothèse : Attal et Philippe tous deux candidats",
+      "round": "premier_tour",
+      "order_index": 0,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 34, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 15, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 15, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 9, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 8, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 8, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 3, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Hypothèse : Attal seul candidat du centre (sans Philippe)",
+      "round": "premier_tour",
+      "order_index": 1,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 34, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 15, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 14, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 12, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 12, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 4, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Hypothèse : Philippe seul candidat du centre (sans Attal)",
+      "round": "premier_tour",
+      "order_index": 2,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 34, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 19, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 15, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 10, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 10, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 3, "low": null, "high": null}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "institute": "OpinionWay",
+  "sponsor": "CNews, Europe 1, Le Journal du Dimanche",
+  "field_start": "2026-09-09",
+  "field_end": "2026-09-10",
+  "sample_size": 1001,
+  "method": "Méthode des quotas, échantillon représentatif de la population française âgée de 18 ans et plus",
+  "published_at": "2026-09-11",
+  "source_name": "CNews",
+  "source_url": "https://www.cnews.fr/france/2026-09-11/sondage-sans-candidature-unique-au-centre-jean-luc-melenchon-en-ballotage",
+  "scenarios": [
+    {
+      "label": "Hypothèse : François Hollande candidat socialiste",
+      "round": "premier_tour",
+      "order_index": 0,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 32, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 16, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 16, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 8, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 7, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 3, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Hypothèse : Ségolène Royal candidate socialiste",
+      "round": "premier_tour",
+      "order_index": 1,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 33, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 17, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 16, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 8, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 7, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 3, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Hypothèse : Raphaël Glucksmann candidat socialiste",
+      "round": "premier_tour",
+      "order_index": 2,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 34, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 17, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 15, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 9, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 7, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 7, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 3, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Mélenchon",
+      "round": "second_tour",
+      "order_index": 3,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 67, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 33, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Philippe",
+      "round": "second_tour",
+      "order_index": 4,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 55, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 45, "low": null, "high": null}
+      ]
+    }
+  ]
+}
