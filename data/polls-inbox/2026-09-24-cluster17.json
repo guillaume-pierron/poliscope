@@ -1,0 +1,37 @@
+{
+  "institute": "Cluster17",
+  "sponsor": "Politico",
+  "field_start": "2026-09-15",
+  "field_end": "2026-09-16",
+  "sample_size": 2045,
+  "method": "Échantillon de 2 045 personnes interrogées en ligne, représentatif de la population française âgée de 18 ans et plus",
+  "published_at": "2026-09-24",
+  "source_name": "Cluster17",
+  "source_url": "https://cluster17.com/presidentielle-2027-le-pen-largement-en-tete-melenchon-et-philippe-au-coude-a-coude/",
+  "scenarios": [
+    {
+      "label": "Hypothèse : Édouard Philippe candidat du bloc central",
+      "round": "premier_tour",
+      "order_index": 0,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 31, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 19, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 19, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 12, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 7.5, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Hypothèse : Gabriel Attal candidat du bloc central (au lieu d'Édouard Philippe)",
+      "round": "premier_tour",
+      "order_index": 1,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 31, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 20, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 14, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 13.5, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 9.5, "low": null, "high": null}
+      ]
+    }
+  ]
+}
