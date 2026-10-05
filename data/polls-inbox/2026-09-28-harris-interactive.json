@@ -1,0 +1,95 @@
+{
+  "institute": "Harris Interactive",
+  "sponsor": "M6, RTL",
+  "field_start": "2026-09-22",
+  "field_end": "2026-09-24",
+  "sample_size": 1974,
+  "method": "Questionnaire auto-administré en ligne via le panel propriétaire Toluna-Harris Interactive, méthode des quotas et redressement (sexe, âge, catégorie socioprofessionnelle, région, comportement électoral aux élections antérieures) ; échantillon de 1 974 personnes inscrites sur les listes électorales, issu d'un échantillon de 2 334 personnes représentatif de la population française âgée de 18 ans et plus.",
+  "published_at": "2026-09-28",
+  "source_name": "Toluna Harris Interactive",
+  "source_url": "https://tolunacorporate.com/fr/intentions-de-vote-a-lelection-presidentielle-2027-septembre-2026-2/",
+  "scenarios": [
+    {
+      "label": "Hypothèse : R. Glucksmann, G. Attal et É. Philippe candidats",
+      "round": "premier_tour",
+      "order_index": 0,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 35, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 17, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 13, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 10, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 7, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 5, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 3, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Hypothèse : R. Glucksmann et É. Philippe candidats (sans G. Attal)",
+      "round": "premier_tour",
+      "order_index": 1,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 35, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 18, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 16, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 10, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 8, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 3, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Hypothèse : R. Glucksmann et G. Attal candidats (sans É. Philippe)",
+      "round": "premier_tour",
+      "order_index": 2,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 36, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 17, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 12, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 11, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 10, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 3, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Hypothèse : F. Hollande et É. Philippe candidats",
+      "round": "premier_tour",
+      "order_index": 3,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 35, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 18, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 16, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 9, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 4, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Hypothèse : F. Hollande et G. Attal candidats",
+      "round": "premier_tour",
+      "order_index": 4,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 36, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 17, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 13, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 10, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 5, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Mélenchon",
+      "round": "second_tour",
+      "order_index": 5,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 69, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 31, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Philippe",
+      "round": "second_tour",
+      "order_index": 6,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 57, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 43, "low": null, "high": null}
+      ]
+    }
+  ]
+}
