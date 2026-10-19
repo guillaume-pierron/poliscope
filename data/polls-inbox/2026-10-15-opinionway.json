@@ -1,0 +1,45 @@
+{
+  "institute": "OpinionWay",
+  "sponsor": "CNEWS",
+  "field_start": "2026-10-13",
+  "field_end": "2026-10-14",
+  "sample_size": 978,
+  "method": "Questionnaire auto-administré en ligne (CAWI) du 13 au 14 octobre 2026, méthode des quotas (sexe, âge, catégorie socioprofessionnelle, région, catégorie d'agglomération), conforme à la norme ISO 20252 ; échantillon de 978 personnes inscrites sur les listes électorales, extrait d'un échantillon de 1 043 personnes représentatif de la population française âgée de 18 ans et plus.",
+  "published_at": "2026-10-15",
+  "source_name": "OpinionWay",
+  "source_url": "https://www.opinion-way.com/wp-content/uploads/2026/10/OpinionWay-pour-CNEWS-Les-intentions-de-vote-a-lelection-presidentielle-2027-15-octobre-2026.pdf",
+  "scenarios": [
+    {
+      "label": "Premier tour",
+      "round": "premier_tour",
+      "order_index": 0,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 35, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 15, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 13, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 12, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 6, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 5, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 2, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Mélenchon",
+      "round": "second_tour",
+      "order_index": 1,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 68, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 32, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Philippe",
+      "round": "second_tour",
+      "order_index": 2,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 56, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 44, "low": null, "high": null}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "institute": "Elabe",
+  "sponsor": "BFMTV, La Tribune Dimanche",
+  "field_start": "2026-10-14",
+  "field_end": "2026-10-16",
+  "sample_size": 1701,
+  "method": "Questionnaire auto-administré en ligne du 14 au 16 octobre 2026, méthode des quotas (sexe, âge, catégorie socioprofessionnelle, région, catégorie d'agglomération) ; échantillon de 1 701 personnes représentatif de la population française âgée de 18 ans et plus, les intentions de vote n'étant calculées que parmi les personnes inscrites sur les listes électorales et certaines d'aller voter.",
+  "published_at": "2026-10-17",
+  "source_name": "Elabe",
+  "source_url": "https://elabe.fr/presidentielle-2027-octobre/",
+  "scenarios": [
+    {
+      "label": "Hypothèse : É. Philippe candidat du bloc central",
+      "round": "premier_tour",
+      "order_index": 0,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 32.5, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 16.5, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 15.5, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 15, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 7, "low": null, "high": null},
+        {"candidate_slug": "marine-tondelier", "value": 3, "low": null, "high": null}
+      ]
+    }
+  ]
+}
