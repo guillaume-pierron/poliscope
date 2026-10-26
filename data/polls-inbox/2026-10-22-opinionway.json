@@ -1,0 +1,53 @@
+{
+  "institute": "OpinionWay",
+  "sponsor": "CNEWS",
+  "field_start": "2026-10-21",
+  "field_end": "2026-10-22",
+  "sample_size": 1033,
+  "method": "Questionnaire auto-administré en ligne (CAWI) du 21 au 22 octobre 2026, méthode des quotas (sexe, âge, catégorie socioprofessionnelle, région, catégorie d'agglomération), conforme à la norme ISO 20252 ; échantillon de 1 033 personnes représentatif de la population française âgée de 18 ans et plus, les intentions de vote n'étant calculées que parmi les personnes inscrites sur les listes électorales et certaines d'aller voter.",
+  "published_at": "2026-10-22",
+  "source_name": "OpinionWay",
+  "source_url": "https://www.opinion-way.com/fr/publications/les-intentions-de-vote-a-lelection-presidentielle-de-2027-vague-3-2026-24596/",
+  "scenarios": [
+    {
+      "label": "Premier tour",
+      "round": "premier_tour",
+      "order_index": 0,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 36, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 16, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 13, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 12, "low": null, "high": null},
+        {"candidate_slug": "bruno-retailleau", "value": 6, "low": null, "high": null},
+        {"candidate_slug": "gabriel-attal", "value": 4, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Mélenchon",
+      "round": "second_tour",
+      "order_index": 1,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 69, "low": null, "high": null},
+        {"candidate_slug": "jean-luc-melenchon", "value": 31, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Glucksmann",
+      "round": "second_tour",
+      "order_index": 2,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 56, "low": null, "high": null},
+        {"candidate_slug": "raphael-glucksmann", "value": 44, "low": null, "high": null}
+      ]
+    },
+    {
+      "label": "Second tour : Le Pen face à Philippe",
+      "round": "second_tour",
+      "order_index": 3,
+      "results": [
+        {"candidate_slug": "marine-le-pen", "value": 56, "low": null, "high": null},
+        {"candidate_slug": "edouard-philippe", "value": 44, "low": null, "high": null}
+      ]
+    }
+  ]
+}
